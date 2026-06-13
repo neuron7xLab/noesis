@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/complexity_profile.schema.json",
+  "title": "complexity_profile",
+  "type": "object",
+  "required": ["input_words","recommended_output_mode","word_budget"]
+}

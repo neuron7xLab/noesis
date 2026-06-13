@@ -7,8 +7,16 @@ import json
 import sys
 from pathlib import Path
 
+from cme.adaptive import build_adaptive_mirror
 from cme.benchmark import run_ablation, run_benchmark
+from cme.benchmark_v6 import run_ablation_v6, run_benchmark_v6
+from cme.causal import build_category_effects, build_reality_map_delta, track_theory_contribution
+from cme.complexity import estimate_complexity
 from cme.eiic import render_eiic_md, run_and_save_eiic, run_eiic
+from cme.ontology import build_reality_maps as _brm
+from cme.theories import run_theories as _rt
+from cme.generators import build_mirror_deterministic as _bmd
+from cme.pipeline_v6 import run_and_save_v6, run_v6
 from cme.generators import (
     build_artifact_deterministic,
     build_introspection_deterministic,
@@ -17,7 +25,6 @@ from cme.generators import (
 )
 from cme.neuro import render_neuro_md, run_and_save_v4, run_v4
 from cme.ontology import build_reality_maps, extract_categories
-from cme.pipeline_v5 import run_and_save_v5, run_v5
 from cme.synthesis import build_synthesis
 from cme.theories import run_theories
 from cme.verdict import read_verdict, render_verdict_md
@@ -112,28 +119,102 @@ def _cmd_synthesize(args: argparse.Namespace) -> int:
 def _cmd_pipeline(args: argparse.Namespace) -> int:
     raw = _read(args.input)
     if args.evidence:
-        run, manifest = run_and_save_v5(raw, Path(args.evidence))
+        run, manifest = run_and_save_v6(raw, Path(args.evidence))
         print(json.dumps(manifest, ensure_ascii=False, indent=2))
     else:
-        run = run_v5(raw)
+        run = run_v6(raw)
         print(json.dumps({
-            "next_action": run.next_action,
-            "dominant_axis": run.maps.dominant_axis,
+            "selected_action": run.action.selected_action,
+            "compression_status": run.mirror.compression_status,
+            "category_layer": "no_effect" if run.flags["category_layer_no_effect"] else "causal",
+            "theory_status": run.theory_status,
+            "decorative_flags": [k for k, v in run.flags.items() if v],
             "gates": run.validation.to_dict(),
-            "baseline": run.baseline,
         }, ensure_ascii=False, indent=2))
     print(f"\nВАЛІДАЦІЯ: {'PASS' if run.passed else 'FAIL'}", file=sys.stderr)
     return _emit(run.passed)
 
 
 def _cmd_verdict(args: argparse.Namespace) -> int:
-    v = read_verdict(Path(args.out))
+    out = Path(args.out)
+    verdict_md = out / "verdict.md"
+    manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
+    if verdict_md.exists():  # v0.6 bundle
+        print(verdict_md.read_text(encoding="utf-8"))
+        print(json.dumps({k: manifest[k] for k in (
+            "pipeline_version", "compression_status", "category_layer_status",
+            "theory_layer_status", "human_eval_status", "decorative_layers", "overall_status",
+        ) if k in manifest}, ensure_ascii=False, indent=2))
+        return _emit(manifest.get("overall_status") == "PASS")
+    v = read_verdict(out)  # v0.5 fallback
     print(render_verdict_md(v))
     return _emit(v["overall_status"] == "PASS")
 
 
 def _cmd_benchmark(args: argparse.Namespace) -> int:
-    print(json.dumps({"benchmark": run_benchmark(), "ablation": run_ablation()}, ensure_ascii=False, indent=2))
+    print(json.dumps({"benchmark_v6": run_benchmark_v6(), "ablation_v6": run_ablation_v6(),
+                      "benchmark_v5": run_benchmark(), "ablation_v5": run_ablation()},
+                     ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_complexity(args: argparse.Namespace) -> int:
+    print(json.dumps(estimate_complexity(_read(args.input)).to_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_mirror_adaptive(args: argparse.Namespace) -> int:
+    print(json.dumps(build_adaptive_mirror(_read(args.input)).to_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_categories_causal(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    effects = build_category_effects(_brm(extract_categories(raw)))
+    print(json.dumps([e.to_dict() for e in effects], ensure_ascii=False, indent=2))
+    return _emit(any(e.status == "causal" for e in effects) or not effects)
+
+
+def _cmd_maps_delta(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    delta = build_reality_map_delta(_brm(extract_categories(raw)), _bmd(raw))
+    print(json.dumps(delta.to_dict(), ensure_ascii=False, indent=2))
+    return _emit(not delta.low_map_utility)
+
+
+def _cmd_theories_contribution(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    contribs = track_theory_contribution(raw, list(_rt(raw, _bmd(raw), _brm(extract_categories(raw)))))
+    print(json.dumps([c.to_dict() for c in contribs], ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_action(args: argparse.Namespace) -> int:
+    run = run_v6(_read(args.input))
+    print(json.dumps(run.action.to_dict(), ensure_ascii=False, indent=2))
+    return _emit(not run.action.pipeline_overbuilt)
+
+
+def _cmd_ablate(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    report = run_ablation_v6(raw)
+    if args.evidence:
+        run_and_save_v6(raw, Path(args.evidence))
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    decorative = [k for k, v in report.items() if v["keep_modify_remove"] == "remove"]
+    print(f"\nDECORATIVE (remove-кандидати): {decorative or 'немає'}", file=sys.stderr)
+    return 0
+
+
+def _cmd_human_eval(args: argparse.Namespace) -> int:
+    packet = json.loads((Path(args.out) / "human_eval_packet.json").read_text(encoding="utf-8"))
+    print(json.dumps({
+        "human_eval_status": packet["human_eval_status"],
+        "baseline_source": packet["baseline_source"],
+        "pairwise_questions": len(packet["pairwise_questions"]),
+        "human_labels": packet["human_labels"],
+        "note": "людські оцінки НЕ заповнені автоматично — статус pending",
+    }, ensure_ascii=False, indent=2))
     return 0
 
 
@@ -243,8 +324,41 @@ def build_parser() -> argparse.ArgumentParser:
     p_verdict.add_argument("out", help="директорія Evidence Bundle")
     p_verdict.set_defaults(func=_cmd_verdict)
 
-    p_bench = sub.add_parser("benchmark", help="100-input proxy benchmark + ablation")
+    p_bench = sub.add_parser("benchmark", help="100-input proxy benchmark + ablation (v6+v5)")
     p_bench.set_defaults(func=_cmd_benchmark)
+
+    p_cx = sub.add_parser("complexity", help="оцінка складності → режим виходу")
+    p_cx.add_argument("input")
+    p_cx.set_defaults(func=_cmd_complexity)
+
+    p_ma = sub.add_parser("mirror-adaptive", help="адаптивне дзеркало (без padding)")
+    p_ma.add_argument("input")
+    p_ma.set_defaults(func=_cmd_mirror_adaptive)
+
+    p_cc = sub.add_parser("categories-causal", help="категорії як причинні ефекти")
+    p_cc.add_argument("input")
+    p_cc.set_defaults(func=_cmd_categories_causal)
+
+    p_md = sub.add_parser("maps-delta", help="дельта карт реальності")
+    p_md.add_argument("input")
+    p_md.set_defaults(func=_cmd_maps_delta)
+
+    p_tc = sub.add_parser("theories-contribution", help="внесок кожної теорії (0–5)")
+    p_tc.add_argument("input")
+    p_tc.set_defaults(func=_cmd_theories_contribution)
+
+    p_act = sub.add_parser("action", help="вибір однієї дії з причинних входів")
+    p_act.add_argument("input")
+    p_act.set_defaults(func=_cmd_action)
+
+    p_abl = sub.add_parser("ablate", help="ablation v2 (keep/modify/remove)")
+    p_abl.add_argument("input")
+    p_abl.add_argument("--evidence", help="директорія для Evidence Bundle")
+    p_abl.set_defaults(func=_cmd_ablate)
+
+    p_he = sub.add_parser("human-eval", help="звіт HumanEvalPacket з bundle (без фейк-оцінок)")
+    p_he.add_argument("out", help="директорія Evidence Bundle")
+    p_he.set_defaults(func=_cmd_human_eval)
 
     return parser
 

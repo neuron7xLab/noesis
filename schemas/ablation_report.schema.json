@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/ablation_report.schema.json",
+  "title": "ablation_report",
+  "type": "object",
+  "required": ["keep_modify_remove"]
+}

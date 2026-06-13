@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/intent_mirror_adaptive.schema.json",
+  "title": "intent_mirror_adaptive",
+  "type": "object",
+  "required": ["surface_intent","next_action","output_mode","compression_status"]
+}

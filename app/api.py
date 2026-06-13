@@ -16,9 +16,15 @@ from app.models import (
     ReverseRequest,
 )
 from app.services import decode_intent, finalize
+from cme.adaptive import build_adaptive_mirror
+from cme.benchmark_v6 import run_ablation_v6
+from cme.causal import build_category_effects, build_reality_map_delta, track_theory_contribution
+from cme.complexity import estimate_complexity
 from cme.eiic import run_eiic
 from cme.engine import run_v3
 from cme.neuro import run_v4
+from cme.pipeline_v6 import run_v6
+from cme.theories import run_theories
 from cme.generators import (
     build_artifact_deterministic,
     build_introspection_deterministic,
@@ -148,3 +154,59 @@ def neuro_endpoint(req: RawRequest) -> dict[str, Any]:
 @app.post("/eiic")
 def eiic_endpoint(req: RawRequest) -> dict[str, Any]:
     return run_eiic(req.text).to_dict()
+
+
+@app.post("/complexity")
+def complexity_endpoint(req: RawRequest) -> dict[str, Any]:
+    return estimate_complexity(req.text).to_dict()
+
+
+@app.post("/mirror/adaptive")
+def mirror_adaptive_endpoint(req: RawRequest) -> dict[str, Any]:
+    return build_adaptive_mirror(req.text).to_dict()
+
+
+@app.post("/categories/causal")
+def categories_causal_endpoint(req: RawRequest) -> dict[str, Any]:
+    effects = build_category_effects(build_reality_maps(extract_categories(req.text)))
+    return {"effects": [e.to_dict() for e in effects]}
+
+
+@app.post("/maps/delta")
+def maps_delta_endpoint(req: RawRequest) -> dict[str, Any]:
+    delta = build_reality_map_delta(build_reality_maps(extract_categories(req.text)),
+                                    build_mirror_deterministic(req.text))
+    return delta.to_dict()
+
+
+@app.post("/theories/contribution")
+def theories_contribution_endpoint(req: RawRequest) -> dict[str, Any]:
+    contribs = track_theory_contribution(
+        req.text, list(run_theories(req.text, build_mirror_deterministic(req.text),
+                                    build_reality_maps(extract_categories(req.text)))))
+    return {"contributions": [c.to_dict() for c in contribs]}
+
+
+@app.post("/action")
+def action_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v6(req.text).action.to_dict()
+
+
+@app.post("/pipeline/v6")
+def pipeline_v6_endpoint(req: RawRequest) -> dict[str, Any]:
+    run = run_v6(req.text)
+    return {
+        "version": "0.6",
+        "selected_action": run.action.selected_action,
+        "compression_status": run.mirror.compression_status,
+        "category_layer": "no_effect" if run.flags["category_layer_no_effect"] else "causal",
+        "theory_status": run.theory_status,
+        "flags": run.flags,
+        "passed": run.passed,
+        "validation": run.validation.to_dict(),
+    }
+
+
+@app.post("/ablation/v6")
+def ablation_v6_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_ablation_v6(req.text)
