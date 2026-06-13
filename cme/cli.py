@@ -7,18 +7,29 @@ import json
 import sys
 from pathlib import Path
 
+from cme.engine import (
+    render_next_action_md,
+    render_reality_maps_md,
+    render_synthesis_md,
+    run_and_save_v3,
+    run_v3,
+)
 from cme.generators import (
     build_artifact_deterministic,
     build_introspection_deterministic,
     build_mirror_deterministic,
     build_mirror_llm,
 )
-from cme.pipeline import render_decision_md, render_mirror_md, run_and_save, run_pipeline
+from cme.ontology import build_reality_maps, extract_categories
+from cme.synthesis import build_synthesis
 from cme.validators import (
     validate_artifact,
+    validate_categories,
     validate_introspection,
+    validate_maps,
     validate_mirror,
     validate_reverse,
+    validate_synthesis,
 )
 from tools.reverse_inference import plan_backwards
 
@@ -71,15 +82,44 @@ def _cmd_artifact(args: argparse.Namespace) -> int:
     return _emit(report.passed)
 
 
+def _cmd_ontology(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    active = extract_categories(raw)
+    report = validate_categories(active)
+    print(json.dumps({"categories": [c.to_dict() for c in active], "validation": report.to_dict()},
+                     ensure_ascii=False, indent=2))
+    return _emit(report.passed)
+
+
+def _cmd_maps(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    maps = build_reality_maps(extract_categories(raw))
+    report = validate_maps(maps)
+    print(json.dumps({"reality_maps": maps.to_dict(), "validation": report.to_dict()},
+                     ensure_ascii=False, indent=2))
+    return _emit(report.passed)
+
+
+def _cmd_synthesize(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    maps = build_reality_maps(extract_categories(raw))
+    synth = build_synthesis(maps)
+    report = validate_synthesis(synth)
+    print(json.dumps({"synthesis_axis": synth.to_dict(), "validation": report.to_dict()},
+                     ensure_ascii=False, indent=2))
+    return _emit(report.passed)
+
+
 def _cmd_pipeline(args: argparse.Namespace) -> int:
     raw = _read(args.input)
     if args.evidence:
-        run, manifest = run_and_save(raw, Path(args.evidence), backend=args.backend)
+        run, manifest = run_and_save_v3(raw, Path(args.evidence))
         print(json.dumps(manifest, ensure_ascii=False, indent=2))
     else:
-        run = run_pipeline(raw, backend=args.backend)
-        print(render_mirror_md(run))
-        print(render_decision_md(run))
+        run = run_v3(raw)
+        print(render_reality_maps_md(run))
+        print(render_synthesis_md(run))
+        print(render_next_action_md(run))
     print(f"\nВАЛІДАЦІЯ: {'PASS' if run.passed else 'FAIL'}", file=sys.stderr)
     return _emit(run.passed)
 
@@ -116,7 +156,19 @@ def build_parser() -> argparse.ArgumentParser:
     p_art.add_argument("input")
     p_art.set_defaults(func=_cmd_artifact)
 
-    p_pipe = sub.add_parser("pipeline", help="повна труба + Evidence Bundle")
+    p_ont = sub.add_parser("ontology", help="текст → активні метафізичні категорії")
+    p_ont.add_argument("input")
+    p_ont.set_defaults(func=_cmd_ontology)
+
+    p_maps = sub.add_parser("maps", help="текст → три карти реальності")
+    p_maps.add_argument("input")
+    p_maps.set_defaults(func=_cmd_maps)
+
+    p_syn = sub.add_parser("synthesize", help="текст → синтез-вісь (preserve/test/evolve/refuse)")
+    p_syn.add_argument("input")
+    p_syn.set_defaults(func=_cmd_synthesize)
+
+    p_pipe = sub.add_parser("pipeline", help="повна труба v0.3 + Evidence Bundle (8 файлів)")
     p_pipe.add_argument("input")
     p_pipe.add_argument("--evidence", help="директорія для Evidence Bundle")
     add_backend(p_pipe)

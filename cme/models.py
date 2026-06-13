@@ -65,3 +65,58 @@ class ValidationReport:
             "passed": self.passed,
             "checks": [c.to_dict() for c in self.checks],
         }
+
+
+# ── Цивілізаційна онтологія (v0.3) ────────────────────────────────────────────
+
+
+@dataclass(frozen=True)
+class ActiveCategory:
+    name: str
+    axis: str  # europe | usa | china
+    function: str
+    failure_mode: str
+    matched: list[str]
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class RealityMaps:
+    europe: list[ActiveCategory]
+    usa: list[ActiveCategory]
+    china: list[ActiveCategory]
+    dominant_axis: str
+    dormant_axes: list[str]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "europe": [c.to_dict() for c in self.europe],
+            "usa": [c.to_dict() for c in self.usa],
+            "china": [c.to_dict() for c in self.china],
+            "dominant_axis": self.dominant_axis,
+            "dormant_axes": self.dormant_axes,
+        }
+
+
+@dataclass(frozen=True)
+class SynthesisAxis:
+    preserve: str  # норма істини (Європа)
+    test: str  # експеримент/наслідок (США)
+    evolve: str  # процес/тайминг (Китай)
+    refuse: str  # failure mode домінантної осі
+
+    def to_dict(self) -> dict[str, str]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class ReversePlan:
+    first_missing_condition: str
+    blocking_assumption: str
+    minimum_viable_intervention: str
+    validation_event: str
+
+    def to_dict(self) -> dict[str, str]:
+        return asdict(self)

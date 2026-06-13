@@ -9,7 +9,15 @@ from __future__ import annotations
 from typing import Any
 
 from cme.forbidden import check_forbidden_claims, hallucination_risk
-from cme.models import Check, IntrospectionMap, MirrorArtifact, ValidationReport
+from cme.models import (
+    ActiveCategory,
+    Check,
+    IntrospectionMap,
+    MirrorArtifact,
+    RealityMaps,
+    SynthesisAxis,
+    ValidationReport,
+)
 from formal.metrics import falsifier_present
 from tools.artifact_checker import check_artifact
 from tools.finalizer100 import MAX_WORDS, MIN_WORDS, REQUIRED_ANCHORS, count_words
@@ -92,3 +100,54 @@ def validate_reverse(trace: ReverseTrace) -> ValidationReport:
 
 def report_to_dict(report: ValidationReport) -> dict[str, Any]:
     return report.to_dict()
+
+
+# ── Валідатори v0.3 (онтологія / карти / синтез / гарди) ──────────────────────
+
+_VALID_AXES = ("europe", "usa", "china")
+_METAPHOR_MARKERS = ("ніби", "наче", "мов ", "як ріка", "як потік")
+
+
+def validate_categories(active: list[ActiveCategory]) -> ValidationReport:
+    axis_ok = all(c.axis in _VALID_AXES for c in active)
+    return ValidationReport("categories", [
+        Check("category_completeness", len(active) >= 1, f"активних категорій: {len(active)}"),
+        Check("axis_separation", axis_ok, "кожна категорія на одній валідній осі"),
+    ])
+
+
+def validate_maps(maps: RealityMaps) -> ValidationReport:
+    total = len(maps.europe) + len(maps.usa) + len(maps.china)
+    return ValidationReport("reality_maps", [
+        Check("maps_nonempty", total >= 1, f"категорій на картах: {total}"),
+        Check("dominant_axis_valid", maps.dominant_axis in _VALID_AXES, f"домінанта: {maps.dominant_axis}"),
+    ])
+
+
+def validate_synthesis(synth: SynthesisAxis) -> ValidationReport:
+    fields = synth.to_dict()
+    missing = [k for k, v in fields.items() if not v.strip()]
+    return ValidationReport("synthesis_axis", [
+        Check("four_axes_present", not missing,
+              "preserve/test/evolve/refuse заповнені" if not missing else "відсутні: " + ", ".join(missing)),
+    ])
+
+
+def validate_guards(blob: str, next_action: str, artifact_validation: str) -> ValidationReport:
+    forbidden = check_forbidden_claims(blob)
+    low = blob.lower()
+    agi = [v for v in forbidden if "AGI" in v]
+    therapy = [v for v in forbidden if "therapy" in v or "heal" in v or "clinician" in v]
+    has_action = bool(next_action.strip())
+    executable = falsifier_present(artifact_validation)
+    metaphors = [m for m in _METAPHOR_MARKERS if m in low]
+    return ValidationReport("guards", [
+        Check("forbidden_claims", not forbidden, "чисто" if not forbidden else ", ".join(forbidden)),
+        Check("agi_overclaim", not agi, "немає AGI-claim"),
+        Check("therapy_overclaim", not therapy, "немає therapy-claim"),
+        Check("missing_next_action", has_action, "одна наступна дія присутня"),
+        Check("empty_abstraction", has_action and executable,
+              "є дія + виконуваний фальсифікатор" if has_action and executable else "абстракція без артефакту/дії"),
+        Check("unverifiable_metaphors", executable or not metaphors,
+              "метафори підкріплені виконуваною валідацією" if executable else "метафора без перевірки"),
+    ])

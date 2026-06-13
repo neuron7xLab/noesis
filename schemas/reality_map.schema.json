@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/reality_map.schema.json",
+  "title": "RealityMaps",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["europe","usa","china","dominant_axis","dormant_axes"],
+  "properties": {
+    "europe": {"type": "array", "items": {"$ref": "category.schema.json"}},
+    "usa": {"type": "array", "items": {"$ref": "category.schema.json"}},
+    "china": {"type": "array", "items": {"$ref": "category.schema.json"}},
+    "dominant_axis": {"type": "string", "enum": ["europe","usa","china"]},
+    "dormant_axes": {"type": "array", "items": {"type": "string", "enum": ["europe","usa","china"]}}
+  }
+}

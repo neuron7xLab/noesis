@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/category.schema.json",
+  "title": "ActiveCategory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name","axis","function","failure_mode","matched"],
+  "properties": {
+    "name": {"type": "string", "minLength": 1},
+    "axis": {"type": "string", "enum": ["europe","usa","china"]},
+    "function": {"type": "string", "minLength": 1},
+    "failure_mode": {"type": "string", "minLength": 1},
+    "matched": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+  }
+}

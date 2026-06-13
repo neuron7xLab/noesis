@@ -16,17 +16,22 @@ from app.models import (
     ReverseRequest,
 )
 from app.services import decode_intent, finalize
+from cme.engine import run_v3
 from cme.generators import (
     build_artifact_deterministic,
     build_introspection_deterministic,
     build_mirror_deterministic,
 )
-from cme.pipeline import run_pipeline
+from cme.ontology import build_reality_maps, extract_categories
+from cme.synthesis import build_synthesis
 from cme.validators import (
     validate_artifact,
+    validate_categories,
     validate_introspection,
+    validate_maps,
     validate_mirror,
     validate_reverse,
+    validate_synthesis,
 )
 from tools.reverse_inference import plan_backwards
 
@@ -82,13 +87,38 @@ def artifact_endpoint(req: RawRequest) -> dict[str, Any]:
     return {"artifact": artifact, "validation": validate_artifact(artifact, req.text).to_dict()}
 
 
+@app.post("/ontology")
+def ontology_endpoint(req: RawRequest) -> dict[str, Any]:
+    active = extract_categories(req.text)
+    return {
+        "categories": [c.to_dict() for c in active],
+        "validation": validate_categories(active).to_dict(),
+    }
+
+
+@app.post("/maps")
+def maps_endpoint(req: RawRequest) -> dict[str, Any]:
+    maps = build_reality_maps(extract_categories(req.text))
+    return {"reality_maps": maps.to_dict(), "validation": validate_maps(maps).to_dict()}
+
+
+@app.post("/synthesize")
+def synthesize_endpoint(req: RawRequest) -> dict[str, Any]:
+    maps = build_reality_maps(extract_categories(req.text))
+    synth = build_synthesis(maps)
+    return {"synthesis_axis": synth.to_dict(), "validation": validate_synthesis(synth).to_dict()}
+
+
 @app.post("/pipeline")
 def pipeline_endpoint(req: RawRequest) -> dict[str, Any]:
-    run = run_pipeline(req.text, backend="deterministic")
+    run = run_v3(req.text)
     return {
-        "method_selected": run.method_selected,
-        "mirror": run.mirror.to_dict(),
-        "introspection": run.introspection.to_dict(),
+        "version": "0.3",
+        "dominant_axis": run.maps.dominant_axis,
+        "controlling_category": run.controlling_category,
+        "reality_maps": run.maps.to_dict(),
+        "synthesis_axis": run.synthesis.to_dict(),
+        "reverse_plan": run.reverse.to_dict(),
         "artifact": run.artifact,
         "next_action": run.next_action,
         "passed": run.passed,

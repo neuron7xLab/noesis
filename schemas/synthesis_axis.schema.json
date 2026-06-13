@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/synthesis_axis.schema.json",
+  "title": "SynthesisAxis",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["preserve","test","evolve","refuse"],
+  "properties": {
+    "preserve": {"type": "string", "minLength": 1},
+    "test": {"type": "string", "minLength": 1},
+    "evolve": {"type": "string", "minLength": 1},
+    "refuse": {"type": "string", "minLength": 1}
+  }
+}
