@@ -7,14 +7,8 @@ import json
 import sys
 from pathlib import Path
 
+from cme.benchmark import run_ablation, run_benchmark
 from cme.eiic import render_eiic_md, run_and_save_eiic, run_eiic
-from cme.engine import (
-    render_next_action_md,
-    render_reality_maps_md,
-    render_synthesis_md,
-    run_and_save_v3,
-    run_v3,
-)
 from cme.generators import (
     build_artifact_deterministic,
     build_introspection_deterministic,
@@ -23,8 +17,10 @@ from cme.generators import (
 )
 from cme.neuro import render_neuro_md, run_and_save_v4, run_v4
 from cme.ontology import build_reality_maps, extract_categories
+from cme.pipeline_v5 import run_and_save_v5, run_v5
 from cme.synthesis import build_synthesis
 from cme.theories import run_theories
+from cme.verdict import read_verdict, render_verdict_md
 from cme.validators import (
     validate_artifact,
     validate_categories,
@@ -116,15 +112,29 @@ def _cmd_synthesize(args: argparse.Namespace) -> int:
 def _cmd_pipeline(args: argparse.Namespace) -> int:
     raw = _read(args.input)
     if args.evidence:
-        run, manifest = run_and_save_v3(raw, Path(args.evidence))
+        run, manifest = run_and_save_v5(raw, Path(args.evidence))
         print(json.dumps(manifest, ensure_ascii=False, indent=2))
     else:
-        run = run_v3(raw)
-        print(render_reality_maps_md(run))
-        print(render_synthesis_md(run))
-        print(render_next_action_md(run))
+        run = run_v5(raw)
+        print(json.dumps({
+            "next_action": run.next_action,
+            "dominant_axis": run.maps.dominant_axis,
+            "gates": run.validation.to_dict(),
+            "baseline": run.baseline,
+        }, ensure_ascii=False, indent=2))
     print(f"\nВАЛІДАЦІЯ: {'PASS' if run.passed else 'FAIL'}", file=sys.stderr)
     return _emit(run.passed)
+
+
+def _cmd_verdict(args: argparse.Namespace) -> int:
+    v = read_verdict(Path(args.out))
+    print(render_verdict_md(v))
+    return _emit(v["overall_status"] == "PASS")
+
+
+def _cmd_benchmark(args: argparse.Namespace) -> int:
+    print(json.dumps({"benchmark": run_benchmark(), "ablation": run_ablation()}, ensure_ascii=False, indent=2))
+    return 0
 
 
 def _cmd_theories(args: argparse.Namespace) -> int:
@@ -228,6 +238,13 @@ def build_parser() -> argparse.ArgumentParser:
     p_eiic.add_argument("input")
     p_eiic.add_argument("--evidence", help="директорія для Evidence Bundle")
     p_eiic.set_defaults(func=_cmd_eiic)
+
+    p_verdict = sub.add_parser("verdict", help="читає Evidence Bundle і виносить вердикт по гейтах")
+    p_verdict.add_argument("out", help="директорія Evidence Bundle")
+    p_verdict.set_defaults(func=_cmd_verdict)
+
+    p_bench = sub.add_parser("benchmark", help="100-input proxy benchmark + ablation")
+    p_bench.set_defaults(func=_cmd_benchmark)
 
     return parser
 
