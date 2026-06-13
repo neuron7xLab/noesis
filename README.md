@@ -1,4 +1,4 @@
-# Cognitive Mirror Engine (CME) v0.6
+# Cognitive Mirror Engine (CME) v0.8
 
 > Software-governed методологічний інструмент екстерналізованої метакогніції.
 > Детермінований + LLM-асистований: перетворює сирий людський сигнал на
@@ -37,6 +37,8 @@ uvicorn app.api:app --port 8000                                      # /pipeline
 - **v0.4 + EIIC** — 12 нейрокогнітивних лінз (проксі) + термінальний вектор + провенанс.
 - **v0.5** — 10 валідаційних гейтів + claim governance + 100-input benchmark.
 - **v0.6** — причинні категорії, адаптивне стиснення, theory contribution, human-eval harness.
+- **v0.7** — розподілений когнітивний граф + IEV precision-gate + dimensionality (шум vs осі).
+- **v0.8** — latency-aware IEV optimization: cluster_quality, node-scaling крива (оптимум ~1–2 вузли).
 
 ## Документація
 Архітектура [`docs/CME_V06_ARCHITECTURE.md`] · методологія [`docs/METHODOLOGY.md`] ·

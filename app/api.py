@@ -25,6 +25,7 @@ from cme.engine import run_v3
 from cme.neuro import run_v4
 from cme.pipeline_v6 import run_v6
 from cme.pipeline_v7 import run_v7
+from cme.pipeline_v8 import run_v8
 from cme.theories import run_theories
 from cme.generators import (
     build_artifact_deterministic,
@@ -256,6 +257,59 @@ def pipeline_v7_endpoint(req: RawRequest) -> dict[str, Any]:
         "dimensionality": run.dimensionality.to_dict(),
         "iev_gate": run.gate.to_dict(),
         "human_bottleneck_score": run.entropy.human_bottleneck_score,
+        "passed": run.passed,
+        "validation": run.validation.to_dict(),
+    }
+
+
+@app.post("/intent-vector")
+def intent_vector_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v8(req.text).intent.to_dict()
+
+
+@app.post("/entropy-budget")
+def entropy_budget_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v8(req.text).budget.to_dict()
+
+
+@app.post("/node-plan")
+def node_plan_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v8(req.text).plan.to_dict()
+
+
+@app.post("/latency")
+def latency_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v8(req.text).latency.to_dict()
+
+
+@app.post("/iev-bandwidth")
+def iev_bandwidth_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v8(req.text).iev.to_dict()
+
+
+@app.post("/collapse")
+def collapse_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v8(req.text).collapse.to_dict()
+
+
+@app.post("/cluster-quality")
+def cluster_quality_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v8(req.text).quality.to_dict()
+
+
+@app.post("/bottleneck-plan")
+def bottleneck_plan_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v8(req.text).bottleneck.to_dict()
+
+
+@app.post("/pipeline/v8")
+def pipeline_v8_endpoint(req: RawRequest) -> dict[str, Any]:
+    run = run_v8(req.text)
+    return {
+        "version": "0.8",
+        "cluster_quality": run.quality.to_dict(),
+        "bottleneck": run.bottleneck.to_dict(),
+        "collapse": run.collapse.to_dict(),
         "passed": run.passed,
         "validation": run.validation.to_dict(),
     }

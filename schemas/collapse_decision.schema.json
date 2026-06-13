@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/collapse_decision.schema.json",
+  "title": "collapse_decision",
+  "type": "object",
+  "required": ["collapse_now","collapse_reason","selected_candidate","next_action"]
+}

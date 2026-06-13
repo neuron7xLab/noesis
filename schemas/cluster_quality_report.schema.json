@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/cluster_quality_report.schema.json",
+  "title": "cluster_quality_report",
+  "type": "object",
+  "required": ["iev_bandwidth_score","node_diversity_score","intent_coherence_score","noise_rejection_score","latency_drag_score","cluster_quality"]
+}

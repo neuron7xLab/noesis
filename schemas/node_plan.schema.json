@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/node_plan.schema.json",
+  "title": "node_plan",
+  "type": "object",
+  "required": ["selected_nodes","why_each_node_is_needed","redundancy_risk"]
+}

@@ -18,6 +18,9 @@ from cme.theories import run_theories as _rt
 from cme.generators import build_mirror_deterministic as _bmd
 from cme.pipeline_v6 import run_and_save_v6, run_v6
 from cme.pipeline_v7 import run_and_save_v7, run_v7
+from cme.pipeline_v8 import run_and_save_v8, run_v8
+from cme.benchmark_v8 import node_scaling_curve
+from cme.vertical_loop import build_vertical_loop
 from cme.generators import (
     build_artifact_deterministic,
     build_introspection_deterministic,
@@ -261,6 +264,43 @@ def _cmd_pipeline_v7(args: argparse.Namespace) -> int:
     return _emit(run.passed)
 
 
+def _cmd_v8_part(args: argparse.Namespace) -> int:
+    run = run_v8(_read(args.input))
+    parts: dict[str, dict[str, object]] = {
+        "intent-vector": run.intent.to_dict(), "entropy-budget": run.budget.to_dict(),
+        "node-plan": run.plan.to_dict(), "latency": run.latency.to_dict(),
+        "iev-bandwidth": run.iev.to_dict(), "precision": run.precision.to_dict(),
+        "collapse": run.collapse.to_dict(), "cluster-quality": run.quality.to_dict(),
+        "bottleneck-plan": run.bottleneck.to_dict(),
+    }
+    print(json.dumps(parts[args.part], ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_pipeline_v8(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    if args.evidence:
+        run, manifest = run_and_save_v8(raw, Path(args.evidence))
+        print(json.dumps(manifest, ensure_ascii=False, indent=2))
+    else:
+        run = run_v8(raw)
+        print(json.dumps({"cluster_quality": run.quality.to_dict(), "bottleneck": run.bottleneck.to_dict(),
+                          "collapse": run.collapse.to_dict(), "gates": run.validation.to_dict()},
+                         ensure_ascii=False, indent=2))
+    print(f"\nВАЛІДАЦІЯ: {'PASS' if run.passed else 'FAIL'}", file=sys.stderr)
+    return _emit(run.passed)
+
+
+def _cmd_vertical_loop(args: argparse.Namespace) -> int:
+    print(json.dumps(build_vertical_loop(_read(args.input)).to_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_node_scaling(args: argparse.Namespace) -> int:
+    print(json.dumps(node_scaling_curve(_read(args.input)), ensure_ascii=False, indent=2))
+    return 0
+
+
 def _cmd_human_eval(args: argparse.Namespace) -> int:
     packet = json.loads((Path(args.out) / "human_eval_packet.json").read_text(encoding="utf-8"))
     print(json.dumps({
@@ -430,6 +470,26 @@ def build_parser() -> argparse.ArgumentParser:
         if cmd in ("graph", "pipeline-v7"):
             p.add_argument("--evidence", help="директорія для Evidence Bundle")
         p.set_defaults(func=fn)
+
+    # v0.8 — latency-aware IEV optimization
+    for part in ("intent-vector", "entropy-budget", "node-plan", "latency", "iev-bandwidth",
+                 "precision-v8", "collapse", "cluster-quality", "bottleneck-plan"):
+        p = sub.add_parser(part, help=f"v0.8 {part}")
+        p.add_argument("input")
+        p.set_defaults(func=_cmd_v8_part, part=part.replace("precision-v8", "precision"))
+
+    p_p8 = sub.add_parser("pipeline-v8", help="повна труба v0.8 + 15-файл Evidence Bundle")
+    p_p8.add_argument("input")
+    p_p8.add_argument("--evidence", help="директорія для Evidence Bundle")
+    p_p8.set_defaults(func=_cmd_pipeline_v8)
+
+    p_vl = sub.add_parser("vertical-loop", help="cyclic reverse vertical cognitive loop")
+    p_vl.add_argument("input")
+    p_vl.set_defaults(func=_cmd_vertical_loop)
+
+    p_ns = sub.add_parser("node-scaling", help="крива cluster_quality vs кількість вузлів")
+    p_ns.add_argument("input")
+    p_ns.set_defaults(func=_cmd_node_scaling)
 
     return parser
 
