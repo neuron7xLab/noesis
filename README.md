@@ -1,8 +1,52 @@
-# Cognitive Mirror Methods
+# Cognitive Mirror Engine (CME) v0.6
 
-> Практичний brain-inspired репозиторій методів, протоколів, валідаторів і
-> LLM-інтерфейсів для розширення людського мислення через мову, рефлексію,
-> інтроспекцію, реверсивний інференс, зовнішнє обчислення та перевірні артефакти.
+> Software-governed методологічний інструмент екстерналізованої метакогніції.
+> Детермінований + LLM-асистований: перетворює сирий людський сигнал на
+> структуровану рефлексію, причинні категорії, нейрокогнітивні лінзи,
+> екстрапольований інтенційний вектор і **валідовані** артефакти.
+>
+> **Не AGI. Не терапія. Не детекція свідомості. Не декоративна філософія.**
+
+[![CI](https://img.shields.io/badge/CI-ruff%20%7C%20mypy--strict%20%7C%20pytest-success)](.github/workflows/ci.yml)
+**123 pytest · mypy --strict (41 файл) · ruff** — усе зелене.
+
+```text
+raw → complexity → adaptive mirror → causal categories → reality-map delta
+    → theory contribution → EIIC → action selector → artifact → 12 gates → evidence → verdict
+```
+
+## Принцип чесності
+Жоден шар не виживає, якщо не впливає на дію / валідацію / ризик / failure-mode /
+стиснення / людську преференцію / benchmark-delta / якість evidence. Інакше —
+позначається `decorative` і пропонується до видалення. Чесний вердикт із реальними
+числами: [`VERDICT.md`](VERDICT.md), [`docs/VERDICT_V6.md`](docs/VERDICT_V6.md).
+
+## Швидкий старт
+```bash
+make dev && make test
+python -m cme.cli pipeline examples/problems/08_ai_system_design.txt --evidence out/   # 15-файл bundle
+python -m cme.cli ablate examples/problems/08_ai_system_design.txt    # keep/modify/remove
+python -m cme.cli benchmark                                           # 100-input proxy + ablation
+python -m cme.cli verdict out/
+uvicorn app.api:app --port 8000                                      # /pipeline/v6, /action, ...
+```
+
+## Шари (еволюція)
+- **v0.1–v0.2** — 7 brain-inspired методів + детермінована підлога + LLM-підсилення.
+- **v0.3** — цивілізаційний рушій: 30 категорій → reality maps → synthesis.
+- **v0.4 + EIIC** — 12 нейрокогнітивних лінз (проксі) + термінальний вектор + провенанс.
+- **v0.5** — 10 валідаційних гейтів + claim governance + 100-input benchmark.
+- **v0.6** — причинні категорії, адаптивне стиснення, theory contribution, human-eval harness.
+
+## Документація
+Архітектура [`docs/CME_V06_ARCHITECTURE.md`] · методологія [`docs/METHODOLOGY.md`] ·
+теорії [`docs/THEORIES.md`] · формалізми [`docs/THEORY.md`] · цивілізаційна матриця
+[`docs/CIVILIZATIONAL_METAPHYSICS.md`] · claim governance [`docs/CLAIM_GOVERNANCE.md`] ·
+валідація [`docs/VALIDATION_V6.md`] · benchmark [`docs/BENCHMARK.md`] · етика [`docs/ethics.md`].
+
+---
+
+## Фундамент: brain-inspired методи
 
 ```text
 намір → мова → дзеркало LLM → рефлексія → реверсивний інференс → артефакт → перевірка → нове мислення
