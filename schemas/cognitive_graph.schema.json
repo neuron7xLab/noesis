@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/cognitive_graph.schema.json",
+  "title": "cognitive_graph",
+  "type": "object",
+  "required": ["nodes","edges","human_decision_points","bottlenecks"]
+}

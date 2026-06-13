@@ -24,6 +24,7 @@ from cme.eiic import run_eiic
 from cme.engine import run_v3
 from cme.neuro import run_v4
 from cme.pipeline_v6 import run_v6
+from cme.pipeline_v7 import run_v7
 from cme.theories import run_theories
 from cme.generators import (
     build_artifact_deterministic,
@@ -210,3 +211,51 @@ def pipeline_v6_endpoint(req: RawRequest) -> dict[str, Any]:
 @app.post("/ablation/v6")
 def ablation_v6_endpoint(req: RawRequest) -> dict[str, Any]:
     return run_ablation_v6(req.text)
+
+
+@app.post("/graph")
+def graph_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v7(req.text).graph.to_dict()
+
+
+@app.post("/node-profile")
+def node_profile_endpoint(req: RawRequest) -> dict[str, Any]:
+    return {"profiles": [p.to_dict() for p in run_v7(req.text).node_profiles]}
+
+
+@app.post("/dimensionality")
+def dimensionality_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v7(req.text).dimensionality.to_dict()
+
+
+@app.post("/gate")
+def gate_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v7(req.text).gate.to_dict()
+
+
+@app.post("/broadcast")
+def broadcast_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v7(req.text).broadcast.to_dict()
+
+
+@app.post("/entropy")
+def entropy_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v7(req.text).entropy.to_dict()
+
+
+@app.post("/precision")
+def precision_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_v7(req.text).precision.to_dict()
+
+
+@app.post("/pipeline/v7")
+def pipeline_v7_endpoint(req: RawRequest) -> dict[str, Any]:
+    run = run_v7(req.text)
+    return {
+        "version": "0.7",
+        "dimensionality": run.dimensionality.to_dict(),
+        "iev_gate": run.gate.to_dict(),
+        "human_bottleneck_score": run.entropy.human_bottleneck_score,
+        "passed": run.passed,
+        "validation": run.validation.to_dict(),
+    }

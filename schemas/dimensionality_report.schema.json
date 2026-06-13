@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/dimensionality_report.schema.json",
+  "title": "dimensionality_report",
+  "type": "object",
+  "required": ["initial_hypothesis_axes","expanded_hypothesis_axes","noise_axes","useful_dimensionality_gain","net_cognitive_gain"]
+}

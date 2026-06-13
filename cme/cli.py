@@ -17,6 +17,7 @@ from cme.ontology import build_reality_maps as _brm
 from cme.theories import run_theories as _rt
 from cme.generators import build_mirror_deterministic as _bmd
 from cme.pipeline_v6 import run_and_save_v6, run_v6
+from cme.pipeline_v7 import run_and_save_v7, run_v7
 from cme.generators import (
     build_artifact_deterministic,
     build_introspection_deterministic,
@@ -206,6 +207,60 @@ def _cmd_ablate(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_graph(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    if args.evidence:
+        _, manifest = run_and_save_v7(raw, Path(args.evidence))
+        print(json.dumps(manifest, ensure_ascii=False, indent=2))
+        return _emit(manifest["overall_status"] == "PASS")
+    run = run_v7(raw)
+    print(json.dumps(run.graph.to_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_dimensionality(args: argparse.Namespace) -> int:
+    print(json.dumps(run_v7(_read(args.input)).dimensionality.to_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_gate(args: argparse.Namespace) -> int:
+    run = run_v7(_read(args.input))
+    print(json.dumps(run.gate.to_dict(), ensure_ascii=False, indent=2))
+    return _emit(run.gate.decision in ("pass", "compress"))
+
+
+def _cmd_broadcast(args: argparse.Namespace) -> int:
+    print(json.dumps(run_v7(_read(args.input)).broadcast.to_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_entropy(args: argparse.Namespace) -> int:
+    print(json.dumps(run_v7(_read(args.input)).entropy.to_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_precision(args: argparse.Namespace) -> int:
+    print(json.dumps(run_v7(_read(args.input)).precision.to_dict(), ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_pipeline_v7(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    if args.evidence:
+        run, manifest = run_and_save_v7(raw, Path(args.evidence))
+        print(json.dumps(manifest, ensure_ascii=False, indent=2))
+    else:
+        run = run_v7(raw)
+        print(json.dumps({
+            "dimensionality": run.dimensionality.to_dict(),
+            "iev_gate": run.gate.to_dict(),
+            "human_bottleneck": run.entropy.human_bottleneck_score,
+            "gates": run.validation.to_dict(),
+        }, ensure_ascii=False, indent=2))
+    print(f"\nВАЛІДАЦІЯ: {'PASS' if run.passed else 'FAIL'}", file=sys.stderr)
+    return _emit(run.passed)
+
+
 def _cmd_human_eval(args: argparse.Namespace) -> int:
     packet = json.loads((Path(args.out) / "human_eval_packet.json").read_text(encoding="utf-8"))
     print(json.dumps({
@@ -359,6 +414,22 @@ def build_parser() -> argparse.ArgumentParser:
     p_he = sub.add_parser("human-eval", help="звіт HumanEvalPacket з bundle (без фейк-оцінок)")
     p_he.add_argument("out", help="директорія Evidence Bundle")
     p_he.set_defaults(func=_cmd_human_eval)
+
+    # v0.7 — distributed cognitive graph
+    for cmd, fn, helptext in (
+        ("graph", _cmd_graph, "когнітивний граф (+ --evidence для bundle v0.7)"),
+        ("dimensionality", _cmd_dimensionality, "оцінка корисної розмірності проти шуму"),
+        ("gate", _cmd_gate, "IEV precision gate: pass/fail/compress/reroute/human_review"),
+        ("broadcast", _cmd_broadcast, "broadcast/reentry (GNWT-аналогія)"),
+        ("entropy", _cmd_entropy, "ledger делегованої ентропії"),
+        ("precision", _cmd_precision, "semi-automated auditor/verifier precision"),
+        ("pipeline-v7", _cmd_pipeline_v7, "повна труба v0.7 + 13-файл Evidence Bundle"),
+    ):
+        p = sub.add_parser(cmd, help=helptext)
+        p.add_argument("input")
+        if cmd in ("graph", "pipeline-v7"):
+            p.add_argument("--evidence", help="директорія для Evidence Bundle")
+        p.set_defaults(func=fn)
 
     return parser
 

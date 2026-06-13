@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/node_profile.schema.json",
+  "title": "node_profile",
+  "type": "object",
+  "required": ["node_id","role","bandwidth","failure_risk","validation_power"]
+}
