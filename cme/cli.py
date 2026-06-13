@@ -7,6 +7,7 @@ import json
 import sys
 from pathlib import Path
 
+from cme.eiic import render_eiic_md, run_and_save_eiic, run_eiic
 from cme.engine import (
     render_next_action_md,
     render_reality_maps_md,
@@ -20,8 +21,10 @@ from cme.generators import (
     build_mirror_deterministic,
     build_mirror_llm,
 )
+from cme.neuro import render_neuro_md, run_and_save_v4, run_v4
 from cme.ontology import build_reality_maps, extract_categories
 from cme.synthesis import build_synthesis
+from cme.theories import run_theories
 from cme.validators import (
     validate_artifact,
     validate_categories,
@@ -124,6 +127,40 @@ def _cmd_pipeline(args: argparse.Namespace) -> int:
     return _emit(run.passed)
 
 
+def _cmd_theories(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    mirror = build_mirror_deterministic(raw)
+    maps = build_reality_maps(extract_categories(raw))
+    readouts = run_theories(raw, mirror, maps)
+    print(json.dumps({k: r.to_dict() for k, r in readouts.items()}, ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_neuro(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    if args.evidence:
+        run, manifest = run_and_save_v4(raw, Path(args.evidence))
+        print(json.dumps(manifest, ensure_ascii=False, indent=2))
+    else:
+        run = run_v4(raw)
+        print(render_neuro_md(run))
+    print(f"\nВАЛІДАЦІЯ: {'PASS' if run.passed else 'FAIL'}", file=sys.stderr)
+    return _emit(run.passed)
+
+
+def _cmd_eiic(args: argparse.Namespace) -> int:
+    raw = _read(args.input)
+    if args.evidence:
+        manifest = run_and_save_eiic(raw, Path(args.evidence))
+        print(json.dumps(manifest, ensure_ascii=False, indent=2))
+        passed = bool(manifest["validations_passed"])
+    else:
+        core = run_eiic(raw)
+        print(render_eiic_md(core))
+        passed = core.passed
+    return _emit(passed)
+
+
 def _cmd_validate(args: argparse.Namespace) -> int:
     payload = json.loads(_read(args.input))
     artifact = payload.get("artifact", payload)
@@ -177,6 +214,20 @@ def build_parser() -> argparse.ArgumentParser:
     p_val = sub.add_parser("validate", help="перевірити артефакт.json")
     p_val.add_argument("input")
     p_val.set_defaults(func=_cmd_validate)
+
+    p_th = sub.add_parser("theories", help="текст → 12 нейрокогнітивних лінз (проксі)")
+    p_th.add_argument("input")
+    p_th.set_defaults(func=_cmd_theories)
+
+    p_neuro = sub.add_parser("neuro", help="нейрокогнітивний артефакт v0.4 (10 секцій)")
+    p_neuro.add_argument("input")
+    p_neuro.add_argument("--evidence", help="директорія для Evidence Bundle")
+    p_neuro.set_defaults(func=_cmd_neuro)
+
+    p_eiic = sub.add_parser("eiic", help="екстрапольований інтенційний ядро-вектор")
+    p_eiic.add_argument("input")
+    p_eiic.add_argument("--evidence", help="директорія для Evidence Bundle")
+    p_eiic.set_defaults(func=_cmd_eiic)
 
     return parser
 

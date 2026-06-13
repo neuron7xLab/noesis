@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/theory_readout.schema.json",
+  "title": "LensReadout",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["lens","software_role","operator_output","signals","status"],
+  "properties": {
+    "lens": {"type": "string", "minLength": 1},
+    "software_role": {"type": "string", "minLength": 1},
+    "operator_output": {"type": "string", "minLength": 1},
+    "signals": {"type": "array", "items": {"type": "string"}},
+    "status": {"type": "string", "const": "deterministic-proxy"}
+  }
+}

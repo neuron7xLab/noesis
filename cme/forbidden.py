@@ -25,6 +25,18 @@ _FORBIDDEN_CLAIMS: tuple[tuple[str, str], ...] = (
     ("фізично розширюємо свідомість", "consciousness expansion claim"),
     ("доведена модель мозку", "validated brain model claim"),
     ("науково валідована когнітивна", "validated cognitive-science claim"),
+    # v0.4 / EIIC — нейрокогнітивні та екстрапольовані overclaims
+    ("детектує свідомість", "consciousness detection"),
+    ("вимірює свідомість", "consciousness measurement"),
+    ("система свідома", "consciousness claim"),
+    ("вимірює досвід", "IIT-experience overclaim"),
+    ("доводить досвід", "IIT-experience overclaim"),
+    ("судилось", "destiny language"),
+    ("призначено долею", "destiny language"),
+    ("така доля", "destiny language"),
+    ("містичн", "mysticism"),
+    ("езотер", "mysticism"),
+    ("карма", "mysticism"),
 )
 
 # Маркери непідкріпленої впевненості (галюцинаційний ризик).

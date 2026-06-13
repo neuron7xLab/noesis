@@ -10,6 +10,11 @@
   Synthesis Axis → Reverse Plan; 8-файловий Evidence Bundle; 12 реальних прикладів;
   spec-документи (ARCHITECTURE/ONTOLOGY/METHODS/SCHEMAS/VALIDATION/EXAMPLES).
 
+- **v0.4 + EIIC** — нейрокогнітивний шар: 12 теоретичних лінз як детерміновані
+  проксі (`cme theories|neuro`), EIIC термінальний вектор (`cme eiic`) з примусовим
+  тегуванням провенансу (observed/inferred/speculative/forbidden); forbidden-шар
+  ловить claims про свідомість/IIT-досвід/AGI/долю/містику.
+
 ## Далі (8 тижнів)
 | Тиждень | Інкремент | Доказ |
 |---|---|---|

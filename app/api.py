@@ -16,7 +16,9 @@ from app.models import (
     ReverseRequest,
 )
 from app.services import decode_intent, finalize
+from cme.eiic import run_eiic
 from cme.engine import run_v3
+from cme.neuro import run_v4
 from cme.generators import (
     build_artifact_deterministic,
     build_introspection_deterministic,
@@ -129,3 +131,20 @@ def pipeline_endpoint(req: RawRequest) -> dict[str, Any]:
 @app.post("/validate")
 def validate_endpoint(req: ArtifactRequest) -> dict[str, Any]:
     return validate_artifact(req.artifact).to_dict()
+
+
+@app.post("/neuro")
+def neuro_endpoint(req: RawRequest) -> dict[str, Any]:
+    run = run_v4(req.text)
+    return {
+        "version": "0.4",
+        "sections": run.sections(),
+        "theory_readout": {k: r.to_dict() for k, r in run.readouts.items()},
+        "passed": run.passed,
+        "validations": [v.to_dict() for v in run.validations],
+    }
+
+
+@app.post("/eiic")
+def eiic_endpoint(req: RawRequest) -> dict[str, Any]:
+    return run_eiic(req.text).to_dict()
