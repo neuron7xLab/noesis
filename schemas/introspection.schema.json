@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/introspection.schema.json",
+  "title": "IntrospectionMap",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["intent","fear","constraint","missing_condition","decision_boundary","action"],
+  "properties": {
+    "intent": {"type": "string", "minLength": 1},
+    "fear": {"type": "string", "minLength": 1},
+    "constraint": {"type": "string", "minLength": 1},
+    "missing_condition": {"type": "string", "minLength": 1},
+    "decision_boundary": {"type": "string", "minLength": 1},
+    "action": {"type": "string", "minLength": 1}
+  }
+}

@@ -27,3 +27,18 @@ class IntentResponse(BaseModel):
     constraint: str
     next_action: str
     assumptions: list[str]
+
+
+class RawRequest(BaseModel):
+    text: str = Field(..., min_length=1, description="Сире повідомлення користувача.")
+    backend: str = Field(default="deterministic", description="deterministic | llm | cli | sdk | auto")
+
+
+class ReverseRequest(BaseModel):
+    target_state: str = Field(..., min_length=1)
+    current_facts: list[str] = Field(default_factory=list)
+    required_conditions: list[str] = Field(default_factory=list)
+
+
+class ArtifactRequest(BaseModel):
+    artifact: dict[str, str]
