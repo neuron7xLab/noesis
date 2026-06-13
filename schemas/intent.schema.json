@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cmm/intent.schema.json",
+  "title": "Intent",
+  "description": "П'ятишарова декомпозиція наміру користувача.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["surface", "process", "strategic", "constraint", "next_action"],
+  "properties": {
+    "surface": {"type": "string", "minLength": 1, "description": "Явний дослівний запит."},
+    "process": {"type": "string", "minLength": 1, "description": "Яку операцію треба виконати."},
+    "strategic": {"type": "string", "minLength": 1, "description": "Якого результату прагне користувач."},
+    "constraint": {"type": "string", "minLength": 1, "description": "Чого треба уникнути."},
+    "next_action": {"type": "string", "minLength": 1, "description": "Що має статися негайно."},
+    "assumptions": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Явно позначені припущення за неоднозначності."
+    }
+  }
+}
