@@ -47,12 +47,18 @@ make run               # API на :8000 → POST /finalize, /intent
 methods/     7 методів за контрактом
 prompts/     5 production-промптів
 schemas/     intent · reflection · inference_trace · artifact (JSON Schema 2020-12)
-tools/       finalizer100 · intent_parser · reverse_inference · *_validator · artifact_checker
+tools/       finalizer100 · intent_parser · reverse_inference · *_validator · artifact_checker · llm_adapter · pipeline
+formal/      ізоморфізм до конструктів: constructs · metrics · verify
 app/         FastAPI: /health · /finalize · /intent
 examples/    10 кейсів використання
-docs/        manifesto · philosophy · ethics · glossary
-tests/       контрактні + smoke-тести
+docs/        manifesto · philosophy · ethics · glossary · THEORY
+tests/       контрактні + smoke + формальні інваріанти
 ```
+
+## Формальний шар
+Кожен метод ізоморфний канонічному конструкту (метакогніція, STRIPS-регресія,
+інформаційне вузьке місце, демаркація Поппера…) з обчислюваним інваріантом і
+фальсифікатором. Карта, цитування й епістемічний статус — [`docs/THEORY.md`](docs/THEORY.md).
 
 ## Центральна теза
 Межі мови задають межі доступного мислення. Інструмент розширює людину, не
