@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/evidence_integral.schema.json",
+  "title": "Evidence Integral Bundle",
+  "description": "Hash-chained integral of a run: transitions + decisions + artifacts + hashes.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "run_id",
+    "input_hash",
+    "state_transition_hashes",
+    "artifact_hashes",
+    "decision_hashes",
+    "verifier_outputs",
+    "rollback_points",
+    "final_manifest_hash"
+  ],
+  "properties": {
+    "run_id": { "type": "string", "minLength": 1 },
+    "input_hash": { "type": "string", "minLength": 64, "maxLength": 64 },
+    "state_transition_hashes": { "type": "array", "items": { "type": "string" } },
+    "artifact_hashes": { "type": "array", "items": { "type": "string" } },
+    "decision_hashes": { "type": "array", "items": { "type": "string" } },
+    "verifier_outputs": { "type": "array" },
+    "rollback_points": { "type": "array", "items": { "type": "string" } },
+    "final_manifest_hash": { "type": "string", "minLength": 64, "maxLength": 64 }
+  }
+}
