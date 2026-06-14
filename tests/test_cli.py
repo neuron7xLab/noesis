@@ -28,6 +28,7 @@ _SPECIAL = {
     "benchmark",
     "bibliography",
     "physics-boundary",
+    "recovery",
 }
 # команди, що друкують не-JSON (markdown / звіт)
 _NON_JSON = {"human-eval", "eiic", "neuro"}
@@ -147,3 +148,11 @@ def test_physics_boundary_validate_runs(capsys: pytest.CaptureFixture[str]) -> N
     rc, out = _run(capsys, ["physics-boundary", "validate"])
     assert rc in (0, 1), f"physics-boundary: несподіваний exit-код {rc}"
     assert "PHYSICS CONTRACT:" in out
+
+
+def test_recovery_self_check_runs(capsys: pytest.CaptureFixture[str]) -> None:
+    rc, out = _run(capsys, ["recovery", "self-check"])
+    assert rc == 0, f"recovery self-check should pass, got {rc}"
+    payload = json.loads(out)
+    assert payload["healthy"] is True
+    assert payload["statuses"] == ["RECOVERED", "RECOVERED", "ESCALATED"]
