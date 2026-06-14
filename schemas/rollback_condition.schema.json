@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/rollback_condition.schema.json",
+  "title": "Rollback Condition / Event",
+  "description": "A rollback event: a typed trigger and whether prior valid state was restored.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["rollback_type", "was_invalid", "recovered", "state_lost"],
+  "properties": {
+    "rollback_type": {
+      "type": "string",
+      "enum": [
+        "schema_failure",
+        "test_failure",
+        "claim_failure",
+        "benchmark_regression",
+        "forbidden_claim_detected",
+        "human_rejection",
+        "artifact_instability"
+      ]
+    },
+    "was_invalid": { "type": "boolean" },
+    "recovered": { "type": "boolean" },
+    "state_lost": { "type": "boolean" }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/residual_promotion.schema.json",
+  "title": "Residual Promotion Decision",
+  "description": "Decision on whether a residual candidate may become a mechanism.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["candidate_id", "state", "reason", "mechanism_update"],
+  "properties": {
+    "candidate_id": { "type": "string", "minLength": 1 },
+    "state": {
+      "type": "string",
+      "enum": ["RESIDUAL", "CANDIDATE_MECHANISM", "VERIFIED_MECHANISM", "REJECTED", "HUMAN_REVIEW_REQUIRED"]
+    },
+    "reason": { "type": "string", "minLength": 1 },
+    "mechanism_update": { "type": "boolean" }
+  }
+}

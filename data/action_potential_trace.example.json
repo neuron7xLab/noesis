@@ -1,0 +1,62 @@
+{
+  "trace_id": "ap-trace-0001",
+  "records": [
+    {
+      "trace_id": "ap-trace-0001",
+      "cycle_id": 0,
+      "state_t": "repo: role2 merged",
+      "intent_delta": "implement action-potential trace",
+      "unfinished_work_delta": "trace runtime absent",
+      "gate_score": 0.71,
+      "threshold": 0.5,
+      "decision": "PASS",
+      "artifact_delta": "added noesis/runtime/action_potential_trace.py + schema + tests",
+      "rollback_condition": "schema_failure or test_failure -> git restore the runtime module",
+      "state_t_plus_1": "repo: trace runtime present"
+    },
+    {
+      "trace_id": "ap-trace-0001",
+      "cycle_id": 1,
+      "state_t": "repo: weak-evidence candidate",
+      "intent_delta": "promote LLM-proposed metric",
+      "unfinished_work_delta": "verifier not yet run",
+      "gate_score": 0.42,
+      "threshold": 0.5,
+      "decision": "BELOW_THRESHOLD",
+      "artifact_delta": "no discharge: routed back for verification",
+      "rollback_condition": "n/a (no state mutation on REROUTE)",
+      "state_t_plus_1": "repo: weak-evidence candidate (unchanged)"
+    },
+    {
+      "trace_id": "ap-trace-0001",
+      "cycle_id": 2,
+      "state_t": "repo: risky release",
+      "intent_delta": "auto-release to main",
+      "unfinished_work_delta": "broad CI not green",
+      "gate_score": 0.31,
+      "threshold": 0.5,
+      "decision": "HUMAN_REVIEW",
+      "artifact_delta": "no discharge: escalated to human review",
+      "rollback_condition": "human_rejection -> hold release",
+      "state_t_plus_1": "repo: risky release (held)"
+    },
+    {
+      "trace_id": "ap-trace-0001",
+      "cycle_id": 3,
+      "state_t": "repo: noisy idea",
+      "intent_delta": "add decorative layer",
+      "unfinished_work_delta": "no gate dependency",
+      "gate_score": 0.04,
+      "threshold": 0.5,
+      "decision": "BELOW_THRESHOLD",
+      "artifact_delta": "no discharge: below threshold, idea rejected as noise",
+      "rollback_condition": "n/a (no state mutation below threshold)",
+      "state_t_plus_1": "repo: noisy idea (rejected)"
+    }
+  ],
+  "metrics": {
+    "trace_completeness_rate": 1.0,
+    "rollback_defined_rate": 1.0,
+    "decision_explainability_rate": 1.0
+  }
+}

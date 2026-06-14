@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/failure_weighted_benchmark.schema.json",
+  "title": "Failure-Weighted Benchmark Report",
+  "description": "Quality = verified improvement minus unsupported, rollback debt, human overload.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "failure_weighted_score",
+    "verified_improvement",
+    "penalties",
+    "release_verdict",
+    "hard_blocks",
+    "open_hard_failures",
+    "metrics"
+  ],
+  "properties": {
+    "failure_weighted_score": { "type": "number" },
+    "verified_improvement": { "type": "number" },
+    "penalties": { "type": "number" },
+    "release_verdict": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "hard_blocks": { "type": "array", "items": { "type": "string" } },
+    "open_hard_failures": { "type": "array", "items": { "type": "string" } },
+    "metrics": {
+      "type": "object",
+      "required": [
+        "failure_weighted_score",
+        "rollback_debt",
+        "unsupported_claim_count",
+        "forbidden_claim_count",
+        "release_readiness_score"
+      ],
+      "properties": {
+        "failure_weighted_score": { "type": "number" },
+        "rollback_debt": { "type": "integer", "minimum": 0 },
+        "unsupported_claim_count": { "type": "integer", "minimum": 0 },
+        "forbidden_claim_count": { "type": "integer", "minimum": 0 },
+        "release_readiness_score": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

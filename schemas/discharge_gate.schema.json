@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/discharge_gate.schema.json",
+  "title": "Discharge Gate Decision",
+  "description": "One evaluation of w = aR + bV + gP - dK against the threshold.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["w", "threshold", "decision", "components", "inputs"],
+  "properties": {
+    "w": { "type": "number" },
+    "threshold": { "type": "number" },
+    "decision": {
+      "type": "string",
+      "enum": ["BELOW_THRESHOLD", "PASS", "FAIL", "REROUTE", "HUMAN_REVIEW"]
+    },
+    "components": {
+      "type": "object",
+      "required": ["alpha_R", "beta_V", "gamma_P", "minus_delta_K", "w", "theta", "accept"],
+      "properties": {
+        "alpha_R": { "type": "number" },
+        "beta_V": { "type": "number" },
+        "gamma_P": { "type": "number" },
+        "minus_delta_K": { "type": "number" },
+        "w": { "type": "number" },
+        "theta": { "type": "number" },
+        "accept": { "type": "number" }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "required": ["relevance", "verifier", "progress", "cost", "verifier_failed"],
+      "properties": {
+        "relevance": { "type": "number", "minimum": 0, "maximum": 1 },
+        "verifier": { "type": "number", "minimum": 0, "maximum": 1 },
+        "progress": { "type": "number", "minimum": 0, "maximum": 1 },
+        "cost": { "type": "number", "minimum": 0, "maximum": 1 },
+        "verifier_failed": { "type": "boolean" }
+      }
+    }
+  }
+}
