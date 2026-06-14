@@ -143,15 +143,20 @@ Live numbers: `noesis bibliography verdict`; full tables in
 4. **Proxy (S5).** IEV precision gate, IEV bandwidth, delegated computational
    entropy, cognitive dimensionality, cluster quality, theory lenses — heuristics
    that say *proxy*, never *measurement* (Gate 8).
-5. **Speculative (S6).** EIIC — a trajectory construct with **no source and no
-   validation**; listed in [`docs/UNSUPPORTED_CLAIMS.md`](docs/UNSUPPORTED_CLAIMS.md).
+5. **Speculative (S6).** EIIC — a trajectory construct framed by possible-selves
+   (Markus & Nurius 1986) and narrative-identity (McAdams 2001) psychology, but
+   with **no predictive validation**; listed in [`docs/UNSUPPORTED_CLAIMS.md`](docs/UNSUPPORTED_CLAIMS.md).
 6. **Forbidden (X).** 12 overclaims (AGI, consciousness detection, Φ-as-experience,
    PFC bitrate, judge-as-truth, therapy, diagnosis, destiny, physical entropy,
    brain dimensionality) — each with a safe replacement and a blocking gate
    ([`docs/OVERCLAIM_GUARDRAILS.md`](docs/OVERCLAIM_GUARDRAILS.md)).
-7. **Lacking source support.** `eiic_speculative` (S6) and 4 background sources
-   (Fleming & Lau, Self-Refine, Reflexion, AutoGen) cited in docs but not yet
-   central to a ledger claim — tracked in `docs/UNSUPPORTED_CLAIMS.md`.
+7. **Lacking source support.** None. Every claim is now anchored to ≥1 source
+   (Gate 11) and every source anchors ≥1 claim (Gate 6/7) — zero
+   `claims_without_sources`, zero `sources_without_claims`. EIIC remains S6 by
+   honesty, not by missing sources. First-principle framing:
+   [`docs/FIRST_PRINCIPLES.md`](docs/FIRST_PRINCIPLES.md).
 8. **Rewrite-if-unsupported rule.** Any claim that cannot be sourced, validated,
    or bounded is marked unsupported or removed; the bibliography gate fails the
-   build if a present theory term loses its source mapping.
+   build if a present theory term loses its source mapping (13 gates, incl.
+   hierarchy type↔status and a runtime guard verifying the forbidden data
+   against `noesis/forbidden.py`).

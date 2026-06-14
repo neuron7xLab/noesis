@@ -49,7 +49,7 @@ Grouped by domain. Each entry anchors a claim, module, or limitation.
 - used in: `docs/ARCHITECTURE.md`, `docs/NOESIS_V06_ARCHITECTURE.md`
 - risk if overused: equating module depth with cortical hierarchy
 
-### `fleming_lau_2014_metacognition` — S3 _(background)_
+### `fleming_lau_2014_metacognition` — S3
 - **Stephen M. Fleming, Hakwan C. Lau (2014).** *How to measure metacognition.* Frontiers in Human Neuroscience [review]
 - supports: metacognition and monitoring as a measurable construct; externalized metacognition framing
 - limits: measures human metacognitive sensitivity, not a tool's
@@ -152,14 +152,14 @@ Grouped by domain. Each entry anchors a claim, module, or limitation.
 - used in: `docs/DISTRIBUTED_COGNITIVE_GRAPH.md`, `noesis/graph.py`
 - risk if overused: assuming more samples always improve quality
 
-### `madaan_2023_self_refine` — S2 _(background)_
+### `madaan_2023_self_refine` — S2
 - **Aman Madaan, Niket Tandon, Prakhar Gupta, et al. (2023).** *Self-Refine: Iterative Refinement with Self-Feedback.* NeurIPS [primary]
 - supports: critique-and-refine loop for candidate improvement
 - limits: self-feedback can entrench errors without external verification
 - used in: `docs/METHODOLOGY.md`, `noesis/vertical_loop.py`
 - risk if overused: treating self-critique as ground truth
 
-### `shinn_2023_reflexion` — S2 _(background)_
+### `shinn_2023_reflexion` — S2
 - **Noah Shinn, Federico Cassano, Edward Berman, Ashwin Gopinath, Karthik Narasimhan, Shunyu Yao (2023).** *Reflexion: Language Agents with Verbal Reinforcement Learning.* NeurIPS [primary]
 - supports: verbal self-reflection between passes
 - limits: reflection quality bounded by the base model
@@ -173,7 +173,7 @@ Grouped by domain. Each entry anchors a claim, module, or limitation.
 - used in: `docs/NODE_DIVERSITY.md`, `noesis/node_profile.py`
 - risk if overused: claiming debate guarantees correctness
 
-### `wu_2023_autogen` — S2 _(background)_
+### `wu_2023_autogen` — S2
 - **Qingyun Wu, Gagan Bansal, Jieyu Zhang, et al. (2023).** *AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation.* arXiv:2308.08155 [primary]
 - supports: agent/tool orchestration patterns
 - limits: framework, not evidence of reasoning gains
@@ -258,4 +258,21 @@ Grouped by domain. Each entry anchors a claim, module, or limitation.
 - limits: meta-philosophical; bounds, not validates, the category layer
 - used in: `docs/CAUSAL_CATEGORY_LAYER.md`
 - risk if overused: over-reading category outputs as conceptual truth
+
+
+## 9. Self & identity (possible selves / narrative identity)
+
+### `markus_nurius_1986_possible_selves` — S2
+- **Hazel Markus, Paula Nurius (1986).** *Possible selves.* American Psychologist [primary]
+- supports: possible/future selves as a legitimate psychological construct; framing for an extrapolated identity trajectory
+- limits: describes self-representations; does not license predicting a person's future
+- used in: `noesis/eiic.py`, `docs/UNSUPPORTED_CLAIMS.md`
+- risk if overused: treating a projected self as a prediction of destiny
+
+### `mcadams_2001_narrative_identity` — S3
+- **Dan P. McAdams (2001).** *The psychology of life stories.* Review of General Psychology [review]
+- supports: narrative identity: the self as an evolving internalized story; grounds EIIC as a narrative-trajectory construct
+- limits: a descriptive theory of identity; no predictive or diagnostic power
+- used in: `noesis/eiic.py`, `docs/UNSUPPORTED_CLAIMS.md`
+- risk if overused: presenting a narrative construct as a measured or predicted identity
 

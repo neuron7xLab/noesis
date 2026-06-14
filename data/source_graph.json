@@ -193,6 +193,18 @@
       "domain": "philosophy"
     },
     {
+      "id": "markus_nurius_1986_possible_selves",
+      "kind": "source",
+      "status": "S2",
+      "domain": "self_identity"
+    },
+    {
+      "id": "mcadams_2001_narrative_identity",
+      "kind": "source",
+      "status": "S3",
+      "domain": "self_identity"
+    },
+    {
       "id": "whitehead_1929_process_reality",
       "kind": "source",
       "status": "S4",
@@ -293,6 +305,24 @@
       "kind": "claim",
       "status": "S1",
       "type": "implementation_claim"
+    },
+    {
+      "id": "externalized_metacognition",
+      "kind": "claim",
+      "status": "S4",
+      "type": "analogy_claim"
+    },
+    {
+      "id": "iterative_refinement_loop",
+      "kind": "claim",
+      "status": "S5",
+      "type": "proxy_claim"
+    },
+    {
+      "id": "agent_orchestration",
+      "kind": "claim",
+      "status": "S4",
+      "type": "analogy_claim"
     }
   ],
   "edges": [
@@ -592,6 +622,16 @@
       "rel": "guarded_by"
     },
     {
+      "from": "markus_nurius_1986_possible_selves",
+      "to": "eiic_speculative",
+      "rel": "supports"
+    },
+    {
+      "from": "mcadams_2001_narrative_identity",
+      "to": "eiic_speculative",
+      "rel": "supports"
+    },
+    {
       "from": "eiic_speculative",
       "to": "pipeline_v6",
       "rel": "used_by_module"
@@ -724,6 +764,76 @@
     {
       "from": "forbidden_guard",
       "to": "gate12_forbidden",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "fleming_lau_2014_metacognition",
+      "to": "externalized_metacognition",
+      "rel": "supports"
+    },
+    {
+      "from": "nelson_narens_1990_metamemory",
+      "to": "externalized_metacognition",
+      "rel": "supports"
+    },
+    {
+      "from": "externalized_metacognition",
+      "to": "pipeline_v6",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "externalized_metacognition",
+      "to": "gate1_intent_coherence",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "madaan_2023_self_refine",
+      "to": "iterative_refinement_loop",
+      "rel": "supports"
+    },
+    {
+      "from": "shinn_2023_reflexion",
+      "to": "iterative_refinement_loop",
+      "rel": "supports"
+    },
+    {
+      "from": "wang_2023_self_consistency",
+      "to": "iterative_refinement_loop",
+      "rel": "supports"
+    },
+    {
+      "from": "iterative_refinement_loop",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "iterative_refinement_loop",
+      "to": "gate7_collapse_discipline",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "wu_2023_autogen",
+      "to": "agent_orchestration",
+      "rel": "supports"
+    },
+    {
+      "from": "du_2023_multiagent_debate",
+      "to": "agent_orchestration",
+      "rel": "supports"
+    },
+    {
+      "from": "wang_2023_self_consistency",
+      "to": "agent_orchestration",
+      "rel": "supports"
+    },
+    {
+      "from": "agent_orchestration",
+      "to": "pipeline_v7",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "agent_orchestration",
+      "to": "gate1_graph_completeness",
       "rel": "guarded_by"
     }
   ]

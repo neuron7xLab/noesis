@@ -9,21 +9,24 @@
       "claim": "Noesis is AGI.",
       "why_forbidden": "Noesis is a bounded, human-in-the-loop metacognition tool with no general autonomy.",
       "safe_replacement": "Noesis is a deterministic + LLM-assisted metacognition tool.",
-      "gate_that_blocks_it": "gate12_forbidden"
+      "gate_that_blocks_it": "gate12_forbidden",
+      "probe": "this tool is artificial general intelligence"
     },
     {
       "id": "consciousness_detection",
       "claim": "Noesis detects consciousness.",
       "why_forbidden": "No method here measures or detects subjective experience.",
       "safe_replacement": "Noesis uses consciousness-theory vocabulary only as structural analogy.",
-      "gate_that_blocks_it": "gate12_forbidden"
+      "gate_that_blocks_it": "gate12_forbidden",
+      "probe": "система детектує свідомість"
     },
     {
       "id": "iit_experience",
       "claim": "The Φ proxy measures experience.",
       "why_forbidden": "The repo Φ-proxy is a structural heuristic; IIT Φ concerns experience and is not implemented.",
       "safe_replacement": "A Φ-named proxy summarizes integration structure, not experience.",
-      "gate_that_blocks_it": "gate12_forbidden"
+      "gate_that_blocks_it": "gate12_forbidden",
+      "probe": "проксі вимірює досвід"
     },
     {
       "id": "gnwt_biological",
@@ -58,14 +61,16 @@
       "claim": "Noesis performs therapy.",
       "why_forbidden": "Noesis is not a clinical instrument and provides no treatment.",
       "safe_replacement": "Noesis is a thinking tool, not therapy.",
-      "gate_that_blocks_it": "gate12_forbidden"
+      "gate_that_blocks_it": "gate12_forbidden",
+      "probe": "це психотерапія"
     },
     {
       "id": "diagnosis",
       "claim": "Noesis diagnoses mental states.",
       "why_forbidden": "No diagnostic capability exists; diagnosis requires a qualified clinician.",
       "safe_replacement": "Noesis describes intent structure; it does not diagnose.",
-      "gate_that_blocks_it": "gate12_forbidden"
+      "gate_that_blocks_it": "gate12_forbidden",
+      "probe": "ставить медичний діагноз"
     },
     {
       "id": "eiic_destiny",

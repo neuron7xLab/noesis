@@ -16,12 +16,15 @@ claim → status → source → module → limitation → gate.
 | `cognitive_dimensionality_proxy` | proxy_claim | S5 | `du_2023_multiagent_debate`, `wang_2023_self_consistency` | pipeline_v7, pipeline_v8 | `gate3_dimensionality_discipline` | A statistical proxy over candidate representations; not measured brain dimensionality. |
 | `cluster_quality_proxy` | proxy_claim | S5 | `cowan_2001_working_memory`, `du_2023_multiagent_debate`, `risko_gilbert_2016_cognitive_offloading` | pipeline_v8 | `gate10_overexpansion_control` | A composite heuristic; component weights are engineering choices, not fitted parameters. |
 | `theory_lenses_proxy` | proxy_claim | S5 | `graziano_2013_attention_schema`, `mashour_2020_gnwt_review`, `parr_pezzulo_friston_2022_active_inference` | pipeline_v6, pipeline_v7 | `gate7_theory_discipline` | Lenses are labelled 'deterministic-proxy'; they do not implement the underlying theories. |
-| `eiic_speculative` | theory_claim | S6 | _none (see UNSUPPORTED)_ | pipeline_v6 | `gate7_eiic_discipline` | Research hypothesis with no validation; must never be presented as predictive of identity or destiny. |
+| `eiic_speculative` | theory_claim | S6 | `markus_nurius_1986_possible_selves`, `mcadams_2001_narrative_identity` | pipeline_v6 | `gate7_eiic_discipline` | Research hypothesis with no validation; must never be presented as predictive of identity or destiny. |
 | `category_layer_conceptual_engineering` | analogy_claim | S4 | `cappelen_2018_conceptual_engineering`, `chalmers_2020_conceptual_engineering`, `whitehead_1929_process_reality` | pipeline_v6 | `gate2_category_causality` | Conceptual refactoring of terms; no civilizational essentialism and no claim of metaphysical truth. |
 | `artifact_stability` | implementation_claim | S1 | `fowler_2018_refactoring`, `parnas_1972_modular_decomposition`, `wroblewski_2022_jsonschema` | pipeline_v8 | `gate7_collapse_discipline` | Validated by tests and schemas; structural correctness, not semantic truth of content. |
 | `evidence_bundle_provenance` | implementation_claim | S0 | `parnas_1972_modular_decomposition`, `wroblewski_2022_jsonschema` | pipeline_v8 | `gate2_provenance` | Records what ran; does not certify the truth of the recorded content. |
 | `human_responsibility` | limitation_claim | S3 | `risko_gilbert_2016_cognitive_offloading`, `gu_2024_judge_survey`, `zheng_2023_llm_as_judge` | pipeline_v8 | `gate11_human_responsibility` | Offloading can create dependence; the tool advises, the human decides. |
 | `forbidden_guard` | implementation_claim | S1 | `tononi_2016_iit`, `mashour_2020_gnwt_review` | pipeline_v6, pipeline_v7, pipeline_v8 | `gate12_forbidden` | Substring/heuristic guard; reduces but does not eliminate overclaim risk. |
+| `externalized_metacognition` | analogy_claim | S4 | `fleming_lau_2014_metacognition`, `nelson_narens_1990_metamemory` | pipeline_v6 | `gate1_intent_coherence` | An externalized monitoring/control analogy; the tool has no metacognition of its own. |
+| `iterative_refinement_loop` | proxy_claim | S5 | `madaan_2023_self_refine`, `shinn_2023_reflexion`, `wang_2023_self_consistency` | pipeline_v8 | `gate7_collapse_discipline` | A refinement proxy; self-critique is bounded by the base model and needs external verification. |
+| `agent_orchestration` | analogy_claim | S4 | `wu_2023_autogen`, `du_2023_multiagent_debate`, `wang_2023_self_consistency` | pipeline_v7 | `gate1_graph_completeness` | Orchestration is a structural pattern; more agents do not by themselves improve reasoning. |
 
 ## Wording discipline
 
@@ -41,3 +44,6 @@ claim → status → source → module → limitation → gate.
 - **evidence_bundle_provenance** — allowed: _reproducible evidence bundle with provenance_ · forbidden: _proof of correctness_
 - **human_responsibility** — allowed: _human-in-the-loop, human-final-responsibility_ · forbidden: _autonomous decision authority_
 - **forbidden_guard** — allowed: _deterministic overclaim guard_ · forbidden: _guarantees no harmful output_
+- **externalized_metacognition** — allowed: _externalized metacognition (supports the human's)_ · forbidden: _the system is metacognitive / self-aware_
+- **iterative_refinement_loop** — allowed: _critique-and-refine proxy loop_ · forbidden: _self-verifying / guaranteed-correct refinement_
+- **agent_orchestration** — allowed: _test-time orchestration pattern_ · forbidden: _more agents = better reasoning_

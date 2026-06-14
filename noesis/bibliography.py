@@ -34,6 +34,20 @@ _THEORY_ANCHOR_TYPES = frozenset({"theory_claim", "analogy_claim", "proxy_claim"
 _THEORY_HEAVY_MIN_TERMS = 2
 HUMAN_GATE = "gate11_human_responsibility"
 
+# First principle: a claim's type fixes the band of statuses it may hold.
+# Promotion outside this band is forbidden (see docs/SOURCE_STATUS_HIERARCHY.md).
+CLAIM_TYPE_STATUS: dict[str, frozenset[str]] = {
+    "implementation_claim": frozenset({"S0", "S1"}),
+    "validation_claim": frozenset({"S1"}),
+    "definition_claim": frozenset({"S0", "S1", "S2"}),
+    "proxy_claim": frozenset({"S5"}),
+    "analogy_claim": frozenset({"S4"}),
+    "theory_claim": frozenset({"S2", "S3", "S6"}),
+    "limitation_claim": frozenset({"S1", "S2", "S3"}),
+}
+# Claims allowed to carry no source (must be speculative and quarantined honestly).
+_SOURCE_EXEMPT: frozenset[str] = frozenset()
+
 
 # --------------------------------------------------------------------------- #
 # Data model
@@ -78,6 +92,7 @@ class Forbidden:
     why_forbidden: str
     safe_replacement: str
     gate_that_blocks_it: str
+    probe: str = ""  # phrase the runtime guard must catch (for gate12_forbidden)
 
 
 @dataclass(frozen=True)
@@ -175,6 +190,7 @@ class ScanResult:
 # theory term by construction and are therefore excluded from the coverage scan.
 _META_DOCS = frozenset(
     {
+        "FIRST_PRINCIPLES.md",
         "BIBLIOGRAPHY.md",
         "CLAIM_SOURCE_LEDGER.md",
         "BIBLIOGRAPHIC_EVIDENCE_GRAPH.md",
@@ -345,6 +361,54 @@ def validate(lib: Library, scan: ScanResult | None = None) -> list[GateResult]:
         )
     )
 
+    # Gate 11 — Solidity: every claim is anchored to ≥1 source (no silent unsupported).
+    unsourced = [
+        c.claim_id for c in lib.claims if not c.source_ids and c.claim_id not in _SOURCE_EXEMPT
+    ]
+    results.append(
+        GateResult("Gate 11 — Solidity", not unsourced, "every claim anchored to a source", unsourced)
+    )
+
+    # Gate 12 — Hierarchy: claim_type fixes the allowed status band, and a
+    # literature-grounded status (S2/S3) must actually cite primary/review sources.
+    hierarchy_bad: list[str] = []
+    for c in lib.claims:
+        allowed = CLAIM_TYPE_STATUS.get(c.claim_type)
+        if allowed is not None and c.status not in allowed:
+            hierarchy_bad.append(f"{c.claim_id}: {c.claim_type}!={c.status}")
+        if c.status in {"S2", "S3"}:
+            cited = [by_id[s] for s in c.source_ids if s in by_id]
+            want = {"primary"} if c.status == "S2" else {"primary", "review"}
+            if not any(s.type in want for s in cited):
+                hierarchy_bad.append(f"{c.claim_id}: {c.status} lacks {'/'.join(sorted(want))} source")
+    results.append(
+        GateResult(
+            "Gate 12 — Hierarchy",
+            not hierarchy_bad,
+            "claim type↔status coherent; literature claims cite literature",
+            hierarchy_bad,
+        )
+    )
+
+    # Gate 13 — Runtime guard: every gate12 forbidden claim has a probe that the
+    # live deterministic guard (noesis.forbidden) actually catches.
+    from noesis.forbidden import check_forbidden_claims
+
+    runtime_bad = [
+        f.id
+        for f in lib.forbidden
+        if f.gate_that_blocks_it == "gate12_forbidden"
+        and not (f.probe.strip() and check_forbidden_claims(f.probe))
+    ]
+    results.append(
+        GateResult(
+            "Gate 13 — Runtime guard",
+            not runtime_bad,
+            "gate12 forbidden probes are caught by noesis.forbidden",
+            runtime_bad,
+        )
+    )
+
     return results
 
 
@@ -459,6 +523,7 @@ _DOMAIN_TITLES = {
     "verification": "6. Verification / Process supervision / LLM-as-judge limits",
     "software_engineering": "7. Software engineering / architecture",
     "philosophy": "8. Philosophy / conceptual engineering / metaphysics",
+    "self_identity": "9. Self & identity (possible selves / narrative identity)",
 }
 
 

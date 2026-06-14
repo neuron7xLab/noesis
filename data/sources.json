@@ -485,6 +485,36 @@
       "bibtex_type": "article"
     },
     {
+      "id": "markus_nurius_1986_possible_selves",
+      "authors": ["Hazel Markus", "Paula Nurius"],
+      "year": 1986,
+      "title": "Possible selves",
+      "type": "primary",
+      "venue": "American Psychologist",
+      "domain": "self_identity",
+      "supports": ["possible/future selves as a legitimate psychological construct", "framing for an extrapolated identity trajectory"],
+      "limits": ["describes self-representations; does not license predicting a person's future"],
+      "used_in": ["noesis/eiic.py", "docs/UNSUPPORTED_CLAIMS.md"],
+      "status": "S2",
+      "risk_if_overused": ["treating a projected self as a prediction of destiny"],
+      "bibtex_type": "article"
+    },
+    {
+      "id": "mcadams_2001_narrative_identity",
+      "authors": ["Dan P. McAdams"],
+      "year": 2001,
+      "title": "The psychology of life stories",
+      "type": "review",
+      "venue": "Review of General Psychology",
+      "domain": "self_identity",
+      "supports": ["narrative identity: the self as an evolving internalized story", "grounds EIIC as a narrative-trajectory construct"],
+      "limits": ["a descriptive theory of identity; no predictive or diagnostic power"],
+      "used_in": ["noesis/eiic.py", "docs/UNSUPPORTED_CLAIMS.md"],
+      "status": "S3",
+      "risk_if_overused": ["presenting a narrative construct as a measured or predicted identity"],
+      "bibtex_type": "article"
+    },
+    {
       "id": "whitehead_1929_process_reality",
       "authors": ["Alfred North Whitehead"],
       "year": 1929,

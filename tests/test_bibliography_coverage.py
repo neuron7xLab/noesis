@@ -33,7 +33,31 @@ def test_all_gates_pass(lib: bib.Library, scan: bib.ScanResult) -> None:
     results = bib.validate(lib, scan)
     failed = [r.gate for r in results if not r.passed]
     assert not failed, f"failing gates: {failed}"
-    assert len(results) == 10
+    assert len(results) == 13
+
+
+def test_no_unsupported_or_orphan(lib: bib.Library, scan: bib.ScanResult) -> None:
+    """First principle: only solid, anchored data — no claim without a source,
+    no source without a claim."""
+    m = bib.missing(lib, scan)
+    assert m["claims_without_sources"] == []
+    assert m["sources_without_claims"] == []
+
+
+def test_hierarchy_type_status_coherent(lib: bib.Library) -> None:
+    for c in lib.claims:
+        allowed = bib.CLAIM_TYPE_STATUS.get(c.claim_type)
+        if allowed is not None:
+            assert c.status in allowed, f"{c.claim_id}: {c.claim_type} cannot be {c.status}"
+
+
+def test_runtime_guard_probes_are_caught(lib: bib.Library) -> None:
+    from noesis.forbidden import check_forbidden_claims
+
+    for f in lib.forbidden:
+        if f.gate_that_blocks_it == "gate12_forbidden":
+            assert f.probe.strip(), f.id
+            assert check_forbidden_claims(f.probe), f"runtime guard misses {f.id}"
 
 
 def test_every_claim_has_valid_status(lib: bib.Library) -> None:

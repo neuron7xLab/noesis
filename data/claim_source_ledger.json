@@ -146,10 +146,10 @@
     },
     {
       "claim_id": "eiic_speculative",
-      "claim_text": "EIIC (Extrapolated Intentional Identity Core) is a speculative trajectory construct.",
+      "claim_text": "EIIC (Extrapolated Intentional Identity Core) is a speculative trajectory construct, framed by possible-selves and narrative-identity psychology, with no predictive validation.",
       "claim_type": "theory_claim",
       "status": "S6",
-      "source_ids": [],
+      "source_ids": ["markus_nurius_1986_possible_selves", "mcadams_2001_narrative_identity"],
       "repo_locations": ["noesis/eiic.py", "schemas/eiic.schema.json"],
       "module_dependency": ["pipeline_v6"],
       "validation_gate": "gate7_eiic_discipline",
@@ -227,6 +227,48 @@
       "failure_mode": "Relying on the guard as a complete safety proof.",
       "allowed_wording": "deterministic overclaim guard",
       "forbidden_wording": "guarantees no harmful output"
+    },
+    {
+      "claim_id": "externalized_metacognition",
+      "claim_text": "Noesis externalizes the user's metacognitive monitoring/control loop; it supports human metacognition rather than possessing its own.",
+      "claim_type": "analogy_claim",
+      "status": "S4",
+      "source_ids": ["fleming_lau_2014_metacognition", "nelson_narens_1990_metamemory"],
+      "repo_locations": ["README.md", "docs/METHODOLOGY.md", "noesis/adaptive.py"],
+      "module_dependency": ["pipeline_v6"],
+      "validation_gate": "gate1_intent_coherence",
+      "limitation": "An externalized monitoring/control analogy; the tool has no metacognition of its own.",
+      "failure_mode": "Claiming the tool is metacognitive rather than supporting the user's metacognition.",
+      "allowed_wording": "externalized metacognition (supports the human's)",
+      "forbidden_wording": "the system is metacognitive / self-aware"
+    },
+    {
+      "claim_id": "iterative_refinement_loop",
+      "claim_text": "The vertical loop is a critique-and-refine pass over candidates, in the self-refine / reflexion style.",
+      "claim_type": "proxy_claim",
+      "status": "S5",
+      "source_ids": ["madaan_2023_self_refine", "shinn_2023_reflexion", "wang_2023_self_consistency"],
+      "repo_locations": ["noesis/vertical_loop.py", "docs/METHODOLOGY.md"],
+      "module_dependency": ["pipeline_v8"],
+      "validation_gate": "gate7_collapse_discipline",
+      "limitation": "A refinement proxy; self-critique is bounded by the base model and needs external verification.",
+      "failure_mode": "Treating self-critique as ground-truth verification.",
+      "allowed_wording": "critique-and-refine proxy loop",
+      "forbidden_wording": "self-verifying / guaranteed-correct refinement"
+    },
+    {
+      "claim_id": "agent_orchestration",
+      "claim_text": "Multi-node candidate generation and critique use test-time agent-orchestration patterns.",
+      "claim_type": "analogy_claim",
+      "status": "S4",
+      "source_ids": ["wu_2023_autogen", "du_2023_multiagent_debate", "wang_2023_self_consistency"],
+      "repo_locations": ["docs/DISTRIBUTED_COGNITIVE_GRAPH.md", "noesis/graph.py", "noesis/node_profile.py"],
+      "module_dependency": ["pipeline_v7"],
+      "validation_gate": "gate1_graph_completeness",
+      "limitation": "Orchestration is a structural pattern; more agents do not by themselves improve reasoning.",
+      "failure_mode": "Claiming multi-agent orchestration guarantees better reasoning.",
+      "allowed_wording": "test-time orchestration pattern",
+      "forbidden_wording": "more agents = better reasoning"
     }
   ]
 }

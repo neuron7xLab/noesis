@@ -6,9 +6,9 @@ How claims map to sources and statuses. Canonical data lives in `data/*.json`;
 `data/source_graph.json` holds the machine-readable graph.
 
 ## Status distribution
-- files scanned: **91**, claims: **16**, sources: **33**, present theory terms: **15**
-- claims by status: `{'S0': 1, 'S1': 2, 'S3': 1, 'S4': 5, 'S5': 6, 'S6': 1}`
-- proxy claims: 6, speculative (S6): 1, forbidden guarded: 12
+- files scanned: **91**, claims: **19**, sources: **35**, present theory terms: **15**
+- claims by status: `{'S0': 1, 'S1': 2, 'S3': 1, 'S4': 7, 'S5': 7, 'S6': 1}`
+- proxy claims: 7, speculative (S6): 1, forbidden guarded: 12
 - bibliography gate status: **PASS**
 
 ## Claim → sources → module → gate
@@ -84,8 +84,8 @@ How claims map to sources and statuses. Canonical data lives in `data/*.json`;
 - failure mode: Claiming a lens computes the theory it is named after.
 
 ### `eiic_speculative` (S6, theory_claim)
-> EIIC (Extrapolated Intentional Identity Core) is a speculative trajectory construct.
-- sources: —
+> EIIC (Extrapolated Intentional Identity Core) is a speculative trajectory construct, framed by possible-selves and narrative-identity psychology, with no predictive validation.
+- sources: `markus_nurius_1986_possible_selves`, `mcadams_2001_narrative_identity`
 - repo: `noesis/eiic.py`, `schemas/eiic.schema.json`
 - module: pipeline_v6 · gate: `gate7_eiic_discipline`
 - failure mode: Presenting EIIC as predicting a person's future or destiny.
@@ -124,3 +124,24 @@ How claims map to sources and statuses. Canonical data lives in `data/*.json`;
 - repo: `noesis/forbidden.py`, `docs/OVERCLAIM_GUARDRAILS.md`
 - module: pipeline_v6, pipeline_v7, pipeline_v8 · gate: `gate12_forbidden`
 - failure mode: Relying on the guard as a complete safety proof.
+
+### `externalized_metacognition` (S4, analogy_claim)
+> Noesis externalizes the user's metacognitive monitoring/control loop; it supports human metacognition rather than possessing its own.
+- sources: `fleming_lau_2014_metacognition`, `nelson_narens_1990_metamemory`
+- repo: `README.md`, `docs/METHODOLOGY.md`, `noesis/adaptive.py`
+- module: pipeline_v6 · gate: `gate1_intent_coherence`
+- failure mode: Claiming the tool is metacognitive rather than supporting the user's metacognition.
+
+### `iterative_refinement_loop` (S5, proxy_claim)
+> The vertical loop is a critique-and-refine pass over candidates, in the self-refine / reflexion style.
+- sources: `madaan_2023_self_refine`, `shinn_2023_reflexion`, `wang_2023_self_consistency`
+- repo: `noesis/vertical_loop.py`, `docs/METHODOLOGY.md`
+- module: pipeline_v8 · gate: `gate7_collapse_discipline`
+- failure mode: Treating self-critique as ground-truth verification.
+
+### `agent_orchestration` (S4, analogy_claim)
+> Multi-node candidate generation and critique use test-time agent-orchestration patterns.
+- sources: `wu_2023_autogen`, `du_2023_multiagent_debate`, `wang_2023_self_consistency`
+- repo: `docs/DISTRIBUTED_COGNITIVE_GRAPH.md`, `noesis/graph.py`, `noesis/node_profile.py`
+- module: pipeline_v7 · gate: `gate1_graph_completeness`
+- failure mode: Claiming multi-agent orchestration guarantees better reasoning.

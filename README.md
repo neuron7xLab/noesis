@@ -117,7 +117,8 @@ claim governance [`docs/CLAIM_GOVERNANCE.md`](docs/CLAIM_GOVERNANCE.md) ·
 валідація [`docs/VALIDATION_V6.md`](docs/VALIDATION_V6.md) ·
 benchmark [`docs/BENCHMARK.md`](docs/BENCHMARK.md) · етика [`docs/ethics.md`](docs/ethics.md).
 
-**Bibliographic evidence graph** (claim → status → source → module → limitation → gate):
+**Bibliographic evidence graph** (claim → status → source → module → limitation → gate) —
+first principle: [`docs/FIRST_PRINCIPLES.md`](docs/FIRST_PRINCIPLES.md) ·
 [`docs/BIBLIOGRAPHY.md`](docs/BIBLIOGRAPHY.md) ·
 [`docs/CLAIM_SOURCE_LEDGER.md`](docs/CLAIM_SOURCE_LEDGER.md) ·
 [`docs/SOURCE_STATUS_HIERARCHY.md`](docs/SOURCE_STATUS_HIERARCHY.md) ·
