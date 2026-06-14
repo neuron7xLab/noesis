@@ -451,6 +451,26 @@ def _cmd_recovery(args: argparse.Namespace) -> int:
     return 0 if result["healthy"] else 1
 
 
+def _cmd_feedback(args: argparse.Namespace) -> int:
+    from noesis.feedback import ingest
+
+    report_path = Path("data") / "feedback_calibration.json"
+    if args.fb_command == "status":
+        if report_path.exists():
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+        else:
+            report = {"status": "INSUFFICIENT_DATA", "reason": "no calibration report yet"}
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0 if report.get("status") == "CALIBRATED" else 1
+
+    payload = json.loads(_read(args.input))
+    report = ingest(payload)
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0 if report["status"] == "CALIBRATED" else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="noesis",
@@ -630,6 +650,14 @@ def build_parser() -> argparse.ArgumentParser:
     recsub = p_rec.add_subparsers(dest="rec_command", required=True)
     recsub.add_parser("self-check", help="run the reversive recovery reflex self-test")
     p_rec.set_defaults(func=_cmd_recovery)
+
+    # feedback harness — calibrate proxy against human-labeled real outcomes
+    p_fb = sub.add_parser("feedback", help="calibrate proxy metrics against real outcomes")
+    fbsub = p_fb.add_subparsers(dest="fb_command", required=True)
+    p_fb_ing = fbsub.add_parser("ingest", help="ingest labeled pairs JSON and calibrate")
+    p_fb_ing.add_argument("input")
+    fbsub.add_parser("status", help="show the last calibration report")
+    p_fb.set_defaults(func=_cmd_feedback)
 
     return parser
 

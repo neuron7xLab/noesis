@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/feedback_calibration.schema.json",
+  "title": "Feedback Calibration Report",
+  "description": "Calibration of proxy quality against human-labeled real outcomes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "n",
+    "min_pairs",
+    "anchored_quality",
+    "calibration_gap",
+    "proxy_reality_alignment",
+    "verdict",
+    "provenance",
+    "hrv_coverage",
+    "reason"
+  ],
+  "properties": {
+    "status": { "type": "string", "enum": ["INSUFFICIENT_DATA", "CALIBRATED"] },
+    "n": { "type": "integer", "minimum": 0 },
+    "min_pairs": { "type": "integer", "minimum": 1 },
+    "anchored_quality": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "calibration_gap": { "type": ["number", "null"] },
+    "proxy_reality_alignment": { "type": ["number", "null"], "minimum": -1, "maximum": 1 },
+    "verdict": {
+      "type": "string",
+      "enum": ["INSUFFICIENT_DATA", "ALIGNED", "PROXY_OVERCLAIMS"]
+    },
+    "provenance": { "type": "array", "items": { "type": "string" } },
+    "hrv_coverage": { "type": "number", "minimum": 0, "maximum": 1 },
+    "reason": { "type": "string", "minLength": 1 }
+  }
+}
