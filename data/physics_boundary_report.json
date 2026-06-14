@@ -1,0 +1,485 @@
+{
+  "report_version": "1.0",
+  "agent_role": "FIRST_PRINCIPLES_PHYSICS_AUDITOR",
+  "repo_snapshot": {
+    "files_scanned": [
+      "README.md",
+      "pyproject.toml",
+      "Makefile",
+      "ROADMAP.md",
+      "VERDICT.md",
+      "CHANGELOG.md",
+      "CITATION.cff",
+      ".github/workflows/ci.yml",
+      "noesis/cli.py",
+      "noesis/pipeline_v8.py",
+      "noesis/gate_functional.py",
+      "noesis/precision_gate.py",
+      "noesis/forbidden.py",
+      "noesis/provenance.py",
+      "noesis/validators.py",
+      "noesis/evidence.py",
+      "noesis/verdict.py",
+      "noesis/bibliography.py",
+      "noesis/intent_vector.py",
+      "noesis/eiic.py",
+      "noesis/collapse_controller.py",
+      "noesis/entropy_ledger.py",
+      "data/bibliography.bib",
+      "schemas/",
+      "tests/",
+      "docs/",
+      "examples/",
+      "prompts/",
+      "app/api.py"
+    ],
+    "missing_expected_files": [
+      "src/** (project uses top-level packages noesis/, tools/, app/, formal/ instead)",
+      "benchmarks/** (benchmark code lives in noesis/benchmark*.py)",
+      "data/physics_boundary_report.json (created by this audit)",
+      "schemas/physics_boundary_report.schema.json (created by this audit)"
+    ],
+    "detected_entrypoints": [
+      "noesis.cli:main (console_script `noesis`, 44 subcommands incl. `bibliography`)",
+      "app.api:app (FastAPI, `uvicorn app.api:app`, incl. /bibliography/* endpoints)",
+      "tools.finalizer100:main (console_script `finalizer100`)",
+      "tools.pipeline:main (console_script `cmm-pipeline`)"
+    ],
+    "detected_tests": [
+      "tests/test_noesis.py",
+      "tests/test_noesis_v3.py",
+      "tests/test_noesis_v4.py",
+      "tests/test_noesis_v5.py",
+      "tests/test_noesis_v6.py",
+      "tests/test_noesis_v7.py",
+      "tests/test_noesis_v8.py",
+      "tests/test_noesis_examples.py",
+      "tests/test_bibliography_coverage.py",
+      "tests/test_gate_math.py",
+      "tests/test_cli.py",
+      "tests/test_reflection_schema.py",
+      "tests/test_reverse_inference.py",
+      "tests/test_formal.py",
+      "tests/test_pipeline.py",
+      "tests/test_finalizer.py",
+      "tests/test_api.py",
+      "tests/test_physics_boundary_report_schema.py"
+    ],
+    "detected_schemas": [
+      "schemas/intent.schema.json",
+      "schemas/intent_vector.schema.json",
+      "schemas/reflection.schema.json",
+      "schemas/artifact.schema.json",
+      "schemas/validation.schema.json",
+      "schemas/inference_trace.schema.json",
+      "schemas/evidence_bundle_v8.schema.json",
+      "schemas/precision_gate.schema.json",
+      "schemas/collapse_decision.schema.json",
+      "schemas/entropy_ledger.schema.json",
+      "schemas/eiic.schema.json",
+      "schemas/physics_boundary_report.schema.json",
+      "... 38 schema files total under schemas/"
+    ],
+    "detected_docs": [
+      "docs/ARCHITECTURE.md",
+      "docs/CLAIM_GOVERNANCE.md",
+      "docs/BIBLIOGRAPHIC_EVIDENCE_GRAPH.md",
+      "docs/BIBLIOGRAPHY.md",
+      "docs/METHODOLOGY.md",
+      "docs/THEORIES.md",
+      "docs/VALIDATION_V8.md",
+      "docs/IEV_PRECISION_GATE.md",
+      "docs/NAME.md",
+      "... ~47 markdown docs under docs/"
+    ]
+  },
+  "system_identity": {
+    "system_type": "Deterministic + LLM-assisted externalized-metacognition pipeline (a controlled state-transformation loop over text), shipped as the `noesis` CLI (44 subcommands) and a FastAPI service. NOT AGI, therapy, diagnosis, or consciousness detection.",
+    "core_transformation": "raw_text -> complexity -> adaptive mirror -> causal categories -> reality-map delta -> theory contribution -> EIIC -> action selection -> artifact -> 12 gates -> Evidence Bundle -> verdict; with a claim-to-source bibliographic evidence graph as a cross-cutting governance layer",
+    "input_state": "raw user text (intent-bearing natural language), file under examples/ or CLI arg",
+    "output_state": "Evidence Bundle (15 files in v0.8: manifest.json + per-stage JSON artifacts + validation.json + verdict.md) with overall_status PASS/FAIL, sha256 input_hash, deterministic/llm module split",
+    "validation_boundary": "12 deterministic gates + jsonschema validation + forbidden-claim detector + hallucination-risk heuristic + provenance tagging + bibliographic evidence-graph gate; LLM output is advisory prose only and cannot pass a gate by itself"
+  },
+  "state_model": {
+    "state_variables": [
+      {
+        "name": "intent_state",
+        "definition": "compressed intent vector extracted from raw text",
+        "repo_evidence": ["noesis/intent_vector.py", "schemas/intent_vector.schema.json", "schemas/intent.schema.json", "tests/test_noesis_v7.py"],
+        "status": "S1_TESTED"
+      },
+      {
+        "name": "context_state",
+        "definition": "complexity profile + active causal categories + reality maps that condition downstream operators",
+        "repo_evidence": ["noesis/complexity.py", "noesis/causal.py", "schemas/complexity_profile.schema.json", "schemas/reality_map.schema.json"],
+        "status": "S1_TESTED"
+      },
+      {
+        "name": "candidate_state",
+        "definition": "candidate actions / synthesis axes / node plans produced before gating",
+        "repo_evidence": ["noesis/synthesis.py", "noesis/node_plan.py", "schemas/action_decision.schema.json", "schemas/synthesis_axis.schema.json"],
+        "status": "S1_TESTED"
+      },
+      {
+        "name": "claim_state",
+        "definition": "each high-level claim carries exactly one provenance tag (observed/inferred/speculative/forbidden) and, where applicable, a source edge in the bibliographic evidence graph",
+        "repo_evidence": ["noesis/provenance.py", "noesis/forbidden.py", "noesis/bibliography.py", "docs/CLAIM_GOVERNANCE.md", "tests/test_noesis_v4.py", "tests/test_bibliography_coverage.py"],
+        "status": "S1_TESTED"
+      },
+      {
+        "name": "evidence_state",
+        "definition": "persisted Evidence Bundle for a run (raw_input, per-stage artifacts, validation, verdict, manifest with input_hash)",
+        "repo_evidence": ["noesis/evidence.py", "noesis/pipeline_v8.py", "schemas/evidence_bundle_v8.schema.json"],
+        "status": "S1_TESTED"
+      },
+      {
+        "name": "gate_state",
+        "definition": "pass/fail of each of the 12 gates incl. canonical IEV functional w = aR + bV + gP - dK >= theta",
+        "repo_evidence": ["noesis/gate_functional.py", "noesis/precision_gate.py", "schemas/precision_gate.schema.json", "tests/test_gate_math.py"],
+        "status": "S1_TESTED"
+      },
+      {
+        "name": "artifact_state",
+        "definition": "stabilized 7- or 10-section artifact written to the bundle",
+        "repo_evidence": ["noesis/synthesis.py", "tools/artifact_checker.py", "schemas/artifact.schema.json", "tests/test_finalizer.py"],
+        "status": "S1_TESTED"
+      },
+      {
+        "name": "verification_state",
+        "definition": "ValidationReport per artifact type (fields, word-count, anchors, forbidden, hallucination, falsifier present)",
+        "repo_evidence": ["noesis/validators.py", "schemas/validation.schema.json", "noesis/verdict.py"],
+        "status": "S1_TESTED"
+      },
+      {
+        "name": "release_state",
+        "definition": "overall_status PASS/FAIL emitted by `noesis verdict <bundle>`, gating release of the run",
+        "repo_evidence": ["noesis/verdict.py", "noesis/cli.py:_cmd_verdict", "VERDICT.md"],
+        "status": "S1_TESTED"
+      },
+      {
+        "name": "trajectory_state",
+        "definition": "an explicit per-operator stepwise trace (state_t, operation_t, score_t, decision_t, rollback_condition_t, state_t+1) for one run",
+        "repo_evidence": ["schemas/inference_trace.schema.json (single-shot reverse-inference trace only); schemas/broadcast_trace.schema.json (broadcast fanout only) — neither is a per-operator pipeline trace"],
+        "status": "S5_PROXY"
+      }
+    ]
+  },
+  "constraints": {
+    "boundary_conditions": [
+      "every emitted artifact MUST validate against its jsonschema (jsonschema dependency, tests/test_reflection_schema.py)",
+      "every high-level claim MUST carry exactly one provenance tag {observed, inferred, speculative, forbidden} (noesis/provenance.py)",
+      "every literature-grounded claim MUST resolve to a source in the bibliographic evidence graph (noesis/bibliography.py, Gate coverage in tests/test_bibliography_coverage.py)",
+      "an artifact MUST pass all 12 gates for overall_status PASS (noesis/pipeline_v8.py)",
+      "extrapolated EIIC cores are force-tagged speculative (Gate 8) and cannot be reported as observed",
+      "ruff + mypy --strict + pytest with a >=90% coverage gate MUST be green in CI (.github/workflows/ci.yml)"
+    ],
+    "forbidden_claims": [
+      "AGI / artificial general intelligence achieved",
+      "consciousness detected / measured / system is conscious",
+      "IIT proves experience",
+      "medical diagnosis / healing / therapy / replaces clinician",
+      "destiny / karma / mysticism / esoteric",
+      "validated brain model / validated neuroscience without data",
+      "overconfidence markers (guaranteed, 100% accurate, never errs)"
+    ],
+    "non_scope": [
+      "live clinical or diagnostic use",
+      "autonomous action without human responsibility",
+      "claims of subjective quality improvement without human evaluation (deferred to Phase 3 in VERDICT.md)",
+      "treating proxy benchmark rates as proof of usefulness"
+    ]
+  },
+  "invariants": [
+    {
+      "name": "intent_coherence",
+      "must_conserve": "downstream artifact stays aligned with the extracted intent vector",
+      "how_verified": "intent_coherence_score in manifest (noesis/pipeline_v8.py) + signal/noise separation check in validators",
+      "failure_if_broken": "mirror restates surface intent instead of hidden goal; gate fails, overall_status FAIL"
+    },
+    {
+      "name": "claim_status_traceability",
+      "must_conserve": "every high-level claim has exactly one provenance tag",
+      "how_verified": "noesis/provenance.py governance_summary + forbidden detector; tests/test_noesis_v4.py",
+      "failure_if_broken": "speculative output presented as observed -> dishonest verdict"
+    },
+    {
+      "name": "source_traceability",
+      "must_conserve": "every literature-grounded claim maps to a real bibliographic source (claim-to-source evidence graph)",
+      "how_verified": "noesis/bibliography.py validate/verdict + tests/test_bibliography_coverage.py + Gate 13 runtime guard",
+      "failure_if_broken": "literature claim with no source -> citation theater; bibliography verdict FAIL"
+    },
+    {
+      "name": "proxy_honesty",
+      "must_conserve": "proxy metrics and named-operator 'theories' are labelled as proxies, never as implemented theory or as usefulness",
+      "how_verified": "docs/THEORIES.md + VERDICT.md self-disclosure + ablation showing decorative layers",
+      "failure_if_broken": "RQ3 (theory contribution) overclaimed without ablation/human eval"
+    },
+    {
+      "name": "artifact_reproducibility",
+      "must_conserve": "same raw input -> same run_id (sha256 input_hash) and same deterministic artifacts offline",
+      "how_verified": "noesis/evidence.py run_id = sha256(raw)[:12]; deterministic modules listed in manifest",
+      "failure_if_broken": "non-reproducible run; evidence bundle cannot be audited"
+    },
+    {
+      "name": "human_responsibility",
+      "must_conserve": "human keeps decision authority; tool is advisory; high-bandwidth review is measured not eliminated",
+      "how_verified": "human_bottleneck_score + manual_gate_count in manifest; forbidden 'replaces human judgment'",
+      "failure_if_broken": "tool framed as autonomous decider -> forbidden-claim violation"
+    },
+    {
+      "name": "validation_evidence",
+      "must_conserve": "no PASS verdict without a populated validation.json + passing gates",
+      "how_verified": "noesis/verdict.py reads validation gates; overall_status derived from gate checks",
+      "failure_if_broken": "green verdict on empty evidence -> false-green"
+    },
+    {
+      "name": "entropy_gating",
+      "must_conserve": "content admitted only if it preserves intent AND raises verified precision (w >= theta), else rejected",
+      "how_verified": "noesis/gate_functional.py + noesis/precision_gate.py + tests/test_gate_math.py",
+      "failure_if_broken": "unweighted entropy enters the artifact; noise_rejection_score drops"
+    }
+  ],
+  "operator_map": [
+    {
+      "operator_name": "ComplexityOperator",
+      "repo_location": "noesis/complexity.py (cli: complexity)",
+      "input_state": "raw_text",
+      "operation": "estimate complexity -> output mode",
+      "output_state": "complexity_profile",
+      "validator": "schemas/complexity_profile.schema.json",
+      "failure_mode": "wrong mode selection -> over/under expansion",
+      "decision": "KEEP"
+    },
+    {
+      "operator_name": "AdaptiveMirrorOperator",
+      "repo_location": "noesis/adaptive.py (cli: mirror-adaptive)",
+      "input_state": "raw_text + complexity_profile",
+      "operation": "compress/structure intent without padding",
+      "output_state": "mirror artifact",
+      "validator": "noesis/validators.py:validate_mirror + schemas/mirror.schema.json",
+      "failure_mode": "pads short inputs (compression metric honestly fails on short inputs per VERDICT.md)",
+      "decision": "MODIFY"
+    },
+    {
+      "operator_name": "IntentVectorOperator",
+      "repo_location": "noesis/intent_vector.py (cli: intent-vector)",
+      "input_state": "raw_text",
+      "operation": "extract compressed intent vector",
+      "output_state": "intent_state",
+      "validator": "schemas/intent_vector.schema.json",
+      "failure_mode": "intent drift",
+      "decision": "KEEP"
+    },
+    {
+      "operator_name": "GateFunctionalOperator",
+      "repo_location": "noesis/gate_functional.py (cli: gate-functional)",
+      "input_state": "candidate (relevance, verifier, progress, cost)",
+      "operation": "w = aR + bV + gP - dK; accept if w >= theta",
+      "output_state": "gate_state (accept/reject + explain)",
+      "validator": "tests/test_gate_math.py",
+      "failure_mode": "mis-tuned weights admit noise or reject signal",
+      "decision": "KEEP"
+    },
+    {
+      "operator_name": "CollapseController",
+      "repo_location": "noesis/collapse_controller.py (cli: collapse)",
+      "input_state": "expanded candidate set",
+      "operation": "collapse uncertainty to one decision",
+      "output_state": "collapse_decision",
+      "validator": "schemas/collapse_decision.schema.json",
+      "failure_mode": "premature or absent collapse",
+      "decision": "KEEP"
+    },
+    {
+      "operator_name": "ForbiddenClaimOperator",
+      "repo_location": "noesis/forbidden.py + noesis/validators.py:_forbidden_check",
+      "input_state": "any generated text",
+      "operation": "detect forbidden claims + hallucination risk",
+      "output_state": "verification_state (blocked/clean)",
+      "validator": "tests/test_noesis_v4.py, tests/test_noesis.py",
+      "failure_mode": "missed forbidden phrasing variant",
+      "decision": "KEEP"
+    },
+    {
+      "operator_name": "BibliographyOperator",
+      "repo_location": "noesis/bibliography.py (cli: bibliography validate|scan|missing|graph|verdict)",
+      "input_state": "claims + data/bibliography.bib",
+      "operation": "build status-aware claim-to-source evidence graph; validate coverage",
+      "output_state": "bibliography verdict (PASS/FAIL + offenders)",
+      "validator": "tests/test_bibliography_coverage.py + Gate 13 runtime guard",
+      "failure_mode": "literature claim without a resolvable source",
+      "decision": "KEEP"
+    },
+    {
+      "operator_name": "EvidenceOperator",
+      "repo_location": "noesis/evidence.py + noesis/pipeline_v8.py",
+      "input_state": "all stage artifacts",
+      "operation": "persist run as Evidence Bundle with sha256 input_hash",
+      "output_state": "evidence_state",
+      "validator": "schemas/evidence_bundle_v8.schema.json",
+      "failure_mode": "missing file -> incomplete trace",
+      "decision": "KEEP"
+    },
+    {
+      "operator_name": "VerdictOperator",
+      "repo_location": "noesis/verdict.py (cli: verdict)",
+      "input_state": "evidence_state",
+      "operation": "read gates -> overall_status PASS/FAIL",
+      "output_state": "release_state",
+      "validator": "noesis/cli.py:_cmd_verdict exit code",
+      "failure_mode": "verdict on absent bundle raises FileNotFoundError (no graceful BLOCKED)",
+      "decision": "MODIFY"
+    },
+    {
+      "operator_name": "TrajectoryTraceOperator",
+      "repo_location": "ABSENT (only single-shot schemas/inference_trace.schema.json + schemas/broadcast_trace.schema.json)",
+      "input_state": "per-operator (state_t, operation_t, candidate_t)",
+      "operation": "append stepwise trace record with score_t, decision_t, rollback_condition_t, state_t+1",
+      "output_state": "trajectory_state",
+      "validator": "MISSING (no schema, no test)",
+      "failure_mode": "process is not replayable step-by-step; only final per-stage artifacts persist",
+      "decision": "CREATE"
+    }
+  ],
+  "mechanism_residual_split": {
+    "deterministic_mechanisms": [
+      "12 gates (noesis/pipeline_v8.py)",
+      "IEV gate functional (noesis/gate_functional.py)",
+      "jsonschema validation (38 schemas)",
+      "provenance tagging + forbidden detector (noesis/provenance.py, noesis/forbidden.py)",
+      "bibliographic claim-to-source evidence graph (noesis/bibliography.py + data/bibliography.bib)",
+      "Evidence Bundle + sha256 input_hash (noesis/evidence.py)",
+      "100-input proxy benchmark + ablation (noesis/benchmark*.py)",
+      "verdict gate (noesis/verdict.py)"
+    ],
+    "llm_residual_spaces": [
+      "finalizer prose quality only (optional `anthropic` extra)",
+      "LLM not on the critical path; manifest records llm_modules (empty on deterministic offline runs)"
+    ],
+    "promotion_rule": "LLM/residual output is advisory and cannot become a mechanism truth without passing a deterministic gate + schema + provenance tag (+ a source edge for literature claims); enforced by architecture (LLM off critical path) and the bibliography gate, but NOT yet a single coded residual->mechanism promotion-gate test."
+  },
+  "trajectory_model": {
+    "required_trace_fields": [
+      "trace_id",
+      "state_t",
+      "operation_t",
+      "candidate_t",
+      "score_t",
+      "decision_t",
+      "artifact_delta_t",
+      "rollback_condition_t",
+      "state_t_plus_1"
+    ],
+    "current_trace_support": "PARTIAL",
+    "missing_trace_fields": [
+      "score_t (per-operator, persisted)",
+      "decision_t (per-operator, persisted)",
+      "rollback_condition_t",
+      "state_t_plus_1 (explicit successor state per step)"
+    ]
+  },
+  "measurement_model": {
+    "metrics": [
+      {"metric_name": "intent_coherence_score", "definition": "alignment of artifact to extracted intent", "measurement_method": "manifest field computed in pipeline_v8", "repo_location": "noesis/pipeline_v8.py", "threshold": "gate-bound", "status": "IMPLEMENTED"},
+      {"metric_name": "noise_rejection_score", "definition": "fraction of entropy rejected by gates", "measurement_method": "manifest field", "repo_location": "noesis/pipeline_v8.py", "threshold": "gate-bound", "status": "IMPLEMENTED"},
+      {"metric_name": "iev_bandwidth_score", "definition": "intent-bearing throughput", "measurement_method": "noesis/iev_bandwidth.py", "repo_location": "schemas/iev_bandwidth_report.schema.json", "threshold": "report", "status": "IMPLEMENTED"},
+      {"metric_name": "latency_drag_score", "definition": "process latency penalty", "measurement_method": "noesis/latency_profile.py", "repo_location": "schemas/latency_profile.schema.json", "threshold": "report", "status": "IMPLEMENTED"},
+      {"metric_name": "human_bottleneck_score", "definition": "manual review load", "measurement_method": "manifest field + noesis/bottleneck_plan.py", "repo_location": "noesis/pipeline_v8.py", "threshold": "report", "status": "IMPLEMENTED"},
+      {"metric_name": "claim_safety_rate", "definition": "fraction of runs with zero forbidden claims", "measurement_method": "100-input benchmark", "repo_location": "noesis/benchmark.py", "threshold": "=1.0 in VERDICT.md", "status": "IMPLEMENTED"},
+      {"metric_name": "artifact_validity_rate", "definition": "fraction of artifacts passing all gates", "measurement_method": "benchmark", "repo_location": "noesis/benchmark.py", "threshold": "=1.0", "status": "IMPLEMENTED"},
+      {"metric_name": "source_coverage_rate", "definition": "fraction of literature claims with a resolvable source", "measurement_method": "noesis bibliography verdict", "repo_location": "noesis/bibliography.py", "threshold": "gate (Gate 13)", "status": "IMPLEMENTED"},
+      {"metric_name": "test_coverage", "definition": "line+branch coverage of the package", "measurement_method": "pytest coverage gate", "repo_location": ".github/workflows/ci.yml", "threshold": ">=90% (observed 92.61%)", "status": "IMPLEMENTED"},
+      {"metric_name": "operator_coverage_rate", "definition": "fraction of operators with a validator", "measurement_method": "not computed; this audit estimates ~9/10 KEEP/MODIFY operators have validators", "repo_location": "n/a", "threshold": "n/a", "status": "PROXY"},
+      {"metric_name": "rollback_rate", "definition": "fraction of steps rolled back", "measurement_method": "not computed (no stepwise trace)", "repo_location": "n/a", "threshold": "n/a", "status": "MISSING"},
+      {"metric_name": "human_preference_quality", "definition": "subjective usefulness vs baseline", "measurement_method": "deferred to Phase 3 human eval", "repo_location": "noesis/human_eval.py (packet only, no scores)", "threshold": "n/a", "status": "MISSING"}
+    ]
+  },
+  "verification_model": {
+    "verifiers": [
+      {"verifier_name": "pytest", "command_or_file": "python -m pytest -q", "checks": "215 tests across 17 files + >=90% coverage gate (92.61%)", "current_status": "PASS"},
+      {"verifier_name": "ruff", "command_or_file": "ruff check .", "checks": "lint", "current_status": "PASS"},
+      {"verifier_name": "mypy_strict", "command_or_file": "mypy", "checks": "64 source files, strict", "current_status": "PASS"},
+      {"verifier_name": "schema_validator", "command_or_file": "jsonschema in tests/test_reflection_schema.py + this audit's test", "checks": "artifacts validate against schemas", "current_status": "PASS"},
+      {"verifier_name": "forbidden_claim_verifier", "command_or_file": "noesis/forbidden.py (tested)", "checks": "no forbidden claim leaks", "current_status": "PASS"},
+      {"verifier_name": "claim_status_verifier", "command_or_file": "noesis/provenance.py (tested)", "checks": "every claim tagged", "current_status": "PASS"},
+      {"verifier_name": "bibliography_verifier", "command_or_file": "python -m noesis.cli bibliography validate", "checks": "claim-to-source evidence graph coverage + Gate 13 runtime guard", "current_status": "PASS"},
+      {"verifier_name": "verdict_gate", "command_or_file": "python -m noesis.cli verdict <bundle>", "checks": "gates -> PASS/FAIL", "current_status": "PASS"},
+      {"verifier_name": "benchmark", "command_or_file": "python -m noesis.cli benchmark", "checks": "100-input proxy + ablation", "current_status": "PASS"},
+      {"verifier_name": "physics_boundary_schema_test", "command_or_file": "python -m pytest tests/test_physics_boundary_report_schema.py -q", "checks": "this report validates against its schema + gate assertions", "current_status": "PASS"}
+    ]
+  },
+  "claim_audit": {
+    "repo_facts": [
+      "215 pytest pass with a >=90% coverage gate (92.61% observed), mypy --strict on 64 files, ruff clean (verified this run)",
+      "38 jsonschema files under schemas/",
+      "44 CLI subcommands incl. bibliography (validate/scan/missing/graph/verdict), pipeline-v8, verdict, benchmark, ablate",
+      "Evidence Bundle v0.8 emits 15 files with sha256 input_hash",
+      "bibliographic claim-to-source evidence graph (noesis/bibliography.py, data/bibliography.bib) with `noesis bibliography validate` exit 0"
+    ],
+    "tested_claims": [
+      "forbidden claims (AGI/consciousness/therapy/mysticism) are detected and block (noesis/forbidden.py + tests)",
+      "IEV gate functional w = aR+bV+gP-dK accepts iff w>=theta (tests/test_gate_math.py)",
+      "every artifact validates against schema (tests/test_reflection_schema.py)",
+      "every literature claim resolves to a source (tests/test_bibliography_coverage.py)"
+    ],
+    "literature_claims": [
+      "working memory (Cowan/Miller/Baddeley), cognitive control (Miller & Cohen, Badre), metacognition (Fleming & Lau), global workspace (Baars, Dehaene), free energy/active inference (Friston, Parr, Clark), distributed cognition (Hutchins, Clark & Chalmers) — all carried in the bibliographic evidence graph as S2/S3, not implementations"
+    ],
+    "proxy_claims": [
+      "12 'theories' are text proxies, not EFE/Phi/homology implementations (self-disclosed in VERDICT.md and docs/THEORIES.md)",
+      "benchmark rates (claim_safety_rate=1.0 etc.) measure structural consistency, NOT subjective usefulness",
+      "IEV precision gate / bandwidth / cognitive dimensionality are heuristics labelled proxy (Gate 8)"
+    ],
+    "speculative_claims": [
+      "EIIC extrapolated_core / peak_architecture (force-tagged speculative by Gate 8)"
+    ],
+    "unsupported_claims": [
+      "compression label on short inputs: finalizer pads to 90-110 words rather than compressing (honestly flagged as failed metric in VERDICT.md)",
+      "category_layer is decorative for validation: ablation breaks zero gates (self-disclosed)"
+    ],
+    "forbidden_claims_detected": []
+  },
+  "quality_score": {
+    "state_model": 8,
+    "constraint_model": 9,
+    "operator_model": 8,
+    "mechanism_residual_split": 8,
+    "trajectory_trace": 7,
+    "measurement_model": 8,
+    "verification_model": 9,
+    "claim_governance": 10,
+    "github_agent_readiness": 8,
+    "total": 75
+  },
+  "first_missing_condition": "There is no unified machine-readable per-operator trajectory trace: the Evidence Bundle persists final per-stage artifacts but no stepwise trace record carrying score_t, decision_t, rollback_condition_t and explicit state_t->state_t+1, so a run cannot be replayed or rolled back step by step.",
+  "role_2_handoff": {
+    "role_name": "TRAJECTORY TRACE IMPLEMENTER",
+    "task": "Add a deterministic per-operator trajectory trace persisted into the Evidence Bundle, with one schema-validated record per pipeline step and a verifier that proves the trace is complete and replay-ordered.",
+    "files_to_create": [
+      "schemas/trajectory_trace.schema.json",
+      "noesis/trajectory.py",
+      "tests/test_trajectory_trace.py"
+    ],
+    "files_to_modify": [
+      "noesis/pipeline_v8.py",
+      "noesis/evidence.py",
+      "noesis/cli.py"
+    ],
+    "validation_commands": [
+      "python -m noesis.cli pipeline-v8 examples/problems/08_ai_system_design.txt --evidence out/",
+      "test -f out/trajectory_trace.json",
+      "python -m pytest tests/test_trajectory_trace.py -q",
+      "python -m pytest -q",
+      "ruff check .",
+      "mypy"
+    ],
+    "pass_fail_criteria": [
+      "out/trajectory_trace.json exists and validates against schemas/trajectory_trace.schema.json",
+      "trace contains one ordered record per executed operator with fields trace_id, state_t, operation_t, candidate_t, score_t, decision_t, artifact_delta_t, rollback_condition_t, state_t_plus_1",
+      "records are monotonically ordered and state_t_plus_1[n] == state_t[n+1] (replay continuity)",
+      "the new test fails if any executed operator is missing from the trace",
+      "pytest + ruff + mypy all green and the >=90% coverage gate holds"
+    ]
+  },
+  "verdict": "PASS"
+}

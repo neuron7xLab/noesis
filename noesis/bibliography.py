@@ -198,6 +198,7 @@ _META_DOCS = frozenset(
         "OVERCLAIM_GUARDRAILS.md",
         "SOURCE_STATUS_HIERARCHY.md",
         "CITATION_POLICY.md",
+        "PHYSICS_BOUNDARY_AUDIT.md",
     }
 )
 

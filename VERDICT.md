@@ -1,3 +1,38 @@
+# VERDICT — Physics Boundary Audit (Role 1, First-Principles Physics Auditor)
+
+**Verdict: PASS — 75/90.** Full report: [`data/physics_boundary_report.json`](data/physics_boundary_report.json)
+· [`docs/PHYSICS_BOUNDARY_AUDIT.md`](docs/PHYSICS_BOUNDARY_AUDIT.md)
+· verifier [`tests/test_physics_boundary_report_schema.py`](tests/test_physics_boundary_report_schema.py).
+
+## Verifier run (this audit)
+
+| Command | Status |
+|---|---|
+| `python -m pytest tests/test_physics_boundary_report_schema.py -q` | PASS (7) |
+| `python -m pytest -q` | PASS (215, coverage 92.61% ≥ 90% gate) |
+| `ruff check .` | PASS |
+| `mypy` | PASS (64 files, strict) |
+| `python -m noesis.cli bibliography validate` | PASS (exit 0, Gate 13 runtime guard) |
+| `python -m noesis.cli verdict out/` (after a pipeline run) | PASS |
+
+> Role 1 spec referenced `cme.cli`; canonical package is `noesis`. `verdict` needs a
+> bundle dir argument (`out/`), not `.`.
+
+## First missing condition
+
+No unified machine-readable **per-operator trajectory trace** (`score_t`,
+`decision_t`, `rollback_condition_t`, explicit `state_t → state_t+1`). The Evidence
+Bundle is auditable by artifact but not replayable by step.
+
+## Next role
+
+**Role 2 = TRAJECTORY TRACE IMPLEMENTER** — create
+`schemas/trajectory_trace.schema.json`, `noesis/trajectory.py`,
+`tests/test_trajectory_trace.py`; modify `noesis/pipeline_v8.py`,
+`noesis/evidence.py`, `noesis/cli.py`. Pass/fail criteria in the JSON `role_2_handoff`.
+
+---
+
 # VERDICT — Noesis v0.5 (чесно настільки, щоб боліло)
 
 ## Що працює
