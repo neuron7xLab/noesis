@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/category_effect.schema.json",
+  "title": "category_effect",
+  "type": "object",
+  "required": ["category","axis","action_bias","next_action_delta","status"]
+}

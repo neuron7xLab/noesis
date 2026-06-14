@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cmm/reflection.schema.json",
+  "title": "Reflection",
+  "description": "Артефакт дзеркальної рефлексії: сирий намір → кристалізований намір → дія.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["raw_intent", "crystallized_intent", "next_action"],
+  "properties": {
+    "raw_intent": {"type": "string", "minLength": 1, "description": "Сирий, нечіткий запит."},
+    "crystallized_intent": {"type": "string", "minLength": 1, "description": "Кристалізований намір, готовий до дії."},
+    "blockers": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Виявлені блокери/сліпі плями."
+    },
+    "blind_spots": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Те, чого користувач не сказав, але очікує."
+    },
+    "next_action": {"type": "string", "minLength": 1, "description": "Вирішальна наступна дія."}
+  }
+}

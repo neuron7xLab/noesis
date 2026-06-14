@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/bottleneck_reduction_plan.schema.json",
+  "title": "bottleneck_reduction_plan",
+  "type": "object",
+  "required": ["current_bottleneck","what_must_remain_human","gate_to_automate","gate_to_keep_manual"]
+}

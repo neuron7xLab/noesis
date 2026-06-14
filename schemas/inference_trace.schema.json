@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cmm/inference_trace.schema.json",
+  "title": "InferenceTrace",
+  "description": "Слід реверсивного інференсу: від цілі до наступної дії.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["target_state", "required_conditions", "missing_constraints", "next_action"],
+  "properties": {
+    "target_state": {"type": "string", "minLength": 1, "description": "Бажаний кінцевий стан."},
+    "required_conditions": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Умови, потрібні для досягнення цілі."
+    },
+    "missing_constraints": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Умови, яких ще бракує."
+    },
+    "next_action": {"type": "string", "minLength": 1, "description": "Перша відсутня умова = наступна дія."}
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/entropy_ledger.schema.json",
+  "title": "entropy_ledger",
+  "type": "object",
+  "required": ["delegated_to_llm","retained_by_human","human_bottleneck_score"]
+}

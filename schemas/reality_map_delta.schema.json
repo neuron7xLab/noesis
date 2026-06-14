@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/reality_map_delta.schema.json",
+  "title": "reality_map_delta",
+  "type": "object",
+  "required": ["chosen_action","low_map_utility","why_chosen"]
+}

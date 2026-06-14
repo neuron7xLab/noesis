@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/entropy_budget.schema.json",
+  "title": "entropy_budget",
+  "type": "object",
+  "required": ["initial_state_space_size","required_expansion","allowed_iterations","recommended_node_count"]
+}

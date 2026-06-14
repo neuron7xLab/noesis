@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/evidence_bundle_v6.schema.json",
+  "title": "EvidenceBundleV6",
+  "type": "object",
+  "required": ["run_id","pipeline_version","compression_status","category_layer_status","theory_layer_status","human_eval_status","overall_status","files"]
+}

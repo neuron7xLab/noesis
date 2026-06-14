@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/intent_vector.schema.json",
+  "title": "intent_vector",
+  "type": "object",
+  "required": ["core_direction","non_negotiable_constraint","forbidden_drift","validation_standard"]
+}

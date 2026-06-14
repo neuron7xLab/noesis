@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/eiic.schema.json",
+  "title": "EIICCore",
+  "type": "object",
+  "required": ["current_state","latent_intent","noise_layer","constraint_layer","extrapolated_core","attractor_state","peak_architecture","failure_mode","first_missing_condition","next_action"],
+  "$defs": {
+    "tagged": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value","provenance"],
+      "properties": {
+        "value": {"type": "string", "minLength": 1},
+        "provenance": {"type": "string", "enum": ["observed","inferred","speculative","forbidden"]}
+      }
+    }
+  },
+  "properties": {
+    "current_state": {"$ref": "#/$defs/tagged"},
+    "latent_intent": {"$ref": "#/$defs/tagged"},
+    "noise_layer": {"$ref": "#/$defs/tagged"},
+    "constraint_layer": {"$ref": "#/$defs/tagged"},
+    "extrapolated_core": {"$ref": "#/$defs/tagged"},
+    "attractor_state": {"$ref": "#/$defs/tagged"},
+    "peak_architecture": {"$ref": "#/$defs/tagged"},
+    "failure_mode": {"$ref": "#/$defs/tagged"},
+    "first_missing_condition": {"$ref": "#/$defs/tagged"},
+    "next_action": {"$ref": "#/$defs/tagged"}
+  }
+}

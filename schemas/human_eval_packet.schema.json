@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neuron7xlab.org/cme/human_eval_packet.schema.json",
+  "title": "human_eval_packet",
+  "type": "object",
+  "required": ["case_id","human_eval_status","pairwise_questions","baseline_source"]
+}

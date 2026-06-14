@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "Якщо ви використовуєте Noesis у дослідженні, процитуйте його так."
+title: "Noesis — externalized metacognition with an IEV precision gate"
+abstract: >-
+  Deterministic + LLM-assisted інструмент екстерналізованої метакогніції.
+  Ноетичний акт, що тримає ноему (інтенційний вектор) і гейтує ентропію через
+  IEV precision-gate w = αR + βV + γP − δK ≥ θ, з claim governance і
+  верифікованим collapse.
+type: software
+version: "0.8.0"
+date-released: "2026-06-14"
+license: MIT
+repository-code: "https://github.com/neuron7xLab/noesis"
+keywords:
+  - metacognition
+  - active-inference
+  - precision-gate
+  - externalized-cognition
+  - llm
+authors:
+  - given-names: Yaroslav
+    family-names: Vasylenko
+    email: neuron7x@ukr.net
+    affiliation: neuron7xLab
