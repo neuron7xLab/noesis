@@ -49,6 +49,7 @@ noesis pipeline examples/problems/08_ai_system_design.txt --evidence out/   # п
 noesis verdict out/                                             # вердикт по 12 гейтах
 noesis ablate examples/problems/08_ai_system_design.txt         # keep/modify/remove
 noesis benchmark                                                # 100-input proxy + ablation
+noesis bibliography verdict                                     # claim-to-source evidence graph (10 gates)
 noesis --version
 
 # Finalizer (хаос → 90–110 слів дії)
@@ -115,6 +116,14 @@ tests/       контрактні + smoke (CLI/API) + формальні інв�
 claim governance [`docs/CLAIM_GOVERNANCE.md`](docs/CLAIM_GOVERNANCE.md) ·
 валідація [`docs/VALIDATION_V6.md`](docs/VALIDATION_V6.md) ·
 benchmark [`docs/BENCHMARK.md`](docs/BENCHMARK.md) · етика [`docs/ethics.md`](docs/ethics.md).
+
+**Bibliographic evidence graph** (claim → status → source → module → limitation → gate):
+[`docs/BIBLIOGRAPHY.md`](docs/BIBLIOGRAPHY.md) ·
+[`docs/CLAIM_SOURCE_LEDGER.md`](docs/CLAIM_SOURCE_LEDGER.md) ·
+[`docs/SOURCE_STATUS_HIERARCHY.md`](docs/SOURCE_STATUS_HIERARCHY.md) ·
+[`docs/CITATION_POLICY.md`](docs/CITATION_POLICY.md) ·
+[`docs/OVERCLAIM_GUARDRAILS.md`](docs/OVERCLAIM_GUARDRAILS.md) ·
+[`docs/UNSUPPORTED_CLAIMS.md`](docs/UNSUPPORTED_CLAIMS.md).
 
 ## Центральна теза
 Межі мови задають межі доступного мислення. Інструмент розширює людину, не

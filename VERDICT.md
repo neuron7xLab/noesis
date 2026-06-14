@@ -118,3 +118,40 @@ end-to-end; кожен видає валідований артефакт (`test
    доказу тези «менш емоційно шумний».
 3. **LLM-екстрактор категорій із детермінованим фолбеком** — підняти конструктну
    валідність класифікації, лишивши детерміновану підлогу як гарант.
+
+---
+
+## Bibliographic status
+
+Claim-to-source evidence graph (canonical data in `data/*.json`, validator
+`noesis bibliography verdict`, gate `tests/test_bibliography_coverage.py`).
+Live numbers: `noesis bibliography verdict`; full tables in
+[`docs/BIBLIOGRAPHIC_EVIDENCE_GRAPH.md`](docs/BIBLIOGRAPHIC_EVIDENCE_GRAPH.md).
+
+1. **Repo-verified (S0–S1).** Evidence Bundle / provenance, artifact stability,
+   the deterministic forbidden guard — present in code and machine-checked.
+2. **Literature-grounded (S2–S3).** Working memory (Cowan, Miller, Baddeley),
+   cognitive control (Miller & Cohen, Badre), metacognition (Fleming & Lau),
+   global workspace (Baars, Mashour/Dehaene), free energy / active inference
+   (Friston, Parr et al., Clark), distributed cognition & offloading (Hutchins,
+   Clark & Chalmers, Risko & Gilbert), LLM orchestration (self-consistency,
+   Self-Refine, Reflexion, debate, AutoGen), verification (process supervision,
+   LLM-as-judge survey), conceptual engineering (Cappelen, Chalmers).
+3. **Analogy (S4).** GNWT broadcast, externalized active inference, the
+   low-bandwidth controller, the conceptual-engineering category layer — borrowed
+   structure, not biological/metaphysical identity.
+4. **Proxy (S5).** IEV precision gate, IEV bandwidth, delegated computational
+   entropy, cognitive dimensionality, cluster quality, theory lenses — heuristics
+   that say *proxy*, never *measurement* (Gate 8).
+5. **Speculative (S6).** EIIC — a trajectory construct with **no source and no
+   validation**; listed in [`docs/UNSUPPORTED_CLAIMS.md`](docs/UNSUPPORTED_CLAIMS.md).
+6. **Forbidden (X).** 12 overclaims (AGI, consciousness detection, Φ-as-experience,
+   PFC bitrate, judge-as-truth, therapy, diagnosis, destiny, physical entropy,
+   brain dimensionality) — each with a safe replacement and a blocking gate
+   ([`docs/OVERCLAIM_GUARDRAILS.md`](docs/OVERCLAIM_GUARDRAILS.md)).
+7. **Lacking source support.** `eiic_speculative` (S6) and 4 background sources
+   (Fleming & Lau, Self-Refine, Reflexion, AutoGen) cited in docs but not yet
+   central to a ledger claim — tracked in `docs/UNSUPPORTED_CLAIMS.md`.
+8. **Rewrite-if-unsupported rule.** Any claim that cannot be sourced, validated,
+   or bounded is marked unsupported or removed; the bibliography gate fails the
+   build if a present theory term loses its source mapping.

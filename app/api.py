@@ -340,3 +340,61 @@ def pipeline_v8_endpoint(req: RawRequest) -> dict[str, Any]:
         "passed": run.passed,
         "validation": run.validation.to_dict(),
     }
+
+
+# --- bibliographic evidence graph -------------------------------------------
+def _bib_load() -> tuple[Any, Any]:
+    from noesis import bibliography as bib
+
+    lib = bib.load_library()
+    return lib, bib.scan_repo(lib)
+
+
+@app.get("/bibliography")
+def bibliography_root() -> dict[str, Any]:
+    from noesis import bibliography as bib
+
+    lib, scan = _bib_load()
+    return {"sources": len(lib.sources), "claims": len(lib.claims),
+            "forbidden": len(lib.forbidden), "audit": bib.audit(lib, scan)}
+
+
+@app.post("/bibliography/scan")
+def bibliography_scan() -> dict[str, Any]:
+    _lib, scan = _bib_load()
+    return {"files_scanned": scan.files_scanned,
+            "present_terms": sorted(scan.present_terms),
+            "theory_heavy_docs": scan.theory_heavy_docs}
+
+
+@app.post("/bibliography/validate")
+def bibliography_validate() -> dict[str, Any]:
+    from noesis import bibliography as bib
+
+    lib, scan = _bib_load()
+    results = bib.validate(lib, scan)
+    return {"passed": bib.gates_pass(results), "gates": [r.to_dict() for r in results]}
+
+
+@app.post("/bibliography/missing")
+def bibliography_missing() -> dict[str, Any]:
+    from noesis import bibliography as bib
+
+    lib, scan = _bib_load()
+    return bib.missing(lib, scan)
+
+
+@app.get("/bibliography/graph")
+def bibliography_graph() -> dict[str, Any]:
+    from noesis import bibliography as bib
+
+    lib, _scan = _bib_load()
+    return bib.build_source_graph(lib)
+
+
+@app.get("/bibliography/verdict")
+def bibliography_verdict() -> dict[str, Any]:
+    from noesis import bibliography as bib
+
+    lib, scan = _bib_load()
+    return bib.verdict(lib, scan)

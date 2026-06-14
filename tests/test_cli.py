@@ -20,7 +20,7 @@ from noesis.cli import build_parser, main
 EXAMPLE = "examples/problems/08_ai_system_design.txt"
 
 # команди з нестандартним входом — тестуються окремо нижче
-_SPECIAL = {"reverse", "validate", "verdict", "human-eval", "benchmark"}
+_SPECIAL = {"reverse", "validate", "verdict", "human-eval", "benchmark", "bibliography"}
 # команди, що друкують не-JSON (markdown / звіт)
 _NON_JSON = {"human-eval", "eiic", "neuro"}
 

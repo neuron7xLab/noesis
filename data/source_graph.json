@@ -1,0 +1,730 @@
+{
+  "nodes": [
+    {
+      "id": "cowan_2001_working_memory",
+      "kind": "source",
+      "status": "S2",
+      "domain": "working_memory"
+    },
+    {
+      "id": "miller_1956_magical_seven",
+      "kind": "source",
+      "status": "S2",
+      "domain": "working_memory"
+    },
+    {
+      "id": "baddeley_hitch_1974_working_memory",
+      "kind": "source",
+      "status": "S2",
+      "domain": "working_memory"
+    },
+    {
+      "id": "miller_cohen_2001_pfc",
+      "kind": "source",
+      "status": "S3",
+      "domain": "working_memory"
+    },
+    {
+      "id": "badre_2008_hierarchical_control",
+      "kind": "source",
+      "status": "S3",
+      "domain": "working_memory"
+    },
+    {
+      "id": "fleming_lau_2014_metacognition",
+      "kind": "source",
+      "status": "S3",
+      "domain": "working_memory"
+    },
+    {
+      "id": "nelson_narens_1990_metamemory",
+      "kind": "source",
+      "status": "S2",
+      "domain": "working_memory"
+    },
+    {
+      "id": "baars_1988_global_workspace",
+      "kind": "source",
+      "status": "S2",
+      "domain": "global_workspace"
+    },
+    {
+      "id": "mashour_2020_gnwt_review",
+      "kind": "source",
+      "status": "S3",
+      "domain": "global_workspace"
+    },
+    {
+      "id": "dehaene_changeux_2011_conscious_processing",
+      "kind": "source",
+      "status": "S3",
+      "domain": "global_workspace"
+    },
+    {
+      "id": "friston_2010_free_energy",
+      "kind": "source",
+      "status": "S3",
+      "domain": "active_inference"
+    },
+    {
+      "id": "parr_pezzulo_friston_2022_active_inference",
+      "kind": "source",
+      "status": "S2",
+      "domain": "active_inference"
+    },
+    {
+      "id": "clark_2013_predictive_processing",
+      "kind": "source",
+      "status": "S2",
+      "domain": "active_inference"
+    },
+    {
+      "id": "hutchins_1995_cognition_in_the_wild",
+      "kind": "source",
+      "status": "S2",
+      "domain": "distributed_cognition"
+    },
+    {
+      "id": "clark_chalmers_1998_extended_mind",
+      "kind": "source",
+      "status": "S2",
+      "domain": "distributed_cognition"
+    },
+    {
+      "id": "risko_gilbert_2016_cognitive_offloading",
+      "kind": "source",
+      "status": "S3",
+      "domain": "distributed_cognition"
+    },
+    {
+      "id": "wang_2023_self_consistency",
+      "kind": "source",
+      "status": "S2",
+      "domain": "llm_orchestration"
+    },
+    {
+      "id": "madaan_2023_self_refine",
+      "kind": "source",
+      "status": "S2",
+      "domain": "llm_orchestration"
+    },
+    {
+      "id": "shinn_2023_reflexion",
+      "kind": "source",
+      "status": "S2",
+      "domain": "llm_orchestration"
+    },
+    {
+      "id": "du_2023_multiagent_debate",
+      "kind": "source",
+      "status": "S2",
+      "domain": "llm_orchestration"
+    },
+    {
+      "id": "wu_2023_autogen",
+      "kind": "source",
+      "status": "S2",
+      "domain": "llm_orchestration"
+    },
+    {
+      "id": "lightman_2023_process_supervision",
+      "kind": "source",
+      "status": "S2",
+      "domain": "verification"
+    },
+    {
+      "id": "uesato_2022_process_outcome",
+      "kind": "source",
+      "status": "S2",
+      "domain": "verification"
+    },
+    {
+      "id": "zheng_2023_llm_as_judge",
+      "kind": "source",
+      "status": "S2",
+      "domain": "verification"
+    },
+    {
+      "id": "gu_2024_judge_survey",
+      "kind": "source",
+      "status": "S3",
+      "domain": "verification"
+    },
+    {
+      "id": "tononi_2016_iit",
+      "kind": "source",
+      "status": "S3",
+      "domain": "global_workspace"
+    },
+    {
+      "id": "graziano_2013_attention_schema",
+      "kind": "source",
+      "status": "S2",
+      "domain": "global_workspace"
+    },
+    {
+      "id": "parnas_1972_modular_decomposition",
+      "kind": "source",
+      "status": "S2",
+      "domain": "software_engineering"
+    },
+    {
+      "id": "fowler_2018_refactoring",
+      "kind": "source",
+      "status": "S3",
+      "domain": "software_engineering"
+    },
+    {
+      "id": "wroblewski_2022_jsonschema",
+      "kind": "source",
+      "status": "S0",
+      "domain": "software_engineering"
+    },
+    {
+      "id": "cappelen_2018_conceptual_engineering",
+      "kind": "source",
+      "status": "S2",
+      "domain": "philosophy"
+    },
+    {
+      "id": "chalmers_2020_conceptual_engineering",
+      "kind": "source",
+      "status": "S3",
+      "domain": "philosophy"
+    },
+    {
+      "id": "whitehead_1929_process_reality",
+      "kind": "source",
+      "status": "S4",
+      "domain": "philosophy"
+    },
+    {
+      "id": "low_bandwidth_controller",
+      "kind": "claim",
+      "status": "S4",
+      "type": "analogy_claim"
+    },
+    {
+      "id": "intent_vector",
+      "kind": "claim",
+      "status": "S4",
+      "type": "analogy_claim"
+    },
+    {
+      "id": "iev_precision_gate",
+      "kind": "claim",
+      "status": "S5",
+      "type": "proxy_claim"
+    },
+    {
+      "id": "iev_bandwidth_proxy",
+      "kind": "claim",
+      "status": "S5",
+      "type": "proxy_claim"
+    },
+    {
+      "id": "delegated_computational_entropy",
+      "kind": "claim",
+      "status": "S5",
+      "type": "proxy_claim"
+    },
+    {
+      "id": "gnwt_analogy",
+      "kind": "claim",
+      "status": "S4",
+      "type": "analogy_claim"
+    },
+    {
+      "id": "externalized_active_inference",
+      "kind": "claim",
+      "status": "S4",
+      "type": "analogy_claim"
+    },
+    {
+      "id": "cognitive_dimensionality_proxy",
+      "kind": "claim",
+      "status": "S5",
+      "type": "proxy_claim"
+    },
+    {
+      "id": "cluster_quality_proxy",
+      "kind": "claim",
+      "status": "S5",
+      "type": "proxy_claim"
+    },
+    {
+      "id": "theory_lenses_proxy",
+      "kind": "claim",
+      "status": "S5",
+      "type": "proxy_claim"
+    },
+    {
+      "id": "eiic_speculative",
+      "kind": "claim",
+      "status": "S6",
+      "type": "theory_claim"
+    },
+    {
+      "id": "category_layer_conceptual_engineering",
+      "kind": "claim",
+      "status": "S4",
+      "type": "analogy_claim"
+    },
+    {
+      "id": "artifact_stability",
+      "kind": "claim",
+      "status": "S1",
+      "type": "implementation_claim"
+    },
+    {
+      "id": "evidence_bundle_provenance",
+      "kind": "claim",
+      "status": "S0",
+      "type": "implementation_claim"
+    },
+    {
+      "id": "human_responsibility",
+      "kind": "claim",
+      "status": "S3",
+      "type": "limitation_claim"
+    },
+    {
+      "id": "forbidden_guard",
+      "kind": "claim",
+      "status": "S1",
+      "type": "implementation_claim"
+    }
+  ],
+  "edges": [
+    {
+      "from": "cowan_2001_working_memory",
+      "to": "low_bandwidth_controller",
+      "rel": "supports"
+    },
+    {
+      "from": "miller_1956_magical_seven",
+      "to": "low_bandwidth_controller",
+      "rel": "supports"
+    },
+    {
+      "from": "miller_cohen_2001_pfc",
+      "to": "low_bandwidth_controller",
+      "rel": "supports"
+    },
+    {
+      "from": "baddeley_hitch_1974_working_memory",
+      "to": "low_bandwidth_controller",
+      "rel": "supports"
+    },
+    {
+      "from": "low_bandwidth_controller",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "low_bandwidth_controller",
+      "to": "iev_bandwidth",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "low_bandwidth_controller",
+      "to": "gate5_iev_bandwidth_safety",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "miller_cohen_2001_pfc",
+      "to": "intent_vector",
+      "rel": "supports"
+    },
+    {
+      "from": "cowan_2001_working_memory",
+      "to": "intent_vector",
+      "rel": "supports"
+    },
+    {
+      "from": "nelson_narens_1990_metamemory",
+      "to": "intent_vector",
+      "rel": "supports"
+    },
+    {
+      "from": "badre_2008_hierarchical_control",
+      "to": "intent_vector",
+      "rel": "supports"
+    },
+    {
+      "from": "intent_vector",
+      "to": "pipeline_v7",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "intent_vector",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "intent_vector",
+      "to": "gate1_intent_coherence",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "lightman_2023_process_supervision",
+      "to": "iev_precision_gate",
+      "rel": "supports"
+    },
+    {
+      "from": "uesato_2022_process_outcome",
+      "to": "iev_precision_gate",
+      "rel": "supports"
+    },
+    {
+      "from": "zheng_2023_llm_as_judge",
+      "to": "iev_precision_gate",
+      "rel": "supports"
+    },
+    {
+      "from": "gu_2024_judge_survey",
+      "to": "iev_precision_gate",
+      "rel": "supports"
+    },
+    {
+      "from": "friston_2010_free_energy",
+      "to": "iev_precision_gate",
+      "rel": "supports"
+    },
+    {
+      "from": "iev_precision_gate",
+      "to": "pipeline_v7",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "iev_precision_gate",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "iev_precision_gate",
+      "to": "gate6_iev_precision_gate",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "cowan_2001_working_memory",
+      "to": "iev_bandwidth_proxy",
+      "rel": "supports"
+    },
+    {
+      "from": "risko_gilbert_2016_cognitive_offloading",
+      "to": "iev_bandwidth_proxy",
+      "rel": "supports"
+    },
+    {
+      "from": "lightman_2023_process_supervision",
+      "to": "iev_bandwidth_proxy",
+      "rel": "supports"
+    },
+    {
+      "from": "iev_bandwidth_proxy",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "iev_bandwidth_proxy",
+      "to": "gate5_iev_bandwidth_safety",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "risko_gilbert_2016_cognitive_offloading",
+      "to": "delegated_computational_entropy",
+      "rel": "supports"
+    },
+    {
+      "from": "hutchins_1995_cognition_in_the_wild",
+      "to": "delegated_computational_entropy",
+      "rel": "supports"
+    },
+    {
+      "from": "wang_2023_self_consistency",
+      "to": "delegated_computational_entropy",
+      "rel": "supports"
+    },
+    {
+      "from": "clark_chalmers_1998_extended_mind",
+      "to": "delegated_computational_entropy",
+      "rel": "supports"
+    },
+    {
+      "from": "delegated_computational_entropy",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "delegated_computational_entropy",
+      "to": "gate5_entropy_delegation_safety",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "baars_1988_global_workspace",
+      "to": "gnwt_analogy",
+      "rel": "supports"
+    },
+    {
+      "from": "mashour_2020_gnwt_review",
+      "to": "gnwt_analogy",
+      "rel": "supports"
+    },
+    {
+      "from": "dehaene_changeux_2011_conscious_processing",
+      "to": "gnwt_analogy",
+      "rel": "supports"
+    },
+    {
+      "from": "gnwt_analogy",
+      "to": "pipeline_v7",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "gnwt_analogy",
+      "to": "gate4_broadcast_awareness",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "friston_2010_free_energy",
+      "to": "externalized_active_inference",
+      "rel": "supports"
+    },
+    {
+      "from": "parr_pezzulo_friston_2022_active_inference",
+      "to": "externalized_active_inference",
+      "rel": "supports"
+    },
+    {
+      "from": "clark_2013_predictive_processing",
+      "to": "externalized_active_inference",
+      "rel": "supports"
+    },
+    {
+      "from": "externalized_active_inference",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "externalized_active_inference",
+      "to": "gate6_iev_precision_gate",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "du_2023_multiagent_debate",
+      "to": "cognitive_dimensionality_proxy",
+      "rel": "supports"
+    },
+    {
+      "from": "wang_2023_self_consistency",
+      "to": "cognitive_dimensionality_proxy",
+      "rel": "supports"
+    },
+    {
+      "from": "cognitive_dimensionality_proxy",
+      "to": "pipeline_v7",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "cognitive_dimensionality_proxy",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "cognitive_dimensionality_proxy",
+      "to": "gate3_dimensionality_discipline",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "cowan_2001_working_memory",
+      "to": "cluster_quality_proxy",
+      "rel": "supports"
+    },
+    {
+      "from": "du_2023_multiagent_debate",
+      "to": "cluster_quality_proxy",
+      "rel": "supports"
+    },
+    {
+      "from": "risko_gilbert_2016_cognitive_offloading",
+      "to": "cluster_quality_proxy",
+      "rel": "supports"
+    },
+    {
+      "from": "cluster_quality_proxy",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "cluster_quality_proxy",
+      "to": "gate10_overexpansion_control",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "graziano_2013_attention_schema",
+      "to": "theory_lenses_proxy",
+      "rel": "supports"
+    },
+    {
+      "from": "mashour_2020_gnwt_review",
+      "to": "theory_lenses_proxy",
+      "rel": "supports"
+    },
+    {
+      "from": "parr_pezzulo_friston_2022_active_inference",
+      "to": "theory_lenses_proxy",
+      "rel": "supports"
+    },
+    {
+      "from": "theory_lenses_proxy",
+      "to": "pipeline_v6",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "theory_lenses_proxy",
+      "to": "pipeline_v7",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "theory_lenses_proxy",
+      "to": "gate7_theory_discipline",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "eiic_speculative",
+      "to": "pipeline_v6",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "eiic_speculative",
+      "to": "gate7_eiic_discipline",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "cappelen_2018_conceptual_engineering",
+      "to": "category_layer_conceptual_engineering",
+      "rel": "supports"
+    },
+    {
+      "from": "chalmers_2020_conceptual_engineering",
+      "to": "category_layer_conceptual_engineering",
+      "rel": "supports"
+    },
+    {
+      "from": "whitehead_1929_process_reality",
+      "to": "category_layer_conceptual_engineering",
+      "rel": "supports"
+    },
+    {
+      "from": "category_layer_conceptual_engineering",
+      "to": "pipeline_v6",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "category_layer_conceptual_engineering",
+      "to": "gate2_category_causality",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "fowler_2018_refactoring",
+      "to": "artifact_stability",
+      "rel": "supports"
+    },
+    {
+      "from": "parnas_1972_modular_decomposition",
+      "to": "artifact_stability",
+      "rel": "supports"
+    },
+    {
+      "from": "wroblewski_2022_jsonschema",
+      "to": "artifact_stability",
+      "rel": "supports"
+    },
+    {
+      "from": "artifact_stability",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "artifact_stability",
+      "to": "gate7_collapse_discipline",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "parnas_1972_modular_decomposition",
+      "to": "evidence_bundle_provenance",
+      "rel": "supports"
+    },
+    {
+      "from": "wroblewski_2022_jsonschema",
+      "to": "evidence_bundle_provenance",
+      "rel": "supports"
+    },
+    {
+      "from": "evidence_bundle_provenance",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "evidence_bundle_provenance",
+      "to": "gate2_provenance",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "risko_gilbert_2016_cognitive_offloading",
+      "to": "human_responsibility",
+      "rel": "supports"
+    },
+    {
+      "from": "gu_2024_judge_survey",
+      "to": "human_responsibility",
+      "rel": "supports"
+    },
+    {
+      "from": "zheng_2023_llm_as_judge",
+      "to": "human_responsibility",
+      "rel": "supports"
+    },
+    {
+      "from": "human_responsibility",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "human_responsibility",
+      "to": "gate11_human_responsibility",
+      "rel": "guarded_by"
+    },
+    {
+      "from": "tononi_2016_iit",
+      "to": "forbidden_guard",
+      "rel": "supports"
+    },
+    {
+      "from": "mashour_2020_gnwt_review",
+      "to": "forbidden_guard",
+      "rel": "supports"
+    },
+    {
+      "from": "forbidden_guard",
+      "to": "pipeline_v6",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "forbidden_guard",
+      "to": "pipeline_v7",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "forbidden_guard",
+      "to": "pipeline_v8",
+      "rel": "used_by_module"
+    },
+    {
+      "from": "forbidden_guard",
+      "to": "gate12_forbidden",
+      "rel": "guarded_by"
+    }
+  ]
+}

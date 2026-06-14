@@ -396,6 +396,47 @@ def _cmd_validate(args: argparse.Namespace) -> int:
     return _emit(report.passed)
 
 
+def _cmd_bibliography(args: argparse.Namespace) -> int:
+    from noesis import bibliography as bib
+
+    lib = bib.load_library()
+    scan = bib.scan_repo(lib)
+    cmd = args.bib_command
+
+    if cmd == "scan":
+        print(json.dumps(
+            {"files_scanned": scan.files_scanned,
+             "present_terms": sorted(scan.present_terms),
+             "theory_heavy_docs": scan.theory_heavy_docs},
+            ensure_ascii=False, indent=2))
+        return 0
+    if cmd == "ledger":
+        print(json.dumps([c.__dict__ for c in lib.claims], ensure_ascii=False, indent=2))
+        return 0
+    if cmd == "missing":
+        print(json.dumps(bib.missing(lib, scan), ensure_ascii=False, indent=2))
+        return 0
+    if cmd == "graph":
+        if args.write:
+            bib.write_generated(lib, scan)
+        print(json.dumps(bib.build_source_graph(lib), ensure_ascii=False, indent=2))
+        return 0
+    if cmd == "export-bibtex":
+        print(bib.export_bibtex(lib))
+        return 0
+    if cmd == "validate":
+        results = bib.validate(lib, scan)
+        ok = bib.gates_pass(results)
+        print(json.dumps([r.to_dict() for r in results], ensure_ascii=False, indent=2))
+        return 0 if ok else 1
+    # verdict
+    v = bib.verdict(lib, scan)
+    if args.write:
+        bib.write_generated(lib, scan)
+    print(json.dumps(v, ensure_ascii=False, indent=2))
+    return 0 if v["overall_status"] == "PASS" else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="noesis",
@@ -543,6 +584,26 @@ def build_parser() -> argparse.ArgumentParser:
     p_gf = sub.add_parser("gate-functional", help="канонічний gating-функціонал w=αR+βV+γP−δK")
     p_gf.add_argument("input")
     p_gf.set_defaults(func=_cmd_gate_functional)
+
+    # bibliographic evidence graph
+    p_bib = sub.add_parser("bibliography", help="claim-to-source evidence graph")
+    bsub = p_bib.add_subparsers(dest="bib_command", required=True)
+    for name, helptext in (
+        ("scan", "сканувати репо на theory-терміни"),
+        ("ledger", "claim → status → source → module → gate"),
+        ("validate", "10 bibliography-гейтів (non-zero на фейлі)"),
+        ("missing", "claims без джерел / спекулятивні / background"),
+        ("export-bibtex", "BibTeX зі sources"),
+    ):
+        bp = bsub.add_parser(name, help=helptext)
+        bp.set_defaults(func=_cmd_bibliography)
+    for name, helptext in (
+        ("graph", "source → claim → module → gate граф"),
+        ("verdict", "повний bibliographic вердикт (non-zero на фейлі)"),
+    ):
+        bp = bsub.add_parser(name, help=helptext)
+        bp.add_argument("--write", action="store_true", help="перегенерувати docs/data артефакти")
+        bp.set_defaults(func=_cmd_bibliography)
 
     return parser
 
