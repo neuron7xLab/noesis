@@ -199,6 +199,7 @@ _META_DOCS = frozenset(
         "SOURCE_STATUS_HIERARCHY.md",
         "CITATION_POLICY.md",
         "PHYSICS_BOUNDARY_AUDIT.md",
+        "PHYSICS_CONTRACT.md",
     }
 )
 

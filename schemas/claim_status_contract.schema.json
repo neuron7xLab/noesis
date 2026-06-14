@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/claim_status_contract.schema.json",
+  "title": "Claim Status Contract",
+  "description": "A single governed claim: status + evidence + allowed/forbidden wording + gate.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "claim_text",
+    "claim_status",
+    "source_or_repo_evidence",
+    "allowed_wording",
+    "forbidden_wording",
+    "gate"
+  ],
+  "properties": {
+    "claim_text": { "type": "string", "minLength": 1 },
+    "claim_status": {
+      "type": "string",
+      "enum": ["S0_REPO_FACT", "S1_TESTED", "S2_LITERATURE", "S5_PROXY", "S6_SPECULATIVE", "UNSUPPORTED", "X_FORBIDDEN"]
+    },
+    "source_or_repo_evidence": { "type": "string" },
+    "allowed_wording": { "type": "string" },
+    "forbidden_wording": { "type": "string" },
+    "gate": { "type": "string", "minLength": 1 }
+  }
+}

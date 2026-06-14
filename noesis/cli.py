@@ -437,6 +437,12 @@ def _cmd_bibliography(args: argparse.Namespace) -> int:
     return 0 if v["overall_status"] == "PASS" else 1
 
 
+def _cmd_physics_boundary(args: argparse.Namespace) -> int:
+    from noesis.contracts import physics_boundary_cli
+
+    return physics_boundary_cli.run(["validate"])
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="noesis",
@@ -604,6 +610,12 @@ def build_parser() -> argparse.ArgumentParser:
         bp = bsub.add_parser(name, help=helptext)
         bp.add_argument("--write", action="store_true", help="перегенерувати docs/data артефакти")
         bp.set_defaults(func=_cmd_bibliography)
+
+    # physics-boundary contract gate (Role 2)
+    p_pb = sub.add_parser("physics-boundary", help="physics-boundary contract gate")
+    pbsub = p_pb.add_subparsers(dest="pb_command", required=True)
+    pbsub.add_parser("validate", help="enforce the physics-boundary contract (non-zero on fail)")
+    p_pb.set_defaults(func=_cmd_physics_boundary)
 
     return parser
 

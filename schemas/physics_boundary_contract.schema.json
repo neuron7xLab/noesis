@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/physics_boundary_contract.schema.json",
+  "title": "Physics Boundary Contract",
+  "description": "Role 2 contract-layer report produced by the physics-boundary validator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "contract_status",
+    "state_variables_checked",
+    "boundary_conditions_checked",
+    "invariants_checked",
+    "operators_checked",
+    "mechanism_residual_checked",
+    "trajectory_checked",
+    "metrics_checked",
+    "verifiers_checked",
+    "claim_status_checked",
+    "release_gates_checked",
+    "score",
+    "score_breakdown",
+    "hard_failures",
+    "failures",
+    "role_3_handoff"
+  ],
+  "properties": {
+    "contract_version": { "type": "string", "minLength": 1 },
+    "contract_status": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "state_variables_checked": { "type": "array" },
+    "boundary_conditions_checked": { "type": "array", "items": { "type": "string" } },
+    "invariants_checked": { "type": "array", "items": { "type": "string" } },
+    "operators_checked": { "type": "array" },
+    "mechanism_residual_checked": {
+      "type": "object",
+      "required": ["promotion_rule", "blocked_promotion_conditions", "status"],
+      "properties": {
+        "promotion_rule": { "type": "string" },
+        "blocked_promotion_conditions": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string" }
+      }
+    },
+    "trajectory_checked": {
+      "type": "object",
+      "required": ["trace_id_required", "state_t", "operation_t", "decision_t", "rollback_condition_t", "state_t_plus_1", "status"],
+      "properties": {
+        "trace_id_required": { "type": "boolean" },
+        "state_t": { "type": "boolean" },
+        "operation_t": { "type": "boolean" },
+        "candidate_t": { "type": "boolean" },
+        "score_t": { "type": "boolean" },
+        "decision_t": { "type": "boolean" },
+        "artifact_delta_t": { "type": "boolean" },
+        "rollback_condition_t": { "type": "boolean" },
+        "state_t_plus_1": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["PASS", "FAIL", "MISSING", "UNKNOWN"] }
+      }
+    },
+    "metrics_checked": { "type": "array" },
+    "verifiers_checked": { "type": "array" },
+    "claim_status_checked": { "type": "array" },
+    "release_gates_checked": { "type": "array" },
+    "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "score_breakdown": { "type": "object" },
+    "hard_failures": { "type": "array", "items": { "type": "string" } },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["failure_code", "file_path", "reason", "required_fix"],
+        "properties": {
+          "failure_code": { "type": "string", "minLength": 1 },
+          "file_path": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 },
+          "required_fix": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "role_3_handoff": {
+      "type": "object",
+      "required": ["role_name", "task", "files_to_create", "files_to_modify", "validation_commands", "pass_fail_criteria"],
+      "properties": {
+        "role_name": { "type": "string", "minLength": 1 },
+        "task": { "type": "string", "minLength": 1 },
+        "files_to_create": { "type": "array", "items": { "type": "string" } },
+        "files_to_modify": { "type": "array", "items": { "type": "string" } },
+        "validation_commands": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "pass_fail_criteria": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    }
+  }
+}
