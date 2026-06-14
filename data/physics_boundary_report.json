@@ -159,8 +159,8 @@
       {
         "name": "trajectory_state",
         "definition": "an explicit per-operator stepwise trace (state_t, operation_t, score_t, decision_t, rollback_condition_t, state_t+1) for one run",
-        "repo_evidence": ["schemas/inference_trace.schema.json (single-shot reverse-inference trace only); schemas/broadcast_trace.schema.json (broadcast fanout only) — neither is a per-operator pipeline trace"],
-        "status": "S5_PROXY"
+        "repo_evidence": ["noesis/trajectory.py", "schemas/trajectory_trace.schema.json", "tests/test_trajectory_trace.py", "noesis/pipeline_v8.py (emits out/trajectory_trace.json)"],
+        "status": "S1_TESTED"
       }
     ]
   },
@@ -332,13 +332,13 @@
     },
     {
       "operator_name": "TrajectoryTraceOperator",
-      "repo_location": "ABSENT (only single-shot schemas/inference_trace.schema.json + schemas/broadcast_trace.schema.json)",
+      "repo_location": "noesis/trajectory.py (emitted by noesis/pipeline_v8.py into out/trajectory_trace.json)",
       "input_state": "per-operator (state_t, operation_t, candidate_t)",
-      "operation": "append stepwise trace record with score_t, decision_t, rollback_condition_t, state_t+1",
+      "operation": "append stepwise trace record with score_t, decision_t, rollback_condition_t, state_t+1; replay-continuous by construction",
       "output_state": "trajectory_state",
-      "validator": "MISSING (no schema, no test)",
-      "failure_mode": "process is not replayable step-by-step; only final per-stage artifacts persist",
-      "decision": "CREATE"
+      "validator": "schemas/trajectory_trace.schema.json + tests/test_trajectory_trace.py",
+      "failure_mode": "validate_trajectory fails if any executed operator is missing or continuity breaks",
+      "decision": "KEEP"
     }
   ],
   "mechanism_residual_split": {
@@ -370,13 +370,8 @@
       "rollback_condition_t",
       "state_t_plus_1"
     ],
-    "current_trace_support": "PARTIAL",
-    "missing_trace_fields": [
-      "score_t (per-operator, persisted)",
-      "decision_t (per-operator, persisted)",
-      "rollback_condition_t",
-      "state_t_plus_1 (explicit successor state per step)"
-    ]
+    "current_trace_support": "FULL",
+    "missing_trace_fields": []
   },
   "measurement_model": {
     "metrics": [
@@ -444,14 +439,14 @@
     "constraint_model": 9,
     "operator_model": 8,
     "mechanism_residual_split": 8,
-    "trajectory_trace": 7,
+    "trajectory_trace": 10,
     "measurement_model": 8,
     "verification_model": 9,
     "claim_governance": 10,
     "github_agent_readiness": 8,
-    "total": 75
+    "total": 78
   },
-  "first_missing_condition": "There is no unified machine-readable per-operator trajectory trace: the Evidence Bundle persists final per-stage artifacts but no stepwise trace record carrying score_t, decision_t, rollback_condition_t and explicit state_t->state_t+1, so a run cannot be replayed or rolled back step by step.",
+  "first_missing_condition": "Demonstrated usefulness is still deferred to Phase 3: the proxy benchmark measures structural consistency, not subjective usefulness, and two self-flagged unsupported claims remain open (short-input 'compression' labelling and the decorative category layer). The trajectory trace is now implemented (noesis/trajectory.py) and replay-continuous.",
   "role_2_handoff": {
     "role_name": "TRAJECTORY TRACE IMPLEMENTER",
     "task": "Add a deterministic per-operator trajectory trace persisted into the Evidence Bundle, with one schema-validated record per pipeline step and a verifier that proves the trace is complete and replay-ordered.",

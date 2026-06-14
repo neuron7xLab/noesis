@@ -6,7 +6,7 @@ How claims map to sources and statuses. Canonical data lives in `data/*.json`;
 `data/source_graph.json` holds the machine-readable graph.
 
 ## Status distribution
-- files scanned: **99**, claims: **19**, sources: **35**, present theory terms: **15**
+- files scanned: **100**, claims: **19**, sources: **35**, present theory terms: **16**
 - claims by status: `{'S0': 1, 'S1': 2, 'S3': 1, 'S4': 7, 'S5': 7, 'S6': 1}`
 - proxy claims: 7, speculative (S6): 1, forbidden guarded: 12
 - bibliography gate status: **PASS**

@@ -61,9 +61,22 @@ def test_trace_id_is_required() -> None:
     assert traj["trace_id_required"] is True
 
 
-def test_missing_trajectory_fields_fail_validation() -> None:
-    # Current tree: rollback_condition_t and state_t_plus_1 are not implemented.
+def test_current_tree_trajectory_now_complete() -> None:
+    # Role 3 implemented the per-operator trace; the report declares FULL support.
     result, fields = v.check_trajectory(_ROOT, _report())
+    assert result.status == "PASS"
+    assert fields["rollback_condition_t"] is True
+    assert fields["state_t_plus_1"] is True
+    assert result.failures == []
+
+
+def test_missing_trajectory_fields_fail_validation(tmp_path: Path) -> None:
+    # A regressed report (fields dropped) must hard-fail the trajectory gate.
+    report = _report()
+    report["trajectory_model"]["current_trace_support"] = "PARTIAL"
+    report["trajectory_model"]["missing_trace_fields"] = ["rollback_condition_t", "state_t_plus_1"]
+    root = _write_repo(tmp_path, report)
+    result, fields = v.check_trajectory(root, report)
     assert result.status == "FAIL"
     assert fields["rollback_condition_t"] is False
     assert fields["state_t_plus_1"] is False

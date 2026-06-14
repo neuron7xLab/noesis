@@ -1,3 +1,35 @@
+# Role 3 — Trajectory Trace Implementer (the open hard-failure, closed)
+
+The single open hard-failure from Role 2 is now **closed honestly** — not by
+editing the audit, but by building the real per-operator trajectory trace.
+
+- **`noesis/trajectory.py`** — `OperatorStep → TrajectoryRecord` with all nine
+  fields (`trace_id, state_t, operation_t, candidate_t, score_t, decision_t,
+  artifact_delta_t, rollback_condition_t, state_t_plus_1`); replay continuity
+  `state_t_plus_1[n] == state_t[n+1]` holds **by construction**;
+  `validate_trajectory` fails if any executed operator is missing or continuity breaks.
+- **`noesis/pipeline_v8.py`** now emits `out/trajectory_trace.json` (11 records,
+  one per executed v0.8 operator) into the Evidence Bundle (16 files).
+- **`schemas/trajectory_trace.schema.json`** + **`tests/test_trajectory_trace.py`** (11 tests).
+
+**Contract flipped green, earned:** `data/physics_boundary_report.json` trajectory
+→ `FULL` (missing fields `[]`), `TrajectoryTraceOperator` → `KEEP` with validator,
+score 75 → **78**. `python -m noesis.contracts.physics_boundary_cli validate` →
+**PASS 100/100, exit 0** (was FAIL); contract `role_3_handoff` auto-advances to
+**BENCHMARK + ABLATION AGENT**.
+
+**Release still FAIL — and that is correct.** With trajectory closed,
+`open_hard_failures = []`, but the failure-weighted release verdict stays `FAIL`
+on `unsupported_claims_present`: two self-flagged honest claims remain (short-input
+"compression" labelling, decorative category layer). The gate refuses a cheap
+green; closing those is product work, not audit edits — the next honest target.
+
+**Verification:** 336 pytest @ **93.24%** coverage gate · ruff clean · mypy
+--strict (79 files). `tests/test_trajectory_trace.py` green; the two Role-2 tests
+that assumed trajectory-open were updated to the new truth.
+
+---
+
 # Tasks 3–9 — Action-Potential Runtime
 
 The runtime that stops treating agent output as action and starts treating action

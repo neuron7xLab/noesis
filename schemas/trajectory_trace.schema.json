@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/trajectory_trace.schema.json",
+  "title": "Per-Operator Trajectory Trace",
+  "description": "Ordered, replay-continuous record per executed operator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["trace_id", "records", "executed_operators", "metrics", "valid"],
+  "properties": {
+    "trace_id": { "type": "string", "minLength": 1 },
+    "executed_operators": { "type": "array", "items": { "type": "string" } },
+    "valid": { "type": "boolean" },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "trace_id",
+          "step",
+          "state_t",
+          "operation_t",
+          "candidate_t",
+          "score_t",
+          "decision_t",
+          "artifact_delta_t",
+          "rollback_condition_t",
+          "state_t_plus_1"
+        ],
+        "properties": {
+          "trace_id": { "type": "string", "minLength": 1 },
+          "step": { "type": "integer", "minimum": 0 },
+          "state_t": { "type": "string", "minLength": 1 },
+          "operation_t": { "type": "string", "minLength": 1 },
+          "candidate_t": { "type": "string", "minLength": 1 },
+          "score_t": { "type": "number" },
+          "decision_t": { "type": "string", "minLength": 1 },
+          "artifact_delta_t": { "type": "string", "minLength": 1 },
+          "rollback_condition_t": { "type": "string", "minLength": 1 },
+          "state_t_plus_1": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["trace_completeness_rate", "rollback_defined_rate", "replay_continuous"],
+      "properties": {
+        "trace_completeness_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "rollback_defined_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "replay_continuous": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

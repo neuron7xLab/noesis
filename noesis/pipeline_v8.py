@@ -24,6 +24,7 @@ from noesis.models import Check, ValidationReport
 from noesis.node_plan import NodePlan, plan_nodes
 from noesis.pipeline_v7 import V7Run, run_v7
 from noesis.precision_scheduler import PrecisionSchedule, schedule_precision
+from noesis.trajectory import V8_OPERATORS, OperatorStep, build_trajectory, trajectory_to_dict
 from tools.artifact_checker import check_artifact
 
 PIPELINE_VERSION = "0.8"
@@ -144,6 +145,39 @@ def render_verdict_v8(run: V8Run) -> str:
     )
 
 
+def _build_v8_trajectory(run: V8Run) -> dict[str, Any]:
+    """Map the executed v0.8 operators to a per-operator, replay-continuous trajectory."""
+    q = run.quality
+    passed = run.passed
+    # (operation, candidate summary, per-stage score proxy, artifact file)
+    rows: list[tuple[str, str, float, str]] = [
+        ("intent_vector", "compressed intent vector", q.intent_coherence_score, "intent_vector.json"),
+        ("entropy_budget", "entropy/iteration budget", q.noise_rejection_score, "entropy_budget.json"),
+        ("node_plan", "selected nodes", q.node_diversity_score, "node_plan.json"),
+        ("latency_profile", "latency profile", round(1.0 - q.latency_drag_score, 4), "latency_profile.json"),
+        ("iev_bandwidth", "IEV bandwidth report", q.iev_bandwidth_score, "iev_bandwidth_report.json"),
+        ("precision_schedule", "precision weights", q.intent_coherence_score, "precision_schedule.json"),
+        ("collapse_decision", run.collapse.collapse_reason, q.cluster_quality, "collapse_decision.json"),
+        ("cluster_quality", "cluster quality report", q.cluster_quality, "cluster_quality_report.json"),
+        ("bottleneck_plan", run.bottleneck.current_bottleneck, round(1.0 - q.human_bottleneck_score, 4), "bottleneck_reduction_plan.json"),
+        ("artifact", "7-section artifact", q.artifact_density, "artifact.json"),
+        ("validation", "v8 gate report", 1.0 if passed else 0.0, "validation.json"),
+    ]
+    steps = [
+        OperatorStep(
+            operation=op,
+            candidate=cand,
+            score=max(0.0, min(1.0, score)),
+            decision="PASS" if (op != "validation" or passed) else "FAIL",
+            artifact_delta=artifact,
+        )
+        for op, cand, score, artifact in rows
+    ]
+    run_id = hashlib.sha256(run.raw_input.encode()).hexdigest()[:16]
+    records = build_trajectory(run_id, steps)
+    return trajectory_to_dict(run_id, records, list(V8_OPERATORS))
+
+
 def run_and_save_v8(raw: str, out_dir: Path, *, created_at: str | None = None) -> tuple[V8Run, dict[str, Any]]:
     run = run_v8(raw)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -168,6 +202,7 @@ def run_and_save_v8(raw: str, out_dir: Path, *, created_at: str | None = None) -
         w("validation.json", run.validation.to_dict()),
         w("next_action.md", f"# Наступна дія\n\n{run.v7.v6.action.selected_action}\n\n- collapse: {run.collapse.collapse_reason}\n"),
         w("verdict.md", render_verdict_v8(run)),
+        w("trajectory_trace.json", _build_v8_trajectory(run)),
     ]
     manifest = {
         "run_id": hashlib.sha256(raw.encode()).hexdigest()[:16],

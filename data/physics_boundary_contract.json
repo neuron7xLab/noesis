@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0",
-  "contract_status": "FAIL",
+  "contract_status": "PASS",
   "state_variables_checked": [
     {
       "name": "intent_state",
@@ -49,7 +49,7 @@
     },
     {
       "name": "trajectory_state",
-      "status": "S5_PROXY",
+      "status": "S1_TESTED",
       "required": false
     }
   ],
@@ -119,8 +119,8 @@
     },
     {
       "operator_name": "TrajectoryTraceOperator",
-      "decision": "CREATE",
-      "has_validator": false
+      "decision": "KEEP",
+      "has_validator": true
     }
   ],
   "mechanism_residual_checked": {
@@ -139,12 +139,12 @@
     "state_t": true,
     "operation_t": true,
     "candidate_t": true,
-    "score_t": false,
-    "decision_t": false,
+    "score_t": true,
+    "decision_t": true,
     "artifact_delta_t": true,
-    "rollback_condition_t": false,
-    "state_t_plus_1": false,
-    "status": "FAIL"
+    "rollback_condition_t": true,
+    "state_t_plus_1": true,
+    "status": "PASS"
   },
   "metrics_checked": [
     {
@@ -441,60 +441,29 @@
       "fail_action": "hand off to Role 3"
     }
   ],
-  "score": 95,
+  "score": 100,
   "score_breakdown": {
     "state_contract": 10,
     "boundary_contract": 10,
     "invariant_contract": 10,
     "operator_contract": 15,
     "mechanism_residual_contract": 10,
-    "trajectory_contract": 5,
+    "trajectory_contract": 10,
     "measurement_contract": 10,
     "verification_contract": 10,
     "claim_status_contract": 10,
     "role_3_handoff_contract": 5
   },
-  "hard_failures": [
-    "trajectory"
-  ],
-  "failures": [
-    {
-      "failure_code": "TRAJECTORY_FIELD_ABSENT",
-      "file_path": "data/physics_boundary_report.json",
-      "reason": "trajectory field not implemented: score_t",
-      "required_fix": "persist score_t in a per-operator trajectory trace"
-    },
-    {
-      "failure_code": "TRAJECTORY_FIELD_ABSENT",
-      "file_path": "data/physics_boundary_report.json",
-      "reason": "trajectory field not implemented: decision_t",
-      "required_fix": "persist decision_t in a per-operator trajectory trace"
-    },
-    {
-      "failure_code": "TRAJECTORY_FIELD_ABSENT",
-      "file_path": "data/physics_boundary_report.json",
-      "reason": "trajectory field not implemented: rollback_condition_t",
-      "required_fix": "persist rollback_condition_t in a per-operator trajectory trace"
-    },
-    {
-      "failure_code": "TRAJECTORY_FIELD_ABSENT",
-      "file_path": "data/physics_boundary_report.json",
-      "reason": "trajectory field not implemented: state_t_plus_1",
-      "required_fix": "persist state_t_plus_1 in a per-operator trajectory trace"
-    }
-  ],
+  "hard_failures": [],
+  "failures": [],
   "role_3_handoff": {
-    "role_name": "TRAJECTORY TRACE IMPLEMENTER",
-    "task": "Persist a per-operator trajectory trace (score_t, decision_t, rollback_condition_t, state_t->state_t+1) into the Evidence Bundle.",
+    "role_name": "BENCHMARK + ABLATION AGENT",
+    "task": "Run benchmark + ablation to separate structural consistency from usefulness.",
     "files_to_create": [
-      "schemas/trajectory_trace.schema.json",
-      "noesis/trajectory.py",
-      "tests/test_trajectory_trace.py"
+      "tests/test_benchmark_ablation.py"
     ],
     "files_to_modify": [
-      "noesis/pipeline_v8.py",
-      "noesis/evidence.py",
-      "noesis/cli.py"
+      "noesis/benchmark.py"
     ],
     "validation_commands": [
       "python -m pytest -q",
