@@ -18,6 +18,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
+from noesis.ratios import rate
 from noesis.runtime.rollback import ROLLBACK_TYPES, RollbackController, StateLossError
 
 RECOVERY_STATES: frozenset[str] = frozenset({"RECOVERED", "ESCALATED", "UNRECOVERABLE"})
@@ -151,24 +152,14 @@ def detect_fault(
 
 def recovery_metrics(outcomes: list[RecoveryOutcome]) -> dict[str, float]:
     total = len(outcomes)
-    if total == 0:
-        return {
-            "recovery_success_rate": 0.0,
-            "escalation_rate": 0.0,
-            "mean_attempts_to_recover": 0.0,
-            "state_loss_rate": 0.0,
-        }
     recovered = [o for o in outcomes if o.status == "RECOVERED"]
     escalated = sum(1 for o in outcomes if o.escalated_to_human)
     lost = sum(1 for o in outcomes if o.status == "UNRECOVERABLE")
-    mean_attempts = (
-        round(sum(len(o.attempts) for o in recovered) / len(recovered), 4) if recovered else 0.0
-    )
     return {
-        "recovery_success_rate": round(len(recovered) / total, 4),
-        "escalation_rate": round(escalated / total, 4),
-        "mean_attempts_to_recover": mean_attempts,
-        "state_loss_rate": round(lost / total, 4),
+        "recovery_success_rate": rate(len(recovered), total),
+        "escalation_rate": rate(escalated, total),
+        "mean_attempts_to_recover": rate(sum(len(o.attempts) for o in recovered), len(recovered)),
+        "state_loss_rate": rate(lost, total),
     }
 
 

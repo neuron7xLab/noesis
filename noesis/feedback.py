@@ -17,6 +17,8 @@ from dataclasses import asdict, dataclass
 from math import sqrt
 from typing import Any
 
+from noesis.ratios import rate
+
 MIN_PAIRS = 12
 _GAP_TOLERANCE = 0.15  # proxy may exceed reality by at most this before it overclaims
 _VERDICTS = ("works", "fails")
@@ -81,7 +83,7 @@ def calibrate(pairs: list[LabeledPair], *, min_pairs: int = MIN_PAIRS) -> dict[s
     """Calibrate proxy against real outcome. Fail-closed below ``min_pairs``."""
     n = len(pairs)
     provenance = sorted({p.provenance for p in pairs}) or ["none"]
-    hrv_coverage = round(sum(1 for p in pairs if p.hrv is not None) / n, 4) if n else 0.0
+    hrv_coverage = rate(sum(1 for p in pairs if p.hrv is not None), n)
 
     if n < min_pairs:
         return {

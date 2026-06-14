@@ -15,6 +15,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from noesis.gate_functional import GateFunctional
+from noesis.ratios import rate
 
 DECISIONS: frozenset[str] = frozenset(
     {"BELOW_THRESHOLD", "PASS", "FAIL", "REROUTE", "HUMAN_REVIEW"}
@@ -107,17 +108,10 @@ class DischargeGate:
 
 def gate_metrics(gate: DischargeGate, results: list[dict[str, Any]]) -> dict[str, float]:
     total = len(results)
-    if total == 0:
-        return {
-            "gate_pass_rate": 0.0,
-            "noise_rejection_rate": 0.0,
-            "human_review_rate": 0.0,
-            "threshold_sensitivity": 0.0,
-        }
     decisions = [r["decision"] for r in results]
     return {
-        "gate_pass_rate": round(decisions.count("PASS") / total, 4),
-        "noise_rejection_rate": round(decisions.count("BELOW_THRESHOLD") / total, 4),
-        "human_review_rate": round(decisions.count("HUMAN_REVIEW") / total, 4),
+        "gate_pass_rate": rate(decisions.count("PASS"), total),
+        "noise_rejection_rate": rate(decisions.count("BELOW_THRESHOLD"), total),
+        "human_review_rate": rate(decisions.count("HUMAN_REVIEW"), total),
         "threshold_sensitivity": gate.threshold_sensitivity(results),
     }

@@ -18,6 +18,8 @@ import hashlib
 import json
 from typing import Any
 
+from noesis.ratios import rate
+
 
 def _sha(payload: Any) -> str:
     blob = json.dumps(payload, ensure_ascii=False, sort_keys=True)
@@ -116,7 +118,7 @@ def bundle_metrics(bundle: dict[str, Any]) -> dict[str, float]:
     with_verifier = sum(1 for t in transitions if t.get("verifier_index") is not None)
     return {
         "reproducibility_score": 1.0 if replay(bundle) else 0.0,
-        "hash_coverage_rate": round(hashed_art / n_art, 4) if n_art else 1.0,
-        "artifact_traceability_rate": round(traced_art / n_art, 4) if n_art else 1.0,
-        "verifier_attachment_rate": round(with_verifier / n_tr, 4) if n_tr else 0.0,
+        "hash_coverage_rate": rate(hashed_art, n_art, default=1.0),
+        "artifact_traceability_rate": rate(traced_art, n_art, default=1.0),
+        "verifier_attachment_rate": rate(with_verifier, n_tr, default=0.0),
     }

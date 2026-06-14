@@ -17,6 +17,8 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any
 
+from noesis.ratios import rate
+
 REQUIRED_FIELDS: tuple[str, ...] = (
     "trace_id",
     "state_t",
@@ -132,8 +134,8 @@ def trajectory_metrics(records: list[TrajectoryRecord]) -> dict[str, float]:
         1 for r in records if all(str(getattr(r, f)).strip() for f in REQUIRED_FIELDS)
     )
     return {
-        "trace_completeness_rate": round(complete / total, 4),
-        "rollback_defined_rate": round(rollback / total, 4),
+        "trace_completeness_rate": rate(complete, total),
+        "rollback_defined_rate": rate(rollback, total),
         "replay_continuous": 1.0 if continuous else 0.0,
     }
 

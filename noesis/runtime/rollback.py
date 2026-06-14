@@ -13,6 +13,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from noesis.ratios import rate
+
 ROLLBACK_TYPES: frozenset[str] = frozenset(
     {
         "schema_failure",
@@ -95,16 +97,12 @@ def rollback_metrics(events: list[dict[str, Any]]) -> dict[str, float]:
     triggered = [e for e in events if e.get("rollback_type") in ROLLBACK_TYPES]
     invalid = [e for e in events if e.get("was_invalid")]
     return {
-        "rollback_defined_rate": round(len(triggered) / total, 4),
-        "rollback_success_rate": round(
-            sum(1 for e in triggered if e.get("recovered")) / len(triggered), 4
-        )
-        if triggered
-        else 0.0,
-        "invalid_state_recovery_rate": round(
-            sum(1 for e in invalid if e.get("recovered")) / len(invalid), 4
-        )
-        if invalid
-        else 1.0,
-        "state_loss_rate": round(sum(1 for e in events if e.get("state_lost")) / total, 4),
+        "rollback_defined_rate": rate(len(triggered), total),
+        "rollback_success_rate": rate(
+            sum(1 for e in triggered if e.get("recovered")), len(triggered)
+        ),
+        "invalid_state_recovery_rate": rate(
+            sum(1 for e in invalid if e.get("recovered")), len(invalid), default=1.0
+        ),
+        "state_loss_rate": rate(sum(1 for e in events if e.get("state_lost")), total),
     }
