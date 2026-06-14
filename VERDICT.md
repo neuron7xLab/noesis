@@ -1,3 +1,26 @@
+# Recovery Supervisor — the reversive recovery loop (Layer −1)
+
+Answers "who lifts the models when they fall": a supervisor **outside** the failed
+layer that runs the reversive cognitive loop `fault → reverse (rollback) → forward
+(re-attempt) → repeat → RECOVERED | ESCALATED | UNRECOVERABLE`.
+
+- **`noesis/runtime/recovery_supervisor.py`** — `RecoverySupervisor.recover()` with
+  bounded budget; `detect_fault` (a fall = absence of pulse: red gate / silent
+  process); recovers by re-deriving state from the rollback stack; escalates to
+  human on budget exhaustion or state loss. Never silently passes.
+- **`schemas/recovery_outcome.schema.json`** + **`tests/test_recovery_supervisor.py`** (12 tests).
+- **CLI** `noesis recovery self-check` — deterministic reflex self-test (recover-first,
+  recover-after-retry, escalate-on-budget); exit 0 only if the reflex behaves.
+
+First-principle (INV-YV1): a collapsed gradient cannot lift itself; the lifter is a
+still-living layer above. The supervisor is itself under the gate (bounded, escalates)
+— the last irreducible lifter is the human. Autonomy has a floor, by design.
+
+**Verification:** 349 pytest @ **93.41%** coverage gate · ruff clean · mypy --strict
+(80 files). `noesis recovery self-check` → healthy.
+
+---
+
 # Role 3 — Trajectory Trace Implementer (the open hard-failure, closed)
 
 The single open hard-failure from Role 2 is now **closed honestly** — not by

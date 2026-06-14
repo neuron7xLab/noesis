@@ -443,6 +443,14 @@ def _cmd_physics_boundary(args: argparse.Namespace) -> int:
     return physics_boundary_cli.run(["validate"])
 
 
+def _cmd_recovery(args: argparse.Namespace) -> int:
+    from noesis.runtime.recovery_supervisor import self_check
+
+    result = self_check()
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0 if result["healthy"] else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="noesis",
@@ -616,6 +624,12 @@ def build_parser() -> argparse.ArgumentParser:
     pbsub = p_pb.add_subparsers(dest="pb_command", required=True)
     pbsub.add_parser("validate", help="enforce the physics-boundary contract (non-zero on fail)")
     p_pb.set_defaults(func=_cmd_physics_boundary)
+
+    # recovery supervisor — reversive recovery loop self-check (Layer -1)
+    p_rec = sub.add_parser("recovery", help="recovery supervisor (reversive recovery loop)")
+    recsub = p_rec.add_subparsers(dest="rec_command", required=True)
+    recsub.add_parser("self-check", help="run the reversive recovery reflex self-test")
+    p_rec.set_defaults(func=_cmd_recovery)
 
     return parser
 

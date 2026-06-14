@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/recovery_outcome.schema.json",
+  "title": "Recovery Outcome",
+  "description": "Result of the reversive recovery loop for one fault.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "fault_type",
+    "scale",
+    "attempts",
+    "restored_state",
+    "escalated_to_human",
+    "reason"
+  ],
+  "properties": {
+    "status": { "type": "string", "enum": ["RECOVERED", "ESCALATED", "UNRECOVERABLE"] },
+    "fault_type": {
+      "type": "string",
+      "enum": [
+        "schema_failure",
+        "test_failure",
+        "claim_failure",
+        "benchmark_regression",
+        "forbidden_claim_detected",
+        "human_rejection",
+        "artifact_instability"
+      ]
+    },
+    "scale": { "type": "string", "minLength": 1 },
+    "restored_state": { "type": "string" },
+    "escalated_to_human": { "type": "boolean" },
+    "reason": { "type": "string", "minLength": 1 },
+    "attempts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["index", "rolled_back_to", "reattempt_ok", "note"],
+        "properties": {
+          "index": { "type": "integer", "minimum": 1 },
+          "rolled_back_to": { "type": "string" },
+          "reattempt_ok": { "type": "boolean" },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  }
+}
