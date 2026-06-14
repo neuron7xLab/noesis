@@ -77,15 +77,17 @@ def test_twelve_gates() -> None:
     assert run.passed
 
 
-def test_evidence_bundle_v8_fifteen_files(tmp_path: Path) -> None:
+def test_evidence_bundle_v8_sixteen_files(tmp_path: Path) -> None:
     run, manifest = run_and_save_v8("хочу запустити продукт але застряг між напрямками", tmp_path)
     expected = {
         "raw_input.md", "intent_vector.json", "entropy_budget.json", "node_plan.json",
         "latency_profile.json", "iev_bandwidth_report.json", "precision_schedule.json",
         "collapse_decision.json", "cluster_quality_report.json", "bottleneck_reduction_plan.json",
-        "artifact.json", "validation.json", "next_action.md", "verdict.md", "manifest.json",
+        "artifact.json", "validation.json", "next_action.md", "verdict.md",
+        "trajectory_trace.json", "manifest.json",
     }
     assert {p.name for p in tmp_path.iterdir()} == expected
+    assert "trajectory_trace.json" in manifest["files"]
     assert manifest["pipeline_version"] == "0.8"
     assert "cluster_quality" in manifest
 

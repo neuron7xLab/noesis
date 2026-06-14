@@ -85,9 +85,12 @@ def test_dimension_out_of_range_raises() -> None:
         evaluate(BenchmarkInput(dimensions=dims))
 
 
-def test_assemble_from_repo_pulls_open_hard_failures() -> None:
-    # the live contract on this repo carries the trajectory hard failure
+def test_assemble_from_repo_reflects_live_contract() -> None:
+    # Trajectory is now closed (no open hard failures), but the live contract still
+    # carries self-flagged UNSUPPORTED claims, so the release verdict stays FAIL.
     inp = assemble_from_repo(_ROOT, _dims(0.9))
     report = evaluate(inp)
-    assert "trajectory" in inp.open_hard_failures
+    assert "trajectory" not in inp.open_hard_failures
+    assert inp.unsupported_claim_count >= 1
     assert report["release_verdict"] == "FAIL"
+    assert "unsupported_claims_present" in report["hard_blocks"]

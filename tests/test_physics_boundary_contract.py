@@ -84,12 +84,15 @@ def test_role_3_handoff_exists() -> None:
     assert handoff["pass_fail_criteria"]
 
 
-def test_current_tree_fails_on_trajectory() -> None:
-    # The repo has no per-operator trajectory trace, so the contract must hard-fail.
+def test_current_tree_passes_after_trajectory_closed() -> None:
+    # Role 3 implemented the per-operator trajectory trace, so the contract passes
+    # and the trajectory hard-failure is gone.
     contract = v.build_contract(_ROOT)
-    assert contract["contract_status"] == "FAIL"
-    assert "trajectory" in contract["hard_failures"]
-    assert contract["role_3_handoff"]["role_name"] == "TRAJECTORY TRACE IMPLEMENTER"
+    assert contract["contract_status"] == "PASS"
+    assert "trajectory" not in contract["hard_failures"]
+    assert contract["trajectory_checked"]["status"] == "PASS"
+    # with all hard gates clear, Role 3 advances to benchmark + ablation
+    assert contract["role_3_handoff"]["role_name"] == "BENCHMARK + ABLATION AGENT"
 
 
 def test_missing_report_is_fail(tmp_path: Path) -> None:
@@ -138,8 +141,8 @@ def test_missing_report_schema_is_missing(tmp_path: Path) -> None:
     assert result.status == "MISSING"
 
 
-def test_cli_validate_exits_nonzero_on_current_tree(capsys: pytest.CaptureFixture[str]) -> None:
+def test_cli_validate_passes_on_current_tree(capsys: pytest.CaptureFixture[str]) -> None:
     code = cli.run(["validate"])
     out = capsys.readouterr().out
-    assert code == 1
-    assert "PHYSICS CONTRACT: FAIL" in out
+    assert code == 0
+    assert "PHYSICS CONTRACT: PASS" in out
