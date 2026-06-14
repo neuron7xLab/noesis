@@ -1,3 +1,36 @@
+# Role 2 — Physics Contract Implementer
+
+**contract_status: FAIL (by design) — score 95/100.** The contract LAYER is fully
+implemented and its tests pass; the FAIL is the gate correctly rejecting an
+incomplete repository (no per-operator trajectory trace). Report:
+[`data/physics_boundary_contract.json`](data/physics_boundary_contract.json) ·
+[`docs/PHYSICS_CONTRACT.md`](docs/PHYSICS_CONTRACT.md).
+
+- **hard_failures:** `["trajectory"]` — `rollback_condition_t`, `state_t_plus_1`,
+  `score_t`, `decision_t` are not persisted per operator.
+- **files created:** `noesis/contracts/{__init__,physics_boundary,physics_boundary_validator,physics_boundary_cli}.py`,
+  `schemas/{physics_boundary_contract,operator_contract,claim_status_contract,trajectory_contract}.schema.json`,
+  `data/physics_boundary_contract.json`,
+  `tests/test_{physics_boundary_contract,operator_contract,claim_status_contract,trajectory_contract}.py`,
+  `docs/PHYSICS_CONTRACT.md`.
+- **files modified:** `noesis/cli.py` (add `physics-boundary validate`),
+  `noesis/bibliography.py` (exclude contract meta-doc from scan), `tests/test_cli.py`.
+- **validation commands:**
+  `python -m pytest tests/test_physics_boundary_contract.py tests/test_operator_contract.py tests/test_claim_status_contract.py tests/test_trajectory_contract.py -q` ·
+  `python -m pytest -q` · `ruff check .` · `mypy` ·
+  `python -m noesis.contracts.physics_boundary_cli validate` (exit 1 by design).
+- **test results:** 255 pytest pass @ 92.79% coverage gate; ruff clean; mypy --strict (68 files); the 4 contract suites (32 tests) pass.
+- **first failing gate:** `trajectory`.
+- **Role 3:** TRAJECTORY TRACE IMPLEMENTER — `schemas/trajectory_trace.schema.json`,
+  `noesis/trajectory.py`, `tests/test_trajectory_trace.py`; modify `noesis/pipeline_v8.py`,
+  `noesis/evidence.py`, `noesis/cli.py`. Gate passes when the CLI exits 0.
+- **honest verdict:** The physics boundary is now machine-verifiable and the gate
+  bites: it refuses to call the repo green while the trajectory/rollback layer is
+  absent. Role 2's deliverable is complete; the contract it enforces is not yet
+  satisfied — that is the point, and it is handed to Role 3.
+
+---
+
 # VERDICT — Physics Boundary Audit (Role 1, First-Principles Physics Auditor)
 
 **Verdict: PASS — 75/90.** Full report: [`data/physics_boundary_report.json`](data/physics_boundary_report.json)

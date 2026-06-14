@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/trajectory_contract.schema.json",
+  "title": "Trajectory Contract",
+  "description": "Per-operator trajectory trace fields the Evidence Bundle must persist.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "trace_id_required",
+    "state_t",
+    "operation_t",
+    "candidate_t",
+    "score_t",
+    "decision_t",
+    "artifact_delta_t",
+    "rollback_condition_t",
+    "state_t_plus_1",
+    "status"
+  ],
+  "properties": {
+    "trace_id_required": { "type": "boolean" },
+    "state_t": { "type": "boolean" },
+    "operation_t": { "type": "boolean" },
+    "candidate_t": { "type": "boolean" },
+    "score_t": { "type": "boolean" },
+    "decision_t": { "type": "boolean" },
+    "artifact_delta_t": { "type": "boolean" },
+    "rollback_condition_t": { "type": "boolean" },
+    "state_t_plus_1": { "type": "boolean" },
+    "status": { "type": "string", "enum": ["PASS", "FAIL", "MISSING", "UNKNOWN"] }
+  }
+}

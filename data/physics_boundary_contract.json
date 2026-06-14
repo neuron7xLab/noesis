@@ -1,0 +1,510 @@
+{
+  "contract_version": "1.0",
+  "contract_status": "FAIL",
+  "state_variables_checked": [
+    {
+      "name": "intent_state",
+      "status": "S1_TESTED",
+      "required": true
+    },
+    {
+      "name": "context_state",
+      "status": "S1_TESTED",
+      "required": true
+    },
+    {
+      "name": "candidate_state",
+      "status": "S1_TESTED",
+      "required": true
+    },
+    {
+      "name": "claim_state",
+      "status": "S1_TESTED",
+      "required": true
+    },
+    {
+      "name": "evidence_state",
+      "status": "S1_TESTED",
+      "required": true
+    },
+    {
+      "name": "gate_state",
+      "status": "S1_TESTED",
+      "required": true
+    },
+    {
+      "name": "artifact_state",
+      "status": "S1_TESTED",
+      "required": true
+    },
+    {
+      "name": "verification_state",
+      "status": "S1_TESTED",
+      "required": true
+    },
+    {
+      "name": "release_state",
+      "status": "S1_TESTED",
+      "required": true
+    },
+    {
+      "name": "trajectory_state",
+      "status": "S5_PROXY",
+      "required": false
+    }
+  ],
+  "boundary_conditions_checked": [
+    "every emitted artifact MUST validate against its jsonschema (jsonschema dependency, tests/test_reflection_schema.py)",
+    "every high-level claim MUST carry exactly one provenance tag {observed, inferred, speculative, forbidden} (noesis/provenance.py)",
+    "every literature-grounded claim MUST resolve to a source in the bibliographic evidence graph (noesis/bibliography.py, Gate coverage in tests/test_bibliography_coverage.py)",
+    "an artifact MUST pass all 12 gates for overall_status PASS (noesis/pipeline_v8.py)",
+    "extrapolated EIIC cores are force-tagged speculative (Gate 8) and cannot be reported as observed",
+    "ruff + mypy --strict + pytest with a >=90% coverage gate MUST be green in CI (.github/workflows/ci.yml)"
+  ],
+  "invariants_checked": [
+    "intent_coherence",
+    "claim_status_traceability",
+    "source_traceability",
+    "proxy_honesty",
+    "artifact_reproducibility",
+    "human_responsibility",
+    "validation_evidence",
+    "entropy_gating"
+  ],
+  "operators_checked": [
+    {
+      "operator_name": "ComplexityOperator",
+      "decision": "KEEP",
+      "has_validator": true
+    },
+    {
+      "operator_name": "AdaptiveMirrorOperator",
+      "decision": "MODIFY",
+      "has_validator": true
+    },
+    {
+      "operator_name": "IntentVectorOperator",
+      "decision": "KEEP",
+      "has_validator": true
+    },
+    {
+      "operator_name": "GateFunctionalOperator",
+      "decision": "KEEP",
+      "has_validator": true
+    },
+    {
+      "operator_name": "CollapseController",
+      "decision": "KEEP",
+      "has_validator": true
+    },
+    {
+      "operator_name": "ForbiddenClaimOperator",
+      "decision": "KEEP",
+      "has_validator": true
+    },
+    {
+      "operator_name": "BibliographyOperator",
+      "decision": "KEEP",
+      "has_validator": true
+    },
+    {
+      "operator_name": "EvidenceOperator",
+      "decision": "KEEP",
+      "has_validator": true
+    },
+    {
+      "operator_name": "VerdictOperator",
+      "decision": "MODIFY",
+      "has_validator": true
+    },
+    {
+      "operator_name": "TrajectoryTraceOperator",
+      "decision": "CREATE",
+      "has_validator": false
+    }
+  ],
+  "mechanism_residual_checked": {
+    "promotion_rule": "LLM/residual output is advisory and cannot become a mechanism truth without passing a deterministic gate + schema + provenance tag (+ a source edge for literature claims); enforced by architecture (LLM off critical path) and the bibliography gate, but NOT yet a single coded residual->mechanism promotion-gate test.",
+    "blocked_promotion_conditions": [
+      "LLM/residual output without a passing deterministic gate",
+      "LLM/residual output without a schema-valid artifact",
+      "literature claim without a bibliographic source edge",
+      "proxy metric reported as a physical measurement"
+    ],
+    "status": "PASS"
+  },
+  "trajectory_checked": {
+    "trace_id_required": true,
+    "trace_id": true,
+    "state_t": true,
+    "operation_t": true,
+    "candidate_t": true,
+    "score_t": false,
+    "decision_t": false,
+    "artifact_delta_t": true,
+    "rollback_condition_t": false,
+    "state_t_plus_1": false,
+    "status": "FAIL"
+  },
+  "metrics_checked": [
+    {
+      "metric_name": "intent_coherence_score",
+      "status": "IMPLEMENTED",
+      "threshold": "gate-bound"
+    },
+    {
+      "metric_name": "noise_rejection_score",
+      "status": "IMPLEMENTED",
+      "threshold": "gate-bound"
+    },
+    {
+      "metric_name": "iev_bandwidth_score",
+      "status": "IMPLEMENTED",
+      "threshold": "report"
+    },
+    {
+      "metric_name": "latency_drag_score",
+      "status": "IMPLEMENTED",
+      "threshold": "report"
+    },
+    {
+      "metric_name": "human_bottleneck_score",
+      "status": "IMPLEMENTED",
+      "threshold": "report"
+    },
+    {
+      "metric_name": "claim_safety_rate",
+      "status": "IMPLEMENTED",
+      "threshold": "=1.0 in VERDICT.md"
+    },
+    {
+      "metric_name": "artifact_validity_rate",
+      "status": "IMPLEMENTED",
+      "threshold": "=1.0"
+    },
+    {
+      "metric_name": "source_coverage_rate",
+      "status": "IMPLEMENTED",
+      "threshold": "gate (Gate 13)"
+    },
+    {
+      "metric_name": "test_coverage",
+      "status": "IMPLEMENTED",
+      "threshold": ">=90% (observed 92.61%)"
+    },
+    {
+      "metric_name": "operator_coverage_rate",
+      "status": "PROXY",
+      "threshold": "n/a"
+    },
+    {
+      "metric_name": "rollback_rate",
+      "status": "MISSING",
+      "threshold": "n/a"
+    },
+    {
+      "metric_name": "human_preference_quality",
+      "status": "MISSING",
+      "threshold": "n/a"
+    }
+  ],
+  "verifiers_checked": [
+    {
+      "verifier_name": "pytest",
+      "current_status": "PASS"
+    },
+    {
+      "verifier_name": "ruff",
+      "current_status": "PASS"
+    },
+    {
+      "verifier_name": "mypy_strict",
+      "current_status": "PASS"
+    },
+    {
+      "verifier_name": "schema_validator",
+      "current_status": "PASS"
+    },
+    {
+      "verifier_name": "forbidden_claim_verifier",
+      "current_status": "PASS"
+    },
+    {
+      "verifier_name": "claim_status_verifier",
+      "current_status": "PASS"
+    },
+    {
+      "verifier_name": "bibliography_verifier",
+      "current_status": "PASS"
+    },
+    {
+      "verifier_name": "verdict_gate",
+      "current_status": "PASS"
+    },
+    {
+      "verifier_name": "benchmark",
+      "current_status": "PASS"
+    },
+    {
+      "verifier_name": "physics_boundary_schema_test",
+      "current_status": "PASS"
+    }
+  ],
+  "claim_status_checked": [
+    {
+      "claim_text": "12 'theories' are text proxies, not EFE/Phi/homology implementations (self-disclosed in VERDICT.md and docs/THEORIES.md)",
+      "claim_status": "S5_PROXY",
+      "source_or_repo_evidence": "VERDICT.md / docs/THEORIES.md",
+      "allowed_wording": "operational proxy metric (proxy, not measurement)",
+      "forbidden_wording": "physical measurement",
+      "gate": "Gate 8 (proxy honesty)"
+    },
+    {
+      "claim_text": "benchmark rates (claim_safety_rate=1.0 etc.) measure structural consistency, NOT subjective usefulness",
+      "claim_status": "S5_PROXY",
+      "source_or_repo_evidence": "VERDICT.md / docs/THEORIES.md",
+      "allowed_wording": "operational proxy metric (proxy, not measurement)",
+      "forbidden_wording": "physical measurement",
+      "gate": "Gate 8 (proxy honesty)"
+    },
+    {
+      "claim_text": "IEV precision gate / bandwidth / cognitive dimensionality are heuristics labelled proxy (Gate 8)",
+      "claim_status": "S5_PROXY",
+      "source_or_repo_evidence": "VERDICT.md / docs/THEORIES.md",
+      "allowed_wording": "operational proxy metric (proxy, not measurement)",
+      "forbidden_wording": "physical measurement",
+      "gate": "Gate 8 (proxy honesty)"
+    },
+    {
+      "claim_text": "compression label on short inputs: finalizer pads to 90-110 words rather than compressing (honestly flagged as failed metric in VERDICT.md)",
+      "claim_status": "UNSUPPORTED",
+      "source_or_repo_evidence": "self-flagged in VERDICT.md",
+      "allowed_wording": "not yet demonstrated",
+      "forbidden_wording": "validated",
+      "gate": "release_blocked"
+    },
+    {
+      "claim_text": "category_layer is decorative for validation: ablation breaks zero gates (self-disclosed)",
+      "claim_status": "UNSUPPORTED",
+      "source_or_repo_evidence": "self-flagged in VERDICT.md",
+      "allowed_wording": "not yet demonstrated",
+      "forbidden_wording": "validated",
+      "gate": "release_blocked"
+    },
+    {
+      "claim_text": "EIIC extrapolated_core / peak_architecture (force-tagged speculative by Gate 8)",
+      "claim_status": "S6_SPECULATIVE",
+      "source_or_repo_evidence": "force-tagged speculative (Gate 8)",
+      "allowed_wording": "speculative engineering extrapolation",
+      "forbidden_wording": "observed",
+      "gate": "Gate 8"
+    },
+    {
+      "claim_text": "<forbidden pattern> is agi",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "CME/Noesis is research software, not AGI",
+      "forbidden_wording": "is agi",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> artificial general intelligence",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "research software, not AGI",
+      "forbidden_wording": "artificial general intelligence",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> detects consciousness",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "no consciousness detection; forbidden by Gate",
+      "forbidden_wording": "detects consciousness",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> measures consciousness",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "no consciousness measurement; forbidden by Gate",
+      "forbidden_wording": "measures consciousness",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> measures brain bandwidth",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "uses an operational IEV proxy, not brain measurement",
+      "forbidden_wording": "measures brain bandwidth",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> proves gnwt",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "uses GNWT as an operational analogy, not biological proof",
+      "forbidden_wording": "proves gnwt",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> performs therapy",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "not therapy; preserves human responsibility",
+      "forbidden_wording": "performs therapy",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> diagnoses",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "no diagnosis; preserves human responsibility",
+      "forbidden_wording": "diagnoses",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> spacex",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "physics-grade engineering principles methodologically, gated by tests",
+      "forbidden_wording": "spacex",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> xai quality",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "physics-grade engineering principles methodologically, gated by tests",
+      "forbidden_wording": "xai quality",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> llm judge is final",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "high-stakes claims require deterministic or human gates",
+      "forbidden_wording": "llm judge is final",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> proxy metric is physical measurement",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "proxy metrics are labelled proxy, not measurement",
+      "forbidden_wording": "proxy metric is physical measurement",
+      "gate": "forbidden_gate"
+    },
+    {
+      "claim_text": "<forbidden pattern> more agents automatically",
+      "claim_status": "X_FORBIDDEN",
+      "source_or_repo_evidence": "noesis/forbidden.py detector",
+      "allowed_wording": "more agents do not automatically improve cognition",
+      "forbidden_wording": "more agents automatically",
+      "gate": "forbidden_gate"
+    }
+  ],
+  "release_gates_checked": [
+    {
+      "gate_name": "tests",
+      "condition": "all tests pass with >=90% coverage",
+      "command": "python -m pytest -q",
+      "pass_threshold": "exit 0, coverage>=90%",
+      "fail_action": "block release"
+    },
+    {
+      "gate_name": "lint_types",
+      "condition": "ruff + mypy --strict clean",
+      "command": "ruff check . && mypy",
+      "pass_threshold": "exit 0",
+      "fail_action": "block release"
+    },
+    {
+      "gate_name": "forbidden_claims",
+      "condition": "no unblocked forbidden claim",
+      "command": "python -m noesis.cli bibliography validate",
+      "pass_threshold": "exit 0",
+      "fail_action": "block release"
+    },
+    {
+      "gate_name": "unsupported_claims",
+      "condition": "UNSUPPORTED claims cannot pass release",
+      "command": "python -m noesis.contracts.physics_boundary_cli validate",
+      "pass_threshold": "no UNSUPPORTED claim asserted as validated",
+      "fail_action": "block release"
+    },
+    {
+      "gate_name": "trajectory_trace",
+      "condition": "per-operator trajectory trace implemented",
+      "command": "python -m noesis.contracts.physics_boundary_cli validate",
+      "pass_threshold": "all trajectory fields implemented",
+      "fail_action": "hand off to Role 3"
+    }
+  ],
+  "score": 95,
+  "score_breakdown": {
+    "state_contract": 10,
+    "boundary_contract": 10,
+    "invariant_contract": 10,
+    "operator_contract": 15,
+    "mechanism_residual_contract": 10,
+    "trajectory_contract": 5,
+    "measurement_contract": 10,
+    "verification_contract": 10,
+    "claim_status_contract": 10,
+    "role_3_handoff_contract": 5
+  },
+  "hard_failures": [
+    "trajectory"
+  ],
+  "failures": [
+    {
+      "failure_code": "TRAJECTORY_FIELD_ABSENT",
+      "file_path": "data/physics_boundary_report.json",
+      "reason": "trajectory field not implemented: score_t",
+      "required_fix": "persist score_t in a per-operator trajectory trace"
+    },
+    {
+      "failure_code": "TRAJECTORY_FIELD_ABSENT",
+      "file_path": "data/physics_boundary_report.json",
+      "reason": "trajectory field not implemented: decision_t",
+      "required_fix": "persist decision_t in a per-operator trajectory trace"
+    },
+    {
+      "failure_code": "TRAJECTORY_FIELD_ABSENT",
+      "file_path": "data/physics_boundary_report.json",
+      "reason": "trajectory field not implemented: rollback_condition_t",
+      "required_fix": "persist rollback_condition_t in a per-operator trajectory trace"
+    },
+    {
+      "failure_code": "TRAJECTORY_FIELD_ABSENT",
+      "file_path": "data/physics_boundary_report.json",
+      "reason": "trajectory field not implemented: state_t_plus_1",
+      "required_fix": "persist state_t_plus_1 in a per-operator trajectory trace"
+    }
+  ],
+  "role_3_handoff": {
+    "role_name": "TRAJECTORY TRACE IMPLEMENTER",
+    "task": "Persist a per-operator trajectory trace (score_t, decision_t, rollback_condition_t, state_t->state_t+1) into the Evidence Bundle.",
+    "files_to_create": [
+      "schemas/trajectory_trace.schema.json",
+      "noesis/trajectory.py",
+      "tests/test_trajectory_trace.py"
+    ],
+    "files_to_modify": [
+      "noesis/pipeline_v8.py",
+      "noesis/evidence.py",
+      "noesis/cli.py"
+    ],
+    "validation_commands": [
+      "python -m pytest -q",
+      "ruff check .",
+      "python -m noesis.contracts.physics_boundary_cli validate"
+    ],
+    "pass_fail_criteria": [
+      "python -m noesis.contracts.physics_boundary_cli validate exits 0",
+      "contract_status == PASS and no hard failures",
+      "pytest + ruff + mypy green and coverage >=90%"
+    ]
+  }
+}

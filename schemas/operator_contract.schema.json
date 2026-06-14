@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/operator_contract.schema.json",
+  "title": "Operator Contract",
+  "description": "One state-transforming operator: input -> operation -> output -> validator.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "operator_name",
+    "input_state",
+    "operation",
+    "output_state",
+    "repo_location",
+    "validator",
+    "failure_mode",
+    "decision"
+  ],
+  "properties": {
+    "operator_name": { "type": "string", "minLength": 1 },
+    "input_state": { "type": "string", "minLength": 1 },
+    "operation": { "type": "string", "minLength": 1 },
+    "output_state": { "type": "string", "minLength": 1 },
+    "repo_location": { "type": "string", "minLength": 1 },
+    "validator": { "type": "string" },
+    "failure_mode": { "type": "string" },
+    "decision": { "type": "string", "enum": ["KEEP", "MODIFY", "REMOVE", "CREATE"] }
+  }
+}

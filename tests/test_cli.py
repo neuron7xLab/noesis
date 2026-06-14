@@ -20,7 +20,15 @@ from noesis.cli import build_parser, main
 EXAMPLE = "examples/problems/08_ai_system_design.txt"
 
 # команди з нестандартним входом — тестуються окремо нижче
-_SPECIAL = {"reverse", "validate", "verdict", "human-eval", "benchmark", "bibliography"}
+_SPECIAL = {
+    "reverse",
+    "validate",
+    "verdict",
+    "human-eval",
+    "benchmark",
+    "bibliography",
+    "physics-boundary",
+}
 # команди, що друкують не-JSON (markdown / звіт)
 _NON_JSON = {"human-eval", "eiic", "neuro"}
 
@@ -133,3 +141,9 @@ def test_evidence_bundle_then_verdict_and_human_eval(
     rc_h, out_h = _run(capsys, ["human-eval", str(out_dir)])
     assert rc_h in (0, 1)
     assert out_h.strip()
+
+
+def test_physics_boundary_validate_runs(capsys: pytest.CaptureFixture[str]) -> None:
+    rc, out = _run(capsys, ["physics-boundary", "validate"])
+    assert rc in (0, 1), f"physics-boundary: несподіваний exit-код {rc}"
+    assert "PHYSICS CONTRACT:" in out
