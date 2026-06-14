@@ -1,0 +1,131 @@
+{
+  "pairs": [
+    {
+      "pair_id": "syn-00",
+      "input_hash": "h00",
+      "artifact_ref": "art-00.json",
+      "human_verdict": "works",
+      "proxy_score": 0.85,
+      "hrv": 55.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-01",
+      "input_hash": "h01",
+      "artifact_ref": "art-01.json",
+      "human_verdict": "works",
+      "proxy_score": 0.78,
+      "hrv": 56.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-02",
+      "input_hash": "h02",
+      "artifact_ref": "art-02.json",
+      "human_verdict": "fails",
+      "proxy_score": 0.3,
+      "hrv": 57.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-03",
+      "input_hash": "h03",
+      "artifact_ref": "art-03.json",
+      "human_verdict": "works",
+      "proxy_score": 0.72,
+      "hrv": 58.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-04",
+      "input_hash": "h04",
+      "artifact_ref": "art-04.json",
+      "human_verdict": "fails",
+      "proxy_score": 0.41,
+      "hrv": 59.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-05",
+      "input_hash": "h05",
+      "artifact_ref": "art-05.json",
+      "human_verdict": "works",
+      "proxy_score": 0.66,
+      "hrv": 60.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-06",
+      "input_hash": "h06",
+      "artifact_ref": "art-06.json",
+      "human_verdict": "works",
+      "proxy_score": 0.81,
+      "hrv": 61.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-07",
+      "input_hash": "h07",
+      "artifact_ref": "art-07.json",
+      "human_verdict": "fails",
+      "proxy_score": 0.25,
+      "hrv": 62.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-08",
+      "input_hash": "h08",
+      "artifact_ref": "art-08.json",
+      "human_verdict": "works",
+      "proxy_score": 0.74,
+      "hrv": 63.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-09",
+      "input_hash": "h09",
+      "artifact_ref": "art-09.json",
+      "human_verdict": "fails",
+      "proxy_score": 0.38,
+      "hrv": 64.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-10",
+      "input_hash": "h10",
+      "artifact_ref": "art-10.json",
+      "human_verdict": "works",
+      "proxy_score": 0.69,
+      "hrv": 65.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-11",
+      "input_hash": "h11",
+      "artifact_ref": "art-11.json",
+      "human_verdict": "fails",
+      "proxy_score": 0.33,
+      "hrv": 66.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-12",
+      "input_hash": "h12",
+      "artifact_ref": "art-12.json",
+      "human_verdict": "works",
+      "proxy_score": 0.77,
+      "hrv": 67.0,
+      "provenance": "synthetic_fixture"
+    },
+    {
+      "pair_id": "syn-13",
+      "input_hash": "h13",
+      "artifact_ref": "art-13.json",
+      "human_verdict": "works",
+      "proxy_score": 0.71,
+      "hrv": 68.0,
+      "provenance": "synthetic_fixture"
+    }
+  ],
+  "provenance": "synthetic_fixture"
+}

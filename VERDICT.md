@@ -1,3 +1,28 @@
+# Feedback Harness — proxy → anchored measurement (data node, step 1)
+
+The node that converts the stack from *proxy* (structural consistency) to
+*measurement* (demonstrated usefulness). It is the verifier `residual_promotion`
+demands: **data promotes a proxy to a measurement; nothing else does.**
+
+- **`noesis/feedback.py`** — ingest human-labeled pairs (`input → artifact →
+  "works"/"fails"` [+ HRV]); `calibrate()` returns `anchored_quality` (real mean
+  reward), `calibration_gap` (proxy − reality; > 0.15 → `PROXY_OVERCLAIMS`),
+  `proxy_reality_alignment` (Pearson). **Fail-closed below 12 pairs** →
+  `INSUFFICIENT_DATA`, never a calibrated PASS.
+- **`schemas/feedback_calibration.schema.json`** + **`tests/test_feedback.py`** (11 tests).
+- **CLI** `noesis feedback ingest <pairs.json>` / `noesis feedback status`
+  (exit 0 only when CALIBRATED). Synthetic example flagged `synthetic_fixture` —
+  machinery only, never a real claim. Runtime report gitignored.
+
+**Verification:** 360 pytest @ **93.53%** coverage gate · ruff clean · mypy
+--strict (81 files).
+
+**Honest state:** harness ready, empty of real data → correctly `INSUFFICIENT_DATA`.
+Next (step 2): wire `anchored_quality` into the release verdict; needs your
+~15–20 real labeled pairs. Then green = *measured useful*, not *looks consistent*.
+
+---
+
 # Recovery Supervisor — the reversive recovery loop (Layer −1)
 
 Answers "who lifts the models when they fall": a supervisor **outside** the failed

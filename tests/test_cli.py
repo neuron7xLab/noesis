@@ -29,6 +29,7 @@ _SPECIAL = {
     "bibliography",
     "physics-boundary",
     "recovery",
+    "feedback",
 }
 # команди, що друкують не-JSON (markdown / звіт)
 _NON_JSON = {"human-eval", "eiic", "neuro"}
