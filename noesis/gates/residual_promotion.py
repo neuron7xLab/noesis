@@ -16,6 +16,8 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any
 
+from noesis.ratios import rate
+
 PROMOTION_STATES: frozenset[str] = frozenset(
     {
         "RESIDUAL",
@@ -82,12 +84,10 @@ def promotion_metrics(decisions: list[dict[str, Any]]) -> dict[str, float]:
     non_verified = [d for d in decisions if d["state"] != "VERIFIED_MECHANISM"]
     blocked = sum(1 for d in non_verified if not d["mechanism_update"])
     return {
-        "unverified_promotion_block_rate": round(blocked / len(non_verified), 4)
-        if non_verified
-        else 1.0,
-        "verified_promotion_rate": round(len(verified) / total, 4),
-        "rejected_residual_rate": round(
-            sum(1 for d in decisions if d["state"] == "REJECTED") / total, 4
+        "unverified_promotion_block_rate": rate(blocked, len(non_verified), default=1.0),
+        "verified_promotion_rate": rate(len(verified), total),
+        "rejected_residual_rate": rate(
+            sum(1 for d in decisions if d["state"] == "REJECTED"), total
         ),
-        "mechanism_stability_rate": round(stable / total, 4),
+        "mechanism_stability_rate": rate(stable, total),
     }

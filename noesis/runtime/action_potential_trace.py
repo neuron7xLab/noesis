@@ -15,6 +15,8 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any
 
+from noesis.ratios import rate
+
 
 @dataclass(frozen=True)
 class ActionPotentialRecord:
@@ -117,19 +119,13 @@ def _is_explainable(record: ActionPotentialRecord) -> bool:
 
 def trace_metrics(records: list[ActionPotentialRecord]) -> dict[str, float]:
     total = len(records)
-    if total == 0:
-        return {
-            "trace_completeness_rate": 0.0,
-            "rollback_defined_rate": 0.0,
-            "decision_explainability_rate": 0.0,
-        }
     complete = sum(1 for r in records if not validate_record(r))
     rollback = sum(1 for r in records if r.rollback_condition.strip())
     explainable = sum(1 for r in records if _is_explainable(r))
     return {
-        "trace_completeness_rate": round(complete / total, 4),
-        "rollback_defined_rate": round(rollback / total, 4),
-        "decision_explainability_rate": round(explainable / total, 4),
+        "trace_completeness_rate": rate(complete, total),
+        "rollback_defined_rate": rate(rollback, total),
+        "decision_explainability_rate": rate(explainable, total),
     }
 
 

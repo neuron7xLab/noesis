@@ -13,6 +13,7 @@ from collections import Counter
 from typing import Any
 
 from noesis.gates.discharge_gate import DischargeGate
+from noesis.ratios import rate
 
 SCALES: tuple[str, ...] = (
     "token_decision",
@@ -76,7 +77,7 @@ def check_fractal_consistency(
     false_pass = 1.0 if release == "PASS" and lower_fail else 0.0
     false_reject = 1.0 if (release is not None and release != "PASS" and all_lower_pass) else 0.0
     fail_count = sum(1 for d in decisions.values() if d != "PASS")
-    scale_failure_rate = round(fail_count / len(decisions), 4) if decisions else 0.0
+    scale_failure_rate = rate(fail_count, len(decisions))
 
     status = "FAIL" if (problems or false_pass > 0.0) else "PASS"
     return {
