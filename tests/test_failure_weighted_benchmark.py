@@ -86,11 +86,13 @@ def test_dimension_out_of_range_raises() -> None:
 
 
 def test_assemble_from_repo_reflects_live_contract() -> None:
-    # Trajectory is now closed (no open hard failures), but the live contract still
-    # carries self-flagged UNSUPPORTED claims, so the release verdict stays FAIL.
+    # Live contract is now fully clean: trajectory closed AND the two prior v0.5
+    # limitations (compression mislabel, decorative category layer) are resolved in
+    # v0.6 and removed from unsupported_claims after empirical verification, so the
+    # release verdict is PASS with no hard blocks.
     inp = assemble_from_repo(_ROOT, _dims(0.9))
     report = evaluate(inp)
     assert "trajectory" not in inp.open_hard_failures
-    assert inp.unsupported_claim_count >= 1
-    assert report["release_verdict"] == "FAIL"
-    assert "unsupported_claims_present" in report["hard_blocks"]
+    assert inp.unsupported_claim_count == 0
+    assert report["release_verdict"] == "PASS"
+    assert report["hard_blocks"] == []

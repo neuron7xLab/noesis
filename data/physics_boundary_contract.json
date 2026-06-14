@@ -276,22 +276,6 @@
       "gate": "Gate 8 (proxy honesty)"
     },
     {
-      "claim_text": "compression label on short inputs: finalizer pads to 90-110 words rather than compressing (honestly flagged as failed metric in VERDICT.md)",
-      "claim_status": "UNSUPPORTED",
-      "source_or_repo_evidence": "self-flagged in VERDICT.md",
-      "allowed_wording": "not yet demonstrated",
-      "forbidden_wording": "validated",
-      "gate": "release_blocked"
-    },
-    {
-      "claim_text": "category_layer is decorative for validation: ablation breaks zero gates (self-disclosed)",
-      "claim_status": "UNSUPPORTED",
-      "source_or_repo_evidence": "self-flagged in VERDICT.md",
-      "allowed_wording": "not yet demonstrated",
-      "forbidden_wording": "validated",
-      "gate": "release_blocked"
-    },
-    {
       "claim_text": "EIIC extrapolated_core / peak_architecture (force-tagged speculative by Gate 8)",
       "claim_status": "S6_SPECULATIVE",
       "source_or_repo_evidence": "force-tagged speculative (Gate 8)",

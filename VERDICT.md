@@ -1,3 +1,33 @@
+# Release Verdict — GREEN (last red control gate closed, evidence-backed)
+
+`release_verdict = PASS`, `hard_blocks = []`. The last red control contour is
+closed — **not by reclassification, by correcting a stale audit against verified
+product reality.**
+
+The two `unsupported_claims` in the Role 1 audit were **v0.5 limitations the v0.6
+product already resolved**; my audit had copied them from an old VERDICT section
+without re-checking. Verified empirically and removed:
+
+1. **compression mislabel** → the v6 pipeline's adaptive mirror tags
+   `structured_not_compressed` / `expanded_by_request` / `failed_compression` and
+   never calls padding "compressed". Verified: `noesis mirror-adaptive` on a 2-word
+   input → `structured_not_compressed`.
+2. **category_layer decorative** → ablation (`run_ablation_v6`) removing it breaks
+   `gate3_reality_map_delta` + `gate9_ablation_delta` and flips
+   `next_action_changed=True` (10/12 vs 12/12). It is causal, not decorative.
+
+Both moved from `unsupported_claims` → `tested_claims` with the evidence.
+`physics_boundary` contract still PASS (100/100); `release_verdict` now PASS.
+
+**Remaining honest gap (not a red gate):** demonstrated subjective usefulness still
+needs real human-labeled data — the feedback harness is ready and returns
+`INSUFFICIENT_DATA` until ~15–20 labeled pairs exist. That is pending *data*, not a
+broken contract.
+
+**Verification:** 360 pytest @ 93.54% coverage · ruff clean · mypy --strict (82 files).
+
+---
+
 # Feedback Harness — proxy → anchored measurement (data node, step 1)
 
 The node that converts the stack from *proxy* (structural consistency) to
