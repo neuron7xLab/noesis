@@ -1,3 +1,30 @@
+# Tasks 3–9 — Action-Potential Runtime
+
+The runtime that stops treating agent output as action and starts treating action
+as a verified threshold-crossing with trace, hash, rollback, artifact, metric, and
+release verdict. All deterministic, fail-closed, gate-bound.
+
+| Task | Module | Core |
+|---|---|---|
+| 3 Action-Potential Trace | `noesis/runtime/action_potential_trace.py` | `state_t→gate_score→decision→artifact_delta→state_t+1`; invalid without threshold/score/artifact/rollback |
+| 4 Discharge Gate | `noesis/gates/discharge_gate.py` | `w=αR+βV+γP−δK`; PASS/BELOW_THRESHOLD/FAIL/REROUTE/HUMAN_REVIEW; PASS impossible below θ |
+| 5 Residual Promotion | `noesis/gates/residual_promotion.py` | no verifier → no mechanism; proxy↛measurement; unsupported→human |
+| 6 Evidence Integral | `noesis/evidence_integral.py` | sha256 hash-chain; replayable; artifact↔trace↔verifier linked |
+| 7 Rollback Physics | `noesis/runtime/rollback.py` | every invalid discharge reversible; failed benchmark never releases |
+| 8 Fractal Gate Consistency | `noesis/evaluation/fractal_gate_consistency.py` | one gate, 7 scales; release can't PASS when a lower scale fails |
+| 9 Failure-Weighted Benchmark | `noesis/evaluation/failure_weighted_benchmark.py` | quality = verified − unsupported − rollback debt − human overload |
+
+**Release verdict (live):** `assemble_from_repo` pulls the open `trajectory` hard
+failure from `data/physics_boundary_contract.json` → **release_verdict = FAIL**.
+The runtime refuses to release while Role 3's trajectory trace is unbuilt. Failure
+signal outweighs simulated success, by construction.
+
+**Verification:** 324 pytest @ 93.13% coverage gate · ruff clean · mypy --strict
+(78 files). Per-task suites:
+`tests/test_{discharge_gate,action_potential_trace,residual_promotion,evidence_integral,rollback,fractal_gate_consistency,failure_weighted_benchmark}.py`.
+
+---
+
 # Role 2 — Physics Contract Implementer
 
 **contract_status: FAIL (by design) — score 95/100.** The contract LAYER is fully

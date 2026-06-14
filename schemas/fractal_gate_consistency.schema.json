@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/fractal_gate_consistency.schema.json",
+  "title": "Fractal Gate Consistency Report",
+  "description": "Same gate applied across token..release scales; cross-scale consistency.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "scales", "consistency_probe", "problems", "metrics"],
+  "properties": {
+    "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+    "scales": { "type": "object" },
+    "consistency_probe": { "type": "object" },
+    "problems": { "type": "array", "items": { "type": "string" } },
+    "metrics": {
+      "type": "object",
+      "required": [
+        "cross_scale_gate_consistency",
+        "scale_specific_failure_rate",
+        "false_pass_rate",
+        "false_reject_rate"
+      ],
+      "properties": {
+        "cross_scale_gate_consistency": { "type": "number", "minimum": 0, "maximum": 1 },
+        "scale_specific_failure_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "false_pass_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "false_reject_rate": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}
