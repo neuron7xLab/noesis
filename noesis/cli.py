@@ -458,6 +458,15 @@ def _cmd_calibrate(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_discriminate(args: argparse.Namespace) -> int:
+    from noesis.evaluation.discrimination_study import study_report
+
+    report = study_report()
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    # Fail-closed gate on the system's own validity: weak discrimination is a red flag.
+    return 0 if report["overall_auc"] >= 0.7 else 1
+
+
 def _cmd_feedback(args: argparse.Namespace) -> int:
     from noesis.feedback import ingest
 
@@ -655,6 +664,10 @@ def build_parser() -> argparse.ArgumentParser:
     # calibration registry — every tunable threshold + measured sensitivity
     p_cal = sub.add_parser("calibrate", help="калібрувальна карта: усі пороги + sensitivity")
     p_cal.set_defaults(func=_cmd_calibrate)
+
+    # discriminant validity — does the gate separate good vs degraded artifacts?
+    p_disc = sub.add_parser("discriminate", help="дискримінантна валідність гейта (AUC проти деградацій)")
+    p_disc.set_defaults(func=_cmd_discriminate)
 
     # recovery supervisor — reversive recovery loop self-check (Layer -1)
     p_rec = sub.add_parser("recovery", help="recovery supervisor (reversive recovery loop)")
