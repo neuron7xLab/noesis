@@ -16,3 +16,4 @@ htmlcov/
 
 # generated feedback calibration report (depends on ingested data)
 data/feedback_calibration.json
+.hypothesis/

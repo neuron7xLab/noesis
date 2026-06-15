@@ -6,7 +6,7 @@ How claims map to sources and statuses. Canonical data lives in `data/*.json`;
 `data/source_graph.json` holds the machine-readable graph.
 
 ## Status distribution
-- files scanned: **105**, claims: **19**, sources: **35**, present theory terms: **16**
+- files scanned: **94**, claims: **19**, sources: **35**, present theory terms: **16**
 - claims by status: `{'S0': 1, 'S1': 2, 'S3': 1, 'S4': 7, 'S5': 7, 'S6': 1}`
 - proxy claims: 7, speculative (S6): 1, forbidden guarded: 12
 - bibliography gate status: **PASS**
@@ -51,14 +51,14 @@ How claims map to sources and statuses. Canonical data lives in `data/*.json`;
 ### `gnwt_analogy` (S4, analogy_claim)
 > Broadcast and re-entry across the cognitive graph are a structural analogy to the Global Neuronal Workspace.
 - sources: `baars_1988_global_workspace`, `mashour_2020_gnwt_review`, `dehaene_changeux_2011_conscious_processing`
-- repo: `docs/GNWT_OPERATIONAL_ANALOGY.md`, `noesis/broadcast.py`, `schemas/broadcast_trace.schema.json`
+- repo: `docs/quarantine/GNWT_OPERATIONAL_ANALOGY.md`, `noesis/broadcast.py`, `schemas/broadcast_trace.schema.json`
 - module: pipeline_v7 · gate: `gate4_broadcast_awareness`
 - failure mode: Using GNWT to imply a biological workspace or consciousness in software.
 
 ### `externalized_active_inference` (S4, analogy_claim)
 > The pipeline is an active-inference-inspired loop closed through a human, not an autonomous sensorimotor agent.
 - sources: `friston_2010_free_energy`, `parr_pezzulo_friston_2022_active_inference`, `clark_2013_predictive_processing`
-- repo: `docs/EXTERNALIZED_ACTIVE_INFERENCE.md`, `noesis/precision_scheduler.py`, `schemas/precision_schedule.schema.json`
+- repo: `docs/quarantine/EXTERNALIZED_ACTIVE_INFERENCE.md`, `noesis/precision_scheduler.py`, `schemas/precision_schedule.schema.json`
 - module: pipeline_v8 · gate: `gate6_iev_precision_gate`
 - failure mode: Claiming an autonomous active-inference loop.
 
