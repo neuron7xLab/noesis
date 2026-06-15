@@ -467,6 +467,15 @@ def _cmd_discriminate(args: argparse.Namespace) -> int:
     return 0 if report["overall_auc"] >= 0.7 else 1
 
 
+def _cmd_validity(args: argparse.Namespace) -> int:
+    from noesis.evaluation.calibration_loop import validity_report
+
+    report = validity_report()
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    # Closed-loop self-proof: AUC + good-pass + hard-reject + θ-in-plateau, fail-closed.
+    return 0 if report["verdict"] == "PASS" else 1
+
+
 def _cmd_feedback(args: argparse.Namespace) -> int:
     from noesis.feedback import ingest
 
@@ -668,6 +677,10 @@ def build_parser() -> argparse.ArgumentParser:
     # discriminant validity — does the gate separate good vs degraded artifacts?
     p_disc = sub.add_parser("discriminate", help="дискримінантна валідність гейта (AUC проти деградацій)")
     p_disc.set_defaults(func=_cmd_discriminate)
+
+    # closed-loop validity gate — calibrated θ + continuous self-proof (fail-closed)
+    p_validity = sub.add_parser("validity", help="замкнений гейт валідності: AUC + калібрування θ")
+    p_validity.set_defaults(func=_cmd_validity)
 
     # recovery supervisor — reversive recovery loop self-check (Layer -1)
     p_rec = sub.add_parser("recovery", help="recovery supervisor (reversive recovery loop)")

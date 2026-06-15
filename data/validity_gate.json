@@ -1,0 +1,21 @@
+{
+  "kind": "validity_gate",
+  "verdict": "PASS",
+  "auc": 0.9847,
+  "auc_floor": 0.9,
+  "good_pass_rate": 1.0,
+  "hard_reject_rate": 1.0,
+  "current_theta": 0.5,
+  "recommended_theta": 0.51,
+  "robust_plateau": [
+    0.3,
+    0.72
+  ],
+  "current_in_plateau": true,
+  "n_intents": 12,
+  "soft_degradations": [
+    "pad"
+  ],
+  "mechanism": "категоріальне вето (no-falsifier/forbidden) робить hard-rejection; θ керує soft/margin",
+  "boundary": "об'єктивні деградації, не людська корисність; claim: гейт ранжує цілий артефакт вище деградованого"
+}
