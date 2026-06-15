@@ -667,7 +667,16 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     func = args.func
     assert callable(func)
-    return int(func(args))
+    # Fail-closed: a bad path or corrupt JSON file is a clean error + exit 1, not
+    # a raw traceback dumped at the user (знайдено хаос-стрес-тестом).
+    try:
+        return int(func(args))
+    except FileNotFoundError as exc:
+        print(f"error: file not found: {exc.filename}", file=sys.stderr)
+        return 1
+    except json.JSONDecodeError as exc:
+        print(f"error: invalid JSON: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

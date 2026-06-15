@@ -18,10 +18,13 @@ from __future__ import annotations
 
 import math
 import random
+from pathlib import Path
 
 import pytest
 
+from noesis.cli import main as cli_main
 from noesis.effective_dim import participation_ratio
+from noesis.evidence_integral import bundle_metrics, replay, validate_bundle
 from noesis.feedback import CALIBRATION_STATES, LabeledPair, calibrate
 from noesis.runtime.recovery_supervisor import (
     RECOVERY_STATES,
@@ -30,6 +33,7 @@ from noesis.runtime.recovery_supervisor import (
     RecoverySupervisor,
 )
 from noesis.runtime.rollback import ROLLBACK_TYPES, RollbackController
+from noesis.verdict import render_verdict_md
 
 _CHAOS = [0.0, 1.0, -1.0, 1e9, -1e9, float("nan"), float("inf"), -float("inf"), 0.5]
 
@@ -160,3 +164,70 @@ def test_recovery_survives_throwing_attempt() -> None:
     assert outcome.escalated_to_human is True
     assert len(outcome.attempts) == 3
     assert all("attempt raised" in a.note for a in outcome.attempts)
+
+
+# ── Round 2: evidence bundle / verdict / CLI surfaces ───────────────────────
+
+_BUNDLE_CHAOS = [
+    1, "x", None, [], {}, 5.0, float("nan"), float("inf"), True, [1, 2], [{}, {}],
+    {"transition_index": "bad"}, {"verifier_index": "y"}, {"transition_index": 0}, "abc", -3,
+]
+_BUNDLE_KEYS = [
+    "transitions", "artifacts", "decisions", "state_transition_hashes", "artifact_hashes",
+    "verifier_outputs", "final_manifest_hash", "run_id", "gates_failed",
+    "deterministic_modules", "pipeline_version", "overall_status", "gates_passed",
+]
+
+
+@pytest.mark.parametrize("seed", [3, 11, 2024, 55555])
+def test_evidence_and_verdict_never_crash_under_chaos(seed: int) -> None:
+    rng = random.Random(seed)
+    for _ in range(500):
+        bundle = {
+            k: rng.choice(_BUNDLE_CHAOS)
+            for k in rng.sample(_BUNDLE_KEYS, k=rng.randint(0, 7))
+        }
+        # None of these may raise on an arbitrary dict; validators report, not crash.
+        problems = validate_bundle(bundle)
+        assert isinstance(problems, list)
+        metrics = bundle_metrics(bundle)
+        assert all(math.isfinite(v) for v in metrics.values())
+        assert isinstance(replay(bundle), bool)
+        assert "VERDICT" in render_verdict_md(bundle)
+
+
+def test_validate_bundle_reports_malformed_instead_of_crashing() -> None:
+    problems = validate_bundle({"transitions": [1, 2], "artifacts": [7]})
+    assert any("TRANSITION_MALFORMED" in p for p in problems)
+    assert any("ARTIFACT_MALFORMED" in p for p in problems)
+
+
+def test_replay_on_non_list_transitions_is_false_not_crash() -> None:
+    assert replay({"transitions": 1}) is False
+    assert replay({"transitions": "abc"}) is False
+
+
+def test_render_verdict_md_degrades_on_partial_manifest() -> None:
+    out = render_verdict_md({})
+    assert "VERDICT" in out and "—" in out
+
+
+@pytest.mark.parametrize(
+    "argv",
+    [
+        ["pipeline", "/nonexistent/cme_stress_file.txt"],
+        ["verdict", "/nonexistent/cme_stress_dir"],
+        ["neuro", "/nonexistent/cme_stress_neuro"],
+    ],
+)
+def test_cli_missing_path_fails_closed(argv: list[str], capsys: pytest.CaptureFixture[str]) -> None:
+    assert cli_main(argv) == 1
+    assert "file not found" in capsys.readouterr().err
+
+
+def test_cli_corrupt_json_fails_closed(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    (tmp_path / "manifest.json").write_text("{not valid json", encoding="utf-8")
+    assert cli_main(["verdict", str(tmp_path)]) == 1
+    assert "invalid JSON" in capsys.readouterr().err

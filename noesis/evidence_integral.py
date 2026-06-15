@@ -69,26 +69,47 @@ def build_bundle(
     return bundle
 
 
+def _seq_len(x: Any) -> int:
+    return len(x) if isinstance(x, list) else 0
+
+
 def validate_bundle(bundle: dict[str, Any]) -> list[str]:
-    """Return structured problems; empty list means the bundle is sound."""
+    """Return structured problems; empty list means the bundle is sound.
+
+    Fail-closed: a malformed bundle (loaded from disk/JSON, so untrusted) is
+    *reported*, never crashed on — a validator that dies on the very deformation
+    it exists to catch is no validator (знайдено хаос-стрес-тестом).
+    """
     problems: list[str] = []
     transitions = bundle.get("transitions", [])
     artifacts = bundle.get("artifacts", [])
+    if not isinstance(transitions, list):
+        problems.append("TRANSITIONS_MALFORMED: 'transitions' is not a list")
+        transitions = []
+    if not isinstance(artifacts, list):
+        problems.append("ARTIFACTS_MALFORMED: 'artifacts' is not a list")
+        artifacts = []
 
-    if len(bundle.get("state_transition_hashes", [])) != len(transitions):
+    if _seq_len(bundle.get("state_transition_hashes")) != len(transitions):
         problems.append("TRACE_WITHOUT_HASH: a transition has no hash")
-    if len(bundle.get("artifact_hashes", [])) != len(artifacts):
+    if _seq_len(bundle.get("artifact_hashes")) != len(artifacts):
         problems.append("ARTIFACT_WITHOUT_HASH: an artifact has no hash")
 
     for i, art in enumerate(artifacts):
+        if not isinstance(art, dict):
+            problems.append(f"ARTIFACT_MALFORMED: artifact {i} is not an object")
+            continue
         idx = art.get("transition_index")
-        if idx is None or not (0 <= idx < len(transitions)):
+        if not isinstance(idx, int) or not (0 <= idx < len(transitions)):
             problems.append(f"ARTIFACT_WITHOUT_TRACE: artifact {i} not linked to a transition")
 
-    verifier_count = len(bundle.get("verifier_outputs", []))
+    verifier_count = _seq_len(bundle.get("verifier_outputs"))
     for i, tr in enumerate(transitions):
+        if not isinstance(tr, dict):
+            problems.append(f"TRANSITION_MALFORMED: transition {i} is not an object")
+            continue
         vidx = tr.get("verifier_index")
-        if vidx is not None and not (0 <= vidx < verifier_count):
+        if vidx is not None and (not isinstance(vidx, int) or not (0 <= vidx < verifier_count)):
             problems.append(f"VERIFIER_NOT_LINKED: transition {i} verifier_index out of range")
 
     if not replay(bundle):
@@ -97,8 +118,15 @@ def validate_bundle(bundle: dict[str, Any]) -> list[str]:
 
 
 def replay(bundle: dict[str, Any]) -> bool:
-    """Recompute the chain + manifest hash and compare to stored values."""
-    if _chain(bundle.get("transitions", [])) != bundle.get("state_transition_hashes", []):
+    """Recompute the chain + manifest hash and compare to stored values.
+
+    A non-list ``transitions`` (corrupt/scalar) is unreplayable, not a crash
+    (знайдено хаос-стрес-тестом) — replay is the single choke point for
+    validate_bundle/bundle_metrics, so guarding it guards them all."""
+    transitions = bundle.get("transitions", [])
+    if not isinstance(transitions, list):
+        return False
+    if _chain(transitions) != bundle.get("state_transition_hashes", []):
         return False
     expected = _sha({k: v for k, v in bundle.items() if k != "final_manifest_hash"})
     return expected == bundle.get("final_manifest_hash")
@@ -107,15 +135,21 @@ def replay(bundle: dict[str, Any]) -> bool:
 def bundle_metrics(bundle: dict[str, Any]) -> dict[str, float]:
     transitions = bundle.get("transitions", [])
     artifacts = bundle.get("artifacts", [])
+    transitions = transitions if isinstance(transitions, list) else []
+    artifacts = artifacts if isinstance(artifacts, list) else []
     n_art = len(artifacts)
     n_tr = len(transitions)
-    hashed_art = min(len(bundle.get("artifact_hashes", [])), n_art)
+    hashed_art = min(_seq_len(bundle.get("artifact_hashes")), n_art)
     traced_art = sum(
         1
         for a in artifacts
-        if isinstance(a.get("transition_index"), int) and 0 <= a["transition_index"] < n_tr
+        if isinstance(a, dict)
+        and isinstance(a.get("transition_index"), int)
+        and 0 <= a["transition_index"] < n_tr
     )
-    with_verifier = sum(1 for t in transitions if t.get("verifier_index") is not None)
+    with_verifier = sum(
+        1 for t in transitions if isinstance(t, dict) and t.get("verifier_index") is not None
+    )
     return {
         "reproducibility_score": 1.0 if replay(bundle) else 0.0,
         "hash_coverage_rate": rate(hashed_art, n_art, default=1.0),
