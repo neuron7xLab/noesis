@@ -451,6 +451,13 @@ def _cmd_recovery(args: argparse.Namespace) -> int:
     return 0 if result["healthy"] else 1
 
 
+def _cmd_calibrate(args: argparse.Namespace) -> int:
+    from noesis.calibration import calibration_report
+
+    print(json.dumps(calibration_report(), ensure_ascii=False, indent=2))
+    return 0
+
+
 def _cmd_feedback(args: argparse.Namespace) -> int:
     from noesis.feedback import ingest
 
@@ -644,6 +651,10 @@ def build_parser() -> argparse.ArgumentParser:
     pbsub = p_pb.add_subparsers(dest="pb_command", required=True)
     pbsub.add_parser("validate", help="enforce the physics-boundary contract (non-zero on fail)")
     p_pb.set_defaults(func=_cmd_physics_boundary)
+
+    # calibration registry — every tunable threshold + measured sensitivity
+    p_cal = sub.add_parser("calibrate", help="калібрувальна карта: усі пороги + sensitivity")
+    p_cal.set_defaults(func=_cmd_calibrate)
 
     # recovery supervisor — reversive recovery loop self-check (Layer -1)
     p_rec = sub.add_parser("recovery", help="recovery supervisor (reversive recovery loop)")
