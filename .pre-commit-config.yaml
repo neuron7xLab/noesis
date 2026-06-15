@@ -1,0 +1,27 @@
+# Local pre-commit hooks. Activate once with:  pre-commit install
+# Keeps the fast gates + generated-doc sync local; full pytest + validity gates
+# stay in CI (.github/workflows/ci.yml).
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff check
+        entry: ruff check --fix
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: mypy
+        name: mypy (strict)
+        entry: mypy
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: bibliography-regen
+        name: regenerate generated bibliography docs (keeps test_generated_docs_in_sync green)
+        entry: python -m noesis.cli bibliography verdict --write
+        language: system
+        pass_filenames: false
+        # only when something the generator reads changes
+        files: ^(docs/.*\.md|data/.*\.json|noesis/.*\.py)$
