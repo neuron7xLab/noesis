@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Mapping, Sequence
+from math import isfinite
 
 # Канонічні часові горизонти екстрапольованого мислення (Trope & Liberman, 2010).
 CANONICAL_HORIZONS: tuple[str, ...] = ("now", "1d", "1w", "1m", "1y")
@@ -36,6 +37,11 @@ def goodman_kruskal_gamma(pairs: Sequence[tuple[float, bool]]) -> float:
     γ=1 — ідеальний моніторинг, γ=0 — сліпий, γ<0 — антикалібрований.
     Зв'язані пари (рівна впевненість або рівна коректність) виключаються.
     """
+    # Fail-closed: не-скінченна впевненість (NaN/inf) не дорівнює нічому й не
+    # більша за ніщо, тож тихо формувала б concordant/discordant і давала
+    # хибний PASS у verify_reflection (знайдено хаос-стрес-тестом).
+    if any(not isfinite(conf) for conf, _ in pairs):
+        raise ValueError("впевненість має бути скінченною (без NaN/inf)")
     concordant = 0
     discordant = 0
     n = len(pairs)
