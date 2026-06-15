@@ -2,6 +2,19 @@
 
 Жорстка межа продукту: ніколи не діагностувати, не лікувати, не замінювати
 людське судження, не претендувати на AGI/свідомість.
+
+Детектор стійкий до тривіальної обфускації, що оминала наївний підрядковий
+матч (знайдено адверсаріальним самозламом v0.8):
+
+* розрив сепараторами:  ``a g i`` / ``a.g.i`` / ``a-g-i`` ⟶ блок;
+* кириличні гомогліфи:   ``АGI`` (кир. А) ⟶ блок;
+* і дзеркальна хиба — підрядок ``agi`` всередині ``m·agi·c`` БІЛЬШЕ не
+  спричиняє false-positive (межі слова для коротких ASCII-стемів).
+
+Залишкові відомі межі (поза можливостями стрічкового гейта, fail-closed —
+радше зайва тривога, ніж пропуск): кирилічні стеми навмисно prefix-матч
+(``діагност`` ловить і безпечну «діагностику трубопроводу»); агресивний
+leetspeak з заміною кількох літер може просочитись.
 """
 
 from __future__ import annotations
@@ -39,6 +52,42 @@ _FORBIDDEN_CLAIMS: tuple[tuple[str, str], ...] = (
     ("карма", "mysticism"),
 )
 
+# Двонапрямні confusable-пари кир.↔лат.: згортаємо ОБИДВІ сторони (текст і
+# needle) одним відображенням до канонічного коду, тож наявні матчі лишаються
+# незмінні, а гомогліф-атака на ASCII-needle ловиться. Канон — латиниця для
+# літер, що мають латинський двійник.
+_CONFUSABLES: dict[str, str] = {
+    "а": "a", "е": "e", "о": "o", "р": "p", "с": "c", "х": "x",
+    "і": "i", "ї": "i", "у": "y", "к": "k", "м": "m", "т": "t",
+    "в": "b", "н": "h",
+}
+_FOLD = str.maketrans(_CONFUSABLES)
+
+# Між сусідніми символами needle дозволяємо «розривні» сепаратори (пробіли,
+# крапки, дефіси, підкреслення, зірочки) — щоб ``a g i`` ⟶ ``agi``.
+_SEP = r"[\s.\-_*]*"
+
+
+def _fold(text: str) -> str:
+    """Канонізує confusable-літери (застосовується і до needle, і до тексту)."""
+    return text.translate(_FOLD)
+
+
+def _compile(needle: str) -> re.Pattern[str]:
+    folded = _fold(needle)
+    body = _SEP.join(re.escape(ch) for ch in folded)
+    # Межі слова — лише для коротких ASCII-стемів (напр. ``agi``), щоб не ловити
+    # підрядок усередині звичайних слів (``magic``). Кирилічні/довгі needle
+    # лишаємо prefix/substring-матчем (навмисний стем «діагност» тощо).
+    if len(folded) < 5 and folded.isascii() and folded.isalpha():
+        body = r"(?<![0-9a-z])" + body + r"(?![0-9a-z])"
+    return re.compile(body)
+
+
+_COMPILED: tuple[tuple[re.Pattern[str], str], ...] = tuple(
+    (_compile(needle), label) for needle, label in _FORBIDDEN_CLAIMS
+)
+
 # Маркери непідкріпленої впевненості (галюцинаційний ризик).
 _CERTAINTY_MARKERS: tuple[str, ...] = (
     "гарантовано", "стовідсотково", "100% точно", "доведено науково",
@@ -49,9 +98,13 @@ _NUM = re.compile(r"\b\d{2,}\b")
 
 
 def check_forbidden_claims(text: str) -> list[str]:
-    """Повертає список порушень заборонених claims; порожній = чисто."""
-    low = text.lower()
-    return [label for needle, label in _FORBIDDEN_CLAIMS if needle in low]
+    """Повертає список порушень заборонених claims; порожній = чисто.
+
+    Стійкий до сепаратор-розриву та кириличних гомогліфів; без false-positive
+    на коротких ASCII-стемах усередині звичайних слів.
+    """
+    folded = _fold(text.lower())
+    return [label for pattern, label in _COMPILED if pattern.search(folded)]
 
 
 def hallucination_risk(text: str, source: str = "") -> tuple[str, list[str]]:
