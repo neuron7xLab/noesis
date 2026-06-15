@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -250,6 +251,23 @@ def run_v5(raw: str, *, modules: frozenset[str] = ALL_MODULES) -> V5Run:
     )
 
 
+def _make_writer(out_dir: Path) -> Callable[[str, Any], str]:
+    """Return a writer bound to ``out_dir`` (created on call).
+
+    The writer accepts a filename and either a pre-serialised string (written
+    verbatim) or a JSON-serialisable object (dumped with the canonical
+    ``ensure_ascii=False, indent=2`` settings), returning the filename.
+    """
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    def w(name: str, obj: Any) -> str:
+        text = obj if isinstance(obj, str) else json.dumps(obj, ensure_ascii=False, indent=2)
+        (out_dir / name).write_text(text, encoding="utf-8")
+        return name
+
+    return w
+
+
 def _manifest_v5(raw: str, run: V5Run, files: list[str], created_at: str | None) -> dict[str, Any]:
     return {
         "run_id": hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16],
@@ -272,11 +290,7 @@ def run_and_save_v5(raw: str, out_dir: Path, *, created_at: str | None = None) -
     run = run_v5(raw)
     v3 = run_v3(raw)  # для reality_maps.md рендеру
     v4 = run_v4(raw)  # для theory_lens_report
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    def w(name: str, text: str) -> str:
-        (out_dir / name).write_text(text, encoding="utf-8")
-        return name
+    w = _make_writer(out_dir)
 
     files = [
         w("raw_input.md", raw),
@@ -580,11 +594,7 @@ def render_verdict_v7(run: V7Run) -> str:
 
 def run_and_save_v7(raw: str, out_dir: Path, *, created_at: str | None = None) -> tuple[V7Run, dict[str, Any]]:
     run = run_v7(raw)
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    def w(name: str, text: str) -> str:
-        (out_dir / name).write_text(text, encoding="utf-8")
-        return name
+    w = _make_writer(out_dir)
 
     files = [
         w("raw_input.md", raw),
@@ -759,12 +769,7 @@ def _build_v8_trajectory(run: V8Run) -> dict[str, Any]:
 
 def run_and_save_v8(raw: str, out_dir: Path, *, created_at: str | None = None) -> tuple[V8Run, dict[str, Any]]:
     run = run_v8(raw)
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    def w(name: str, obj: Any) -> str:
-        text = obj if isinstance(obj, str) else json.dumps(obj, ensure_ascii=False, indent=2)
-        (out_dir / name).write_text(text, encoding="utf-8")
-        return name
+    w = _make_writer(out_dir)
 
     files = [
         w("raw_input.md", raw),
