@@ -476,6 +476,15 @@ def _cmd_discriminate(args: argparse.Namespace) -> int:
     return 0 if report["overall_auc"] >= 0.7 else 1
 
 
+def _cmd_proxy_matrix(args: argparse.Namespace) -> int:
+    from noesis.evaluation.artifact_proxy import discrimination_matrix
+
+    report = discrimination_matrix()
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    # Fail-closed: a construct-valid proxy must rank intact above degraded artifacts.
+    return 0 if report["overall_auc_clean_vs_all_degraded"] >= 0.7 else 1
+
+
 def _cmd_validity(args: argparse.Namespace) -> int:
     from noesis.evaluation.calibration_loop import validity_report
 
@@ -693,6 +702,10 @@ def build_parser() -> argparse.ArgumentParser:
     # discriminant validity — does the gate separate good vs degraded artifacts?
     p_disc = sub.add_parser("discriminate", help="дискримінантна валідність гейта (AUC проти деградацій)")
     p_disc.set_defaults(func=_cmd_discriminate)
+
+    # construct-valid artifact proxy — discrimination matrix (replaces saturated proxy)
+    p_pm = sub.add_parser("proxy-matrix", help="матриця розділення continuous-проксі (вимір×деградація + AUC)")
+    p_pm.set_defaults(func=_cmd_proxy_matrix)
 
     # closed-loop validity gate — calibrated θ + continuous self-proof (fail-closed)
     p_validity = sub.add_parser("validity", help="замкнений гейт валідності: AUC + калібрування θ")
