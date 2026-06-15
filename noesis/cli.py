@@ -485,6 +485,13 @@ def _cmd_validity(args: argparse.Namespace) -> int:
     return 0 if report["verdict"] == "PASS" else 1
 
 
+def _cmd_metrics(args: argparse.Namespace) -> int:
+    from noesis.evaluation.metrics_inference import build_metrics_report
+
+    print(json.dumps(build_metrics_report(), ensure_ascii=False, indent=2))
+    return 0
+
+
 def _cmd_feedback(args: argparse.Namespace) -> int:
     from noesis.feedback import ingest
 
@@ -696,6 +703,13 @@ def build_parser() -> argparse.ArgumentParser:
     recsub = p_rec.add_subparsers(dest="rec_command", required=True)
     recsub.add_parser("self-check", help="run the reversive recovery reflex self-test")
     p_rec.set_defaults(func=_cmd_recovery)
+
+    # consolidated metrics inference report with provenance tiers
+    p_metrics = sub.add_parser(
+        "metrics",
+        help="консолідований inference-звіт метрик з провенансом (MEASURED/SIMULATED/EXTRAPOLATED)",
+    )
+    p_metrics.set_defaults(func=_cmd_metrics)
 
     # feedback harness — calibrate proxy against human-labeled real outcomes
     p_fb = sub.add_parser("feedback", help="calibrate proxy metrics against real outcomes")

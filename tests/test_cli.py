@@ -33,6 +33,7 @@ _SPECIAL = {
     "calibrate",
     "discriminate",
     "validity",
+    "metrics",
 }
 # команди, що друкують не-JSON (markdown / звіт)
 _NON_JSON = {"human-eval", "eiic", "neuro"}
