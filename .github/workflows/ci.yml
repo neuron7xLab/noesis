@@ -25,3 +25,27 @@ jobs:
         run: mypy
       - name: Pytest (+ coverage gate)
         run: python -m pytest -q
+
+  validity-gates:
+    # Enforce the system's OWN fail-closed self-checks (exit!=0 blocks merge).
+    # These already exist as CLI commands; this job turns them into enforcement.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[dev,serve,llm]"
+      - name: Discriminant validity (gate AUC >= 0.7)
+        run: python -m noesis.cli discriminate
+      - name: Proxy construct validity (clean > degraded, AUC >= 0.7)
+        run: python -m noesis.cli proxy-matrix
+      - name: Physics boundary contract
+        run: python -m noesis.cli physics-boundary validate
+      - name: Release verdict (informational — honestly FAIL on open claims)
+        continue-on-error: true
+        run: python -m noesis.cli verdict
+      - name: Claim validity (informational)
+        continue-on-error: true
+        run: python -m noesis.cli validate
