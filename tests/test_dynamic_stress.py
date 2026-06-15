@@ -22,6 +22,8 @@ from pathlib import Path
 
 import pytest
 
+from formal.metrics import goodman_kruskal_gamma
+from formal.verify import verify_reflection
 from noesis.cli import main as cli_main
 from noesis.effective_dim import participation_ratio
 from noesis.evidence_integral import bundle_metrics, replay, validate_bundle
@@ -231,3 +233,38 @@ def test_cli_corrupt_json_fails_closed(
     (tmp_path / "manifest.json").write_text("{not valid json", encoding="utf-8")
     assert cli_main(["verdict", str(tmp_path)]) == 1
     assert "invalid JSON" in capsys.readouterr().err
+
+
+# ── Round 3: formal verifier must fail-closed on NaN, never PASS over poison ──
+
+
+@pytest.mark.parametrize("bad", [float("nan"), float("inf"), -float("inf")])
+def test_gamma_rejects_non_finite_confidence(bad: float) -> None:
+    with pytest.raises(ValueError, match="скінченн"):
+        goodman_kruskal_gamma([(bad, True), (2.0, False)])
+
+
+@pytest.mark.parametrize("bad", [float("nan"), float("inf")])
+def test_verify_reflection_fails_closed_on_nan(bad: float) -> None:
+    # A NaN judgment silently produced a PASSING verdict — the worst place for
+    # silent poison (a verifier). It must fail closed.
+    verdict = verify_reflection([(bad, True), (2.0, False), (0.5, True)])
+    assert verdict.passed is False
+
+
+def test_verify_reflection_still_passes_clean_calibration() -> None:
+    verdict = verify_reflection([(0.9, True), (0.2, False), (0.7, True)])
+    assert verdict.passed is True
+
+
+@pytest.mark.parametrize("seed", [13, 808, 31337])
+def test_gamma_never_returns_non_finite(seed: int) -> None:
+    rng = random.Random(seed)
+    scores = [0.0, 0.5, 1.0, -1.0, 1e9, float("nan"), float("inf")]
+    for _ in range(400):
+        pairs = [(rng.choice(scores), rng.random() > 0.5) for _ in range(rng.randint(0, 6))]
+        try:
+            g = goodman_kruskal_gamma(pairs)
+        except ValueError:
+            continue  # defended (no informative pairs / non-finite)
+        assert math.isfinite(g) and -1.0 <= g <= 1.0
