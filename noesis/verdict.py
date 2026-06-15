@@ -25,14 +25,26 @@ def read_verdict(out_dir: Path) -> dict[str, Any]:
     }
 
 
+def _join(x: Any) -> str:
+    return ", ".join(map(str, x)) if isinstance(x, list) else ""
+
+
 def render_verdict_md(v: dict[str, Any]) -> str:
+    """Render a verdict. Fail-closed on partial/corrupt input: a manifest read
+    from disk may be truncated, so missing fields degrade to «—», never KeyError
+    (знайдено хаос-стрес-тестом)."""
+    run_id = v.get("run_id") or "—"
+    version = v.get("pipeline_version") or "—"
+    status = v.get("overall_status") or "—"
+    passed = v.get("gates_passed", 0)
+    total = v.get("gates_total", 0)
     return (
-        f"# VERDICT — run {v['run_id']} (CME v{v['pipeline_version']})\n\n"
-        f"**Статус:** {v['overall_status']} — гейтів пройдено {v['gates_passed']}/{v['gates_total']}\n"
-        f"**Провалені гейти:** {', '.join(v['gates_failed']) or 'немає'}\n\n"
+        f"# VERDICT — run {run_id} (CME v{version})\n\n"
+        f"**Статус:** {status} — гейтів пройдено {passed}/{total}\n"
+        f"**Провалені гейти:** {_join(v.get('gates_failed')) or 'немає'}\n\n"
         f"## Реальне vs проксі vs спекулятивне\n"
-        f"- claim governance: {v['claim_governance']}\n"
-        f"- baseline: {v['baseline']}\n"
-        f"- детерміновані модулі: {', '.join(v['deterministic_modules'])}\n"
-        f"- LLM-модулі: {', '.join(v['llm_modules']) or 'немає (детермінований прогін)'}\n"
+        f"- claim governance: {v.get('claim_governance', {})}\n"
+        f"- baseline: {v.get('baseline', {})}\n"
+        f"- детерміновані модулі: {_join(v.get('deterministic_modules'))}\n"
+        f"- LLM-модулі: {_join(v.get('llm_modules')) or 'немає (детермінований прогін)'}\n"
     )
