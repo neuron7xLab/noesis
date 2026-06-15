@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://neuron7xlab/noesis/schemas/metrics_inference_report.schema.json",
+  "title": "Metrics Inference Report",
+  "description": "Unified consolidation of already-computed metrics with explicit provenance (MEASURED/SIMULATED/EXTRAPOLATED). No invented numbers; deterministic.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["report", "report_version", "tiers", "metrics", "not_claimed"],
+  "properties": {
+    "report": { "type": "string", "const": "metrics_inference" },
+    "report_version": { "type": "string" },
+    "tiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["MEASURED", "SIMULATED", "EXTRAPOLATED"],
+      "properties": {
+        "MEASURED": { "type": "integer", "minimum": 0 },
+        "SIMULATED": { "type": "integer", "minimum": 0 },
+        "EXTRAPOLATED": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "value", "tier", "procedure", "sample_n", "caveat"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "value": { "type": ["number", "integer", "string"] },
+          "tier": { "type": "string", "enum": ["MEASURED", "SIMULATED", "EXTRAPOLATED"] },
+          "procedure": { "type": "string", "minLength": 1 },
+          "sample_n": { "type": ["integer", "null"], "minimum": 0 },
+          "caveat": { "type": "string" }
+        }
+      }
+    },
+    "not_claimed": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

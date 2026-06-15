@@ -396,3 +396,11 @@ def bibliography_verdict() -> dict[str, Any]:
 
     lib, scan = _bib_load()
     return bib.verdict(lib, scan)
+
+
+@app.post("/metrics")
+@app.get("/metrics")
+def metrics_endpoint() -> dict[str, Any]:
+    from noesis.evaluation.metrics_inference import build_metrics_report
+
+    return build_metrics_report()
