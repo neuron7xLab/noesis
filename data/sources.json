@@ -74,7 +74,7 @@
       "domain": "working_memory",
       "supports": ["hierarchical cognitive control motivating layered pipeline"],
       "limits": ["anatomical hierarchy ≠ software pipeline hierarchy"],
-      "used_in": ["docs/ARCHITECTURE.md", "docs/NOESIS_V06_ARCHITECTURE.md"],
+      "used_in": ["docs/ARCHITECTURE.md", "docs/quarantine/NOESIS_V06_ARCHITECTURE.md"],
       "status": "S3",
       "risk_if_overused": ["equating module depth with cortical hierarchy"],
       "bibtex_type": "article"
@@ -119,7 +119,7 @@
       "domain": "global_workspace",
       "supports": ["global workspace: broadcast and selective access as analogy"],
       "limits": ["not a consciousness proof", "not a brain-measurement claim"],
-      "used_in": ["docs/GNWT_OPERATIONAL_ANALOGY.md", "noesis/broadcast.py"],
+      "used_in": ["docs/quarantine/GNWT_OPERATIONAL_ANALOGY.md", "noesis/broadcast.py"],
       "status": "S2",
       "risk_if_overused": ["claiming Noesis instantiates a global workspace"],
       "bibtex_type": "book"
@@ -134,7 +134,7 @@
       "domain": "global_workspace",
       "supports": ["broadcast/re-entry dynamics as structural analogy"],
       "limits": ["GNWT is a neuroscientific hypothesis about consciousness; Noesis makes no such claim"],
-      "used_in": ["docs/GNWT_OPERATIONAL_ANALOGY.md"],
+      "used_in": ["docs/quarantine/GNWT_OPERATIONAL_ANALOGY.md"],
       "status": "S3",
       "risk_if_overused": ["using GNWT to imply biological workspace in software"],
       "bibtex_type": "article"
@@ -149,7 +149,7 @@
       "domain": "global_workspace",
       "supports": ["ignition/broadcast vocabulary for selective access analogy"],
       "limits": ["about neural consciousness, not software access control"],
-      "used_in": ["docs/GNWT_OPERATIONAL_ANALOGY.md"],
+      "used_in": ["docs/quarantine/GNWT_OPERATIONAL_ANALOGY.md"],
       "status": "S3",
       "risk_if_overused": ["importing 'ignition' as a literal mechanism"],
       "bibtex_type": "article"
@@ -164,7 +164,7 @@
       "domain": "active_inference",
       "supports": ["precision-weighting and prediction-error language", "action under uncertainty framing"],
       "limits": ["Noesis is human-in-the-loop, not an autonomous active-inference agent"],
-      "used_in": ["docs/EXTERNALIZED_ACTIVE_INFERENCE.md", "docs/PRECISION_WEIGHT_SCHEDULER.md", "noesis/precision_scheduler.py"],
+      "used_in": ["docs/quarantine/EXTERNALIZED_ACTIVE_INFERENCE.md", "docs/PRECISION_WEIGHT_SCHEDULER.md", "noesis/precision_scheduler.py"],
       "status": "S3",
       "risk_if_overused": ["claiming Noesis minimizes variational free energy"],
       "bibtex_type": "article"
@@ -179,7 +179,7 @@
       "domain": "active_inference",
       "supports": ["expected-free-energy vocabulary for action selection analogy"],
       "limits": ["formal autonomous agent theory; Noesis closes the loop through a human"],
-      "used_in": ["docs/EXTERNALIZED_ACTIVE_INFERENCE.md", "noesis/precision_gate.py"],
+      "used_in": ["docs/quarantine/EXTERNALIZED_ACTIVE_INFERENCE.md", "noesis/precision_gate.py"],
       "status": "S2",
       "risk_if_overused": ["presenting the IEV functional as a literal EFE computation"],
       "bibtex_type": "book"
@@ -194,7 +194,7 @@
       "domain": "active_inference",
       "supports": ["predictive-processing framing of error-driven refinement"],
       "limits": ["theory of biological cognition"],
-      "used_in": ["docs/EXTERNALIZED_ACTIVE_INFERENCE.md"],
+      "used_in": ["docs/quarantine/EXTERNALIZED_ACTIVE_INFERENCE.md"],
       "status": "S2",
       "risk_if_overused": ["claiming the pipeline is a predictive-coding hierarchy"],
       "bibtex_type": "article"
@@ -419,7 +419,7 @@
       "domain": "software_engineering",
       "supports": ["information hiding, modularity, decoupling"],
       "limits": ["principle, not a correctness proof"],
-      "used_in": ["docs/ARCHITECTURE.md", "docs/NOESIS_V06_ARCHITECTURE.md"],
+      "used_in": ["docs/ARCHITECTURE.md", "docs/quarantine/NOESIS_V06_ARCHITECTURE.md"],
       "status": "S2",
       "risk_if_overused": ["citing modularity as evidence of correctness"],
       "bibtex_type": "article"
@@ -524,7 +524,7 @@
       "domain": "philosophy",
       "supports": ["process-over-substance framing as bounded analogy only"],
       "limits": ["speculative metaphysics; used strictly as analogy, never as mechanism"],
-      "used_in": ["docs/CIVILIZATIONAL_METAPHYSICS.md", "docs/philosophy.md"],
+      "used_in": ["docs/quarantine/CIVILIZATIONAL_METAPHYSICS.md", "docs/quarantine/philosophy.md"],
       "status": "S4",
       "risk_if_overused": ["civilizational essentialism or mystical reading"],
       "bibtex_type": "book"

@@ -46,7 +46,7 @@ Grouped by domain. Each entry anchors a claim, module, or limitation.
 - **David Badre (2008).** *Cognitive control, hierarchy, and the rostro-caudal organization of the frontal lobes.* Trends in Cognitive Sciences [review]
 - supports: hierarchical cognitive control motivating layered pipeline
 - limits: anatomical hierarchy ≠ software pipeline hierarchy
-- used in: `docs/ARCHITECTURE.md`, `docs/NOESIS_V06_ARCHITECTURE.md`
+- used in: `docs/ARCHITECTURE.md`, `docs/quarantine/NOESIS_V06_ARCHITECTURE.md`
 - risk if overused: equating module depth with cortical hierarchy
 
 ### `fleming_lau_2014_metacognition` — S3
@@ -63,14 +63,14 @@ Grouped by domain. Each entry anchors a claim, module, or limitation.
 - **Bernard J. Baars (1988).** *A Cognitive Theory of Consciousness.* Cambridge University Press [primary]
 - supports: global workspace: broadcast and selective access as analogy
 - limits: not a consciousness proof; not a brain-measurement claim
-- used in: `docs/GNWT_OPERATIONAL_ANALOGY.md`, `noesis/broadcast.py`
+- used in: `docs/quarantine/GNWT_OPERATIONAL_ANALOGY.md`, `noesis/broadcast.py`
 - risk if overused: claiming Noesis instantiates a global workspace
 
 ### `dehaene_changeux_2011_conscious_processing` — S3
 - **Stanislas Dehaene, Jean-Pierre Changeux (2011).** *Experimental and theoretical approaches to conscious processing.* Neuron [review]
 - supports: ignition/broadcast vocabulary for selective access analogy
 - limits: about neural consciousness, not software access control
-- used in: `docs/GNWT_OPERATIONAL_ANALOGY.md`
+- used in: `docs/quarantine/GNWT_OPERATIONAL_ANALOGY.md`
 - risk if overused: importing 'ignition' as a literal mechanism
 
 ### `graziano_2013_attention_schema` — S2
@@ -91,7 +91,7 @@ Grouped by domain. Each entry anchors a claim, module, or limitation.
 - **George A. Mashour, Pieter Roelfsema, Jean-Pierre Changeux, Stanislas Dehaene (2020).** *Conscious processing and the global neuronal workspace hypothesis.* Neuron [review]
 - supports: broadcast/re-entry dynamics as structural analogy
 - limits: GNWT is a neuroscientific hypothesis about consciousness; Noesis makes no such claim
-- used in: `docs/GNWT_OPERATIONAL_ANALOGY.md`
+- used in: `docs/quarantine/GNWT_OPERATIONAL_ANALOGY.md`
 - risk if overused: using GNWT to imply biological workspace in software
 
 
@@ -101,21 +101,21 @@ Grouped by domain. Each entry anchors a claim, module, or limitation.
 - **Karl Friston (2010).** *The free-energy principle: a unified brain theory?.* Nature Reviews Neuroscience [review]
 - supports: precision-weighting and prediction-error language; action under uncertainty framing
 - limits: Noesis is human-in-the-loop, not an autonomous active-inference agent
-- used in: `docs/EXTERNALIZED_ACTIVE_INFERENCE.md`, `docs/PRECISION_WEIGHT_SCHEDULER.md`, `noesis/precision_scheduler.py`
+- used in: `docs/quarantine/EXTERNALIZED_ACTIVE_INFERENCE.md`, `docs/PRECISION_WEIGHT_SCHEDULER.md`, `noesis/precision_scheduler.py`
 - risk if overused: claiming Noesis minimizes variational free energy
 
 ### `clark_2013_predictive_processing` — S2
 - **Andy Clark (2013).** *Whatever next? Predictive brains, situated agents, and the future of cognitive science.* Behavioral and Brain Sciences [primary]
 - supports: predictive-processing framing of error-driven refinement
 - limits: theory of biological cognition
-- used in: `docs/EXTERNALIZED_ACTIVE_INFERENCE.md`
+- used in: `docs/quarantine/EXTERNALIZED_ACTIVE_INFERENCE.md`
 - risk if overused: claiming the pipeline is a predictive-coding hierarchy
 
 ### `parr_pezzulo_friston_2022_active_inference` — S2
 - **Thomas Parr, Giovanni Pezzulo, Karl Friston (2022).** *Active Inference: The Free Energy Principle in Mind, Brain, and Behavior.* MIT Press [primary]
 - supports: expected-free-energy vocabulary for action selection analogy
 - limits: formal autonomous agent theory; Noesis closes the loop through a human
-- used in: `docs/EXTERNALIZED_ACTIVE_INFERENCE.md`, `noesis/precision_gate.py`
+- used in: `docs/quarantine/EXTERNALIZED_ACTIVE_INFERENCE.md`, `noesis/precision_gate.py`
 - risk if overused: presenting the IEV functional as a literal EFE computation
 
 
@@ -218,7 +218,7 @@ Grouped by domain. Each entry anchors a claim, module, or limitation.
 - **David L. Parnas (1972).** *On the criteria to be used in decomposing systems into modules.* Communications of the ACM [primary]
 - supports: information hiding, modularity, decoupling
 - limits: principle, not a correctness proof
-- used in: `docs/ARCHITECTURE.md`, `docs/NOESIS_V06_ARCHITECTURE.md`
+- used in: `docs/ARCHITECTURE.md`, `docs/quarantine/NOESIS_V06_ARCHITECTURE.md`
 - risk if overused: citing modularity as evidence of correctness
 
 ### `fowler_2018_refactoring` — S3
@@ -242,7 +242,7 @@ Grouped by domain. Each entry anchors a claim, module, or limitation.
 - **Alfred North Whitehead (1929).** *Process and Reality.* Macmillan [primary]
 - supports: process-over-substance framing as bounded analogy only
 - limits: speculative metaphysics; used strictly as analogy, never as mechanism
-- used in: `docs/CIVILIZATIONAL_METAPHYSICS.md`, `docs/philosophy.md`
+- used in: `docs/quarantine/CIVILIZATIONAL_METAPHYSICS.md`, `docs/quarantine/philosophy.md`
 - risk if overused: civilizational essentialism or mystical reading
 
 ### `cappelen_2018_conceptual_engineering` — S2

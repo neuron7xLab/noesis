@@ -17,7 +17,7 @@
 - **Китай:** Дао · Де · Лі · Ци · Порожнеча · Гармонія · Зміна · Недіяння · Порядок · Ритуал.
 
 Повна матриця (definition · function · cognitive style · failure_mode · AI-analogy):
-[`CIVILIZATIONAL_METAPHYSICS.md`](CIVILIZATIONAL_METAPHYSICS.md). Машинний
+[`CIVILIZATIONAL_METAPHYSICS.md`](quarantine/CIVILIZATIONAL_METAPHYSICS.md). Машинний
 лексикон із сигнальними маркерами — `noesis/ontology.py:ONTOLOGY`.
 
 ## Екстракція (детермінована)
