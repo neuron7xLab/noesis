@@ -8,9 +8,10 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from noesis.pipeline_v6 import V6Run
+if TYPE_CHECKING:
+    from noesis.runs import V6Run
 
 DELEGATED_TO_LLM = (
     "variation_generation", "drafting", "counterargument", "failure_mode_search",

@@ -7,12 +7,14 @@ cluster_quality = IEV_bw × node_diversity × intent_coherence × noise_rejectio
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from noesis.iev_bandwidth import IEVBandwidthReport
 from noesis.latency_profile import LatencyProfile
 from noesis.node_plan import NodePlan
-from noesis.pipeline_v7 import V7Run
+
+if TYPE_CHECKING:
+    from noesis.runs import V7Run
 
 
 @dataclass(frozen=True)

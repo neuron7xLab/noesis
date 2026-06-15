@@ -392,7 +392,7 @@ def _role3_handoff(first_failing_gate: str) -> dict[str, Any]:
                 "noesis/trajectory.py",
                 "tests/test_trajectory_trace.py",
             ],
-            "files_to_modify": ["noesis/pipeline_v8.py", "noesis/evidence.py", "noesis/cli.py"],
+            "files_to_modify": ["noesis/pipeline_core.py", "noesis/evidence.py", "noesis/cli.py"],
         },
         "claim_status": {
             "role_name": "CLAIM GOVERNANCE GATE IMPLEMENTER",
@@ -404,7 +404,7 @@ def _role3_handoff(first_failing_gate: str) -> dict[str, Any]:
             "role_name": "METRIC INSTRUMENTATION AGENT",
             "task": "Implement thresholds for IMPLEMENTED metrics.",
             "files_to_create": ["tests/test_metric_thresholds.py"],
-            "files_to_modify": ["noesis/pipeline_v8.py"],
+            "files_to_modify": ["noesis/pipeline_core.py"],
         },
         "verification": {
             "role_name": "VERIFIER HARNESS IMPLEMENTER",

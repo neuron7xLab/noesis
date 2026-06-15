@@ -7,7 +7,7 @@ from pathlib import Path
 
 import jsonschema
 
-from noesis.pipeline_v8 import run_and_save_v8
+from noesis.pipeline_core import run_and_save_v8
 from noesis.trajectory import (
     V8_OPERATORS,
     OperatorStep,

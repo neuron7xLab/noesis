@@ -17,15 +17,13 @@ from app.models import (
 )
 from app.services import decode_intent, finalize
 from noesis.adaptive import build_adaptive_mirror
-from noesis.benchmark_v6 import run_ablation_v6
+from noesis.benchmark import run_ablation_v6
 from noesis.causal import build_category_effects, build_reality_map_delta, track_theory_contribution
 from noesis.complexity import estimate_complexity
 from noesis.eiic import run_eiic
 from noesis.engine import run_v3
 from noesis.neuro import run_v4
-from noesis.pipeline_v6 import run_v6
-from noesis.pipeline_v7 import run_v7
-from noesis.pipeline_v8 import run_v8
+from noesis.pipeline_core import run_v6, run_v7, run_v8
 from noesis.effective_dim import effective_dimensionality
 from noesis.gate_functional import GateFunctional
 from noesis.theories import run_theories

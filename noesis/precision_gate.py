@@ -8,12 +8,14 @@ human_review, з precision_weight ∈ [0,1] і поясненням, ЩО змі
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from noesis.forbidden import check_forbidden_claims
-from noesis.pipeline_v6 import V6Run
 from tools.artifact_checker import check_artifact
 from formal.metrics import falsifier_present
+
+if TYPE_CHECKING:
+    from noesis.runs import V6Run
 
 # Маркери високих ставок → обов'язковий human_review.
 _HIGH_STAKES = (

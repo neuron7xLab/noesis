@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from noesis.benchmark_v7 import run_benchmark_v7
+from noesis.benchmark import run_benchmark_v7
 from noesis.graph import build_cognitive_graph, check_graph_completeness
 from noesis.node_profile import bottleneck_nodes, profile_nodes
-from noesis.pipeline_v7 import run_and_save_v7, run_v7
+from noesis.pipeline_core import run_and_save_v7, run_v7
 
 
 def test_graph_completeness() -> None:
