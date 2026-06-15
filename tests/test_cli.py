@@ -30,6 +30,7 @@ _SPECIAL = {
     "physics-boundary",
     "recovery",
     "feedback",
+    "calibrate",
 }
 # команди, що друкують не-JSON (markdown / звіт)
 _NON_JSON = {"human-eval", "eiic", "neuro"}
