@@ -11,7 +11,7 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from noesis.forbidden import check_forbidden_claims
+from noesis.forbidden import check_forbidden_claims, hallucination_risk
 
 # Слова, що містять підрядок "agi", але НІКОЛИ не є claim про AGI.
 _BENIGN_AGI_SUBSTR = [
@@ -77,3 +77,33 @@ def test_agi_embedded_in_word_never_flags(pre: str, post: str) -> None:
 def test_separated_agi_always_blocked(s1: str, s2: str) -> None:
     text = f"the a{s1}g{s2}i system"
     assert "claim of AGI" in check_forbidden_claims(text)
+
+
+# ── hallucination_risk: близнюк тієї самої стрічкової хиби ──────────────────
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "це гарантовано працює",
+        "це г а р а н т о в а н о працює",  # сепаратор-розрив
+        "г-а-р-а-н-т-о-в-а-н-о результат",  # дефіси
+    ],
+)
+def test_certainty_markers_survive_obfuscation(text: str) -> None:
+    level, signals = hallucination_risk(text)
+    assert level != "low" and signals
+
+
+def test_grouped_and_decimal_numbers_reported_whole() -> None:
+    # Сигнал має називати справжнє число, а не фрагмент («000» / «14»).
+    _, sig_grp = hallucination_risk("оборот 1 000 000 грн")
+    assert any("1 000 000" in s for s in sig_grp)
+    _, sig_dec = hallucination_risk("показник 3.14 стабільний")
+    assert any("3.14" in s for s in sig_dec)
+
+
+def test_single_digit_is_not_fabrication_signal() -> None:
+    # Однозначні цілі — шум, не сигнал.
+    level, signals = hallucination_risk("у 7 разів швидше")
+    assert level == "low" and signals == []
