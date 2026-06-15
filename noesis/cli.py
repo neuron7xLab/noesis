@@ -9,18 +9,27 @@ from pathlib import Path
 
 from noesis import __version__
 from noesis.adaptive import build_adaptive_mirror
-from noesis.benchmark import run_ablation, run_benchmark
-from noesis.benchmark_v6 import run_ablation_v6, run_benchmark_v6
+from noesis.benchmark import (
+    node_scaling_curve,
+    run_ablation,
+    run_ablation_v6,
+    run_benchmark,
+    run_benchmark_v6,
+)
 from noesis.causal import build_category_effects, build_reality_map_delta, track_theory_contribution
 from noesis.complexity import estimate_complexity
 from noesis.eiic import render_eiic_md, run_and_save_eiic, run_eiic
 from noesis.ontology import build_reality_maps as _brm
 from noesis.theories import run_theories as _rt
 from noesis.generators import build_mirror_deterministic as _bmd
-from noesis.pipeline_v6 import run_and_save_v6, run_v6
-from noesis.pipeline_v7 import run_and_save_v7, run_v7
-from noesis.pipeline_v8 import run_and_save_v8, run_v8
-from noesis.benchmark_v8 import node_scaling_curve
+from noesis.pipeline_core import (
+    run_and_save_v6,
+    run_and_save_v7,
+    run_and_save_v8,
+    run_v6,
+    run_v7,
+    run_v8,
+)
 from noesis.vertical_loop import build_vertical_loop
 from noesis.effective_dim import effective_dimensionality
 from noesis.gate_functional import GateFunctional

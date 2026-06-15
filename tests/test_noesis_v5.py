@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from noesis.benchmark import generate_inputs, run_ablation, run_benchmark
-from noesis.pipeline_v5 import ALL_MODULES, run_and_save_v5, run_v5
+from noesis.pipeline_core import ALL_MODULES, run_and_save_v5, run_v5
 from noesis.provenance import PROVENANCE, Claim, governance_summary, is_valid_provenance
 from noesis.verdict import read_verdict
 

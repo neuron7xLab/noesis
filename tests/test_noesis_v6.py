@@ -7,10 +7,10 @@ import json
 from pathlib import Path
 
 from noesis.adaptive import build_adaptive_mirror
-from noesis.benchmark_v6 import run_ablation_v6, run_benchmark_v6
+from noesis.benchmark import run_ablation_v6, run_benchmark_v6
 from noesis.complexity import estimate_complexity
 from noesis.human_eval import build_human_eval_packet
-from noesis.pipeline_v6 import ALL_MODULES_V6, run_and_save_v6, run_v6
+from noesis.pipeline_core import ALL_MODULES_V6, run_and_save_v6, run_v6
 
 
 def test_complexity_modes() -> None:

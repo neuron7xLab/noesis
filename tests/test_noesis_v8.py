@@ -5,10 +5,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from noesis.benchmark_v8 import node_scaling_curve, run_benchmark_v8
+from noesis.benchmark import node_scaling_curve, run_benchmark_v8
 from noesis.intent_vector import estimate_intent_vector
 from noesis.entropy_budget import estimate_entropy_budget
-from noesis.pipeline_v8 import run_and_save_v8, run_v8
+from noesis.pipeline_core import run_and_save_v8, run_v8
 from noesis.vertical_loop import OPERATIONS, build_vertical_loop
 
 

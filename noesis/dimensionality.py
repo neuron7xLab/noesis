@@ -8,10 +8,12 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from noesis.pipeline_v6 import V6Run
 from tools.finalizer100 import count_words
+
+if TYPE_CHECKING:
+    from noesis.runs import V6Run
 
 
 @dataclass(frozen=True)
