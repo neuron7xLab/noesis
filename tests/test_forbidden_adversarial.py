@@ -40,6 +40,22 @@ def test_agi_evasions_are_blocked(text: str) -> None:
     assert "claim of AGI" in check_forbidden_claims(text)
 
 
+# Unicode-камуфляж із динамічного середовища (екстрапольовані евазії).
+_UNICODE_EVASIONS = [
+    "a​g​i achieved",   # zero-width space
+    "a‍g‍i",            # zero-width joiner
+    "a­g­i",            # soft hyphen
+    "ＡＧＩ",         # fullwidth ＡＧＩ
+    "a‮gi",                  # RTL override
+    "ági",                  # combining acute on first letter
+]
+
+
+@pytest.mark.parametrize("text", _UNICODE_EVASIONS)
+def test_agi_unicode_evasions_are_blocked(text: str) -> None:
+    assert "claim of AGI" in check_forbidden_claims(text)
+
+
 @pytest.mark.parametrize("text", _BENIGN_AGI_SUBSTR)
 def test_agi_substring_is_not_false_positive(text: str) -> None:
     assert "claim of AGI" not in check_forbidden_claims(text)

@@ -16,10 +16,6 @@ _WORD = re.compile(r"[\w’'-]+", re.UNICODE)
 _STOP = frozenset({"що", "це", "але", "не", "на", "як", "то", "бо", "для", "над", "під", "із", "зі"})
 
 
-def _dot(a: Sequence[float], b: Sequence[float]) -> float:
-    return sum(x * y for x, y in zip(a, b))
-
-
 def participation_ratio(vectors: Sequence[Sequence[float]]) -> float:
     """D_eff = tr(Σ)² / tr(Σ²) над центрованими векторами (Gram-форма, точно).
 
@@ -40,8 +36,15 @@ def participation_ratio(vectors: Sequence[Sequence[float]]) -> float:
         return 0.0
     mean = [sum(v[k] for v in vectors) / n for k in range(d)]
     centered = [[v[k] - mean[k] for k in range(d)] for v in vectors]
-    tr_sigma = sum(_dot(x, x) for x in centered) / n
-    tr_sigma2 = sum(_dot(centered[i], centered[j]) ** 2 for i in range(n) for j in range(n)) / (n * n)
+    # Через d×d коваріацію Σ: tr(Σ)=Σ_a C_aa, tr(Σ²)=Σ_ab C_ab². Математично
+    # тотожне Σ_ij(x_i·x_j)²/n², але O(n·d²) замість O(n²·d) — знімає
+    # квадратичний по n DoS-вектор (масштаб гіпотез контролює викликач).
+    cov = [
+        [sum(centered[i][a] * centered[i][b] for i in range(n)) / n for b in range(d)]
+        for a in range(d)
+    ]
+    tr_sigma = sum(cov[a][a] for a in range(d))
+    tr_sigma2 = sum(cov[a][b] ** 2 for a in range(d) for b in range(d))
     if tr_sigma2 <= 1e-12:
         return 1.0
     return tr_sigma**2 / tr_sigma2

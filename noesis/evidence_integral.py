@@ -16,14 +16,26 @@ from __future__ import annotations
 
 import hashlib
 import json
-from typing import Any
+from typing import Any, TypeGuard
 
 from noesis.ratios import rate
 
 
 def _sha(payload: Any) -> str:
-    blob = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+    # allow_nan=False: NaN/inf would serialise as non-standard ``NaN``/``Infinity``
+    # tokens that strict JSON parsers reject, so a bundle built with them replays
+    # in-process but is silently unportable across systems. Fail closed at the
+    # hash so the chain is portable-by-construction (екстрапольована вразливість).
+    try:
+        blob = json.dumps(payload, ensure_ascii=False, sort_keys=True, allow_nan=False)
+    except ValueError as exc:
+        raise ValueError(f"evidence must be JSON-portable (no NaN/inf): {exc}") from exc
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+
+def _is_index(value: Any) -> TypeGuard[int]:
+    # bool is an int subclass — True would pass as index 1 (type confusion).
+    return isinstance(value, int) and not isinstance(value, bool)
 
 
 def _chain(items: list[dict[str, Any]]) -> list[str]:
@@ -100,7 +112,7 @@ def validate_bundle(bundle: dict[str, Any]) -> list[str]:
             problems.append(f"ARTIFACT_MALFORMED: artifact {i} is not an object")
             continue
         idx = art.get("transition_index")
-        if not isinstance(idx, int) or not (0 <= idx < len(transitions)):
+        if not _is_index(idx) or not (0 <= idx < len(transitions)):
             problems.append(f"ARTIFACT_WITHOUT_TRACE: artifact {i} not linked to a transition")
 
     verifier_count = _seq_len(bundle.get("verifier_outputs"))
@@ -109,7 +121,7 @@ def validate_bundle(bundle: dict[str, Any]) -> list[str]:
             problems.append(f"TRANSITION_MALFORMED: transition {i} is not an object")
             continue
         vidx = tr.get("verifier_index")
-        if vidx is not None and (not isinstance(vidx, int) or not (0 <= vidx < verifier_count)):
+        if vidx is not None and (not _is_index(vidx) or not (0 <= vidx < verifier_count)):
             problems.append(f"VERIFIER_NOT_LINKED: transition {i} verifier_index out of range")
 
     if not replay(bundle):
@@ -126,9 +138,12 @@ def replay(bundle: dict[str, Any]) -> bool:
     transitions = bundle.get("transitions", [])
     if not isinstance(transitions, list):
         return False
-    if _chain(transitions) != bundle.get("state_transition_hashes", []):
-        return False
-    expected = _sha({k: v for k, v in bundle.items() if k != "final_manifest_hash"})
+    try:
+        if _chain(transitions) != bundle.get("state_transition_hashes", []):
+            return False
+        expected = _sha({k: v for k, v in bundle.items() if k != "final_manifest_hash"})
+    except ValueError:
+        return False  # non-portable (NaN/inf) bundle is unreplayable
     return expected == bundle.get("final_manifest_hash")
 
 
@@ -143,9 +158,7 @@ def bundle_metrics(bundle: dict[str, Any]) -> dict[str, float]:
     traced_art = sum(
         1
         for a in artifacts
-        if isinstance(a, dict)
-        and isinstance(a.get("transition_index"), int)
-        and 0 <= a["transition_index"] < n_tr
+        if isinstance(a, dict) and _is_index(a.get("transition_index")) and 0 <= a["transition_index"] < n_tr
     )
     with_verifier = sum(
         1 for t in transitions if isinstance(t, dict) and t.get("verifier_index") is not None

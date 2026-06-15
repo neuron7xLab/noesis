@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import math
 import random
+import time
 from pathlib import Path
 
 import pytest
@@ -26,7 +27,7 @@ from formal.metrics import goodman_kruskal_gamma
 from formal.verify import verify_reflection
 from noesis.cli import main as cli_main
 from noesis.effective_dim import participation_ratio
-from noesis.evidence_integral import bundle_metrics, replay, validate_bundle
+from noesis.evidence_integral import build_bundle, bundle_metrics, replay, validate_bundle
 from noesis.feedback import CALIBRATION_STATES, LabeledPair, calibrate
 from noesis.runtime.recovery_supervisor import (
     RECOVERY_STATES,
@@ -268,3 +269,58 @@ def test_gamma_never_returns_non_finite(seed: int) -> None:
         except ValueError:
             continue  # defended (no informative pairs / non-finite)
         assert math.isfinite(g) and -1.0 <= g <= 1.0
+
+
+# ── Round 4: extrapolated dynamic vulnerabilities (scale / portability / types) ──
+
+
+def test_participation_ratio_scales_linearly_not_quadratically() -> None:
+    # O(n²) was a DoS axis: n=1600 took ~1.2 s. The covariance form is O(n·d²);
+    # 2000 vectors must finish well under a generous bound a quadratic would blow.
+    rng = random.Random(0)
+    vectors = [[rng.random() for _ in range(5)] for _ in range(2000)]
+    start = time.perf_counter()
+    result = participation_ratio(vectors)
+    assert math.isfinite(result)
+    assert time.perf_counter() - start < 0.5  # quadratic would need ~2-3 s here
+
+
+def test_participation_ratio_covariance_form_matches_reference() -> None:
+    # Lock the algebraic identity D_eff = tr(Σ)²/tr(Σ²): N identical vectors → 1.0,
+    # N near-orthogonal → close to N−1 (centring removes one dof).
+    assert participation_ratio([[1.0, 0.0], [1.0, 0.0], [1.0, 0.0]]) == 1.0
+    ortho = participation_ratio([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
+    assert ortho == pytest.approx(2.0)
+
+
+@pytest.mark.parametrize("bad", [float("inf"), float("nan"), -float("inf")])
+def test_evidence_bundle_fails_closed_on_non_portable_floats(bad: float) -> None:
+    # NaN/inf serialise to non-standard JSON tokens → unportable hash chain.
+    with pytest.raises(ValueError, match="JSON-portable"):
+        build_bundle(
+            run_id="r", input_text="i",
+            transitions=[{"i": 0, "state": bad}],
+            artifacts=[], decisions=[], verifier_outputs=[], rollback_points=[],
+        )
+
+
+def test_replay_returns_false_on_non_portable_bundle() -> None:
+    bad = {
+        "transitions": [{"x": float("inf")}],
+        "state_transition_hashes": ["deadbeef"],
+        "final_manifest_hash": "x",
+    }
+    assert replay(bad) is False
+
+
+def test_bool_is_not_a_valid_evidence_index() -> None:
+    # isinstance(True, int) is True — a bool must not pass as a transition index.
+    problems = validate_bundle(
+        {
+            "transitions": [{"verifier_index": True}],
+            "verifier_outputs": [{}, {}],
+            "state_transition_hashes": [],
+            "artifact_hashes": [],
+        }
+    )
+    assert any("VERIFIER_NOT_LINKED" in p for p in problems)
