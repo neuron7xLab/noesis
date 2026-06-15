@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Sequence
+from math import isfinite
 
 _WORD = re.compile(r"[\w’'-]+", re.UNICODE)
 _STOP = frozenset({"що", "це", "але", "не", "на", "як", "то", "бо", "для", "над", "під", "із", "зі"})
@@ -29,6 +30,14 @@ def participation_ratio(vectors: Sequence[Sequence[float]]) -> float:
     if n == 0:
         return 0.0
     d = len(vectors[0])
+    # Fail-closed: ragged matrix or non-finite entries are invalid input, not a
+    # silent IndexError / NaN (знайдено хаос-стрес-тестом).
+    if any(len(v) != d for v in vectors):
+        raise ValueError("all vectors must share one dimension (ragged matrix)")
+    if any(not isfinite(x) for v in vectors for x in v):
+        raise ValueError("vector entries must be finite (no NaN/inf)")
+    if d == 0:
+        return 0.0
     mean = [sum(v[k] for v in vectors) / n for k in range(d)]
     centered = [[v[k] - mean[k] for k in range(d)] for v in vectors]
     tr_sigma = sum(_dot(x, x) for x in centered) / n

@@ -112,7 +112,18 @@ class RecoverySupervisor:
                     escalated_to_human=True,
                     reason=f"state loss, escalate to human: {exc}",
                 )
-            result = reattempt()
+            # A re-attempt that throws IS a failed attempt — the supervisor sits
+            # outside the failed layer and must survive it (INV-YV1), not die with
+            # it. Crashing here violated "always terminates / escalates to human"
+            # (знайдено хаос-стрес-тестом). Record the failure and keep the loop.
+            try:
+                result = reattempt()
+            except Exception as exc:
+                result = AttemptResult(
+                    ok=False,
+                    state_id=restored.state_id,
+                    note=f"attempt raised: {type(exc).__name__}: {exc}",
+                )
             attempts.append(
                 RecoveryAttempt(i, restored.state_id, result.ok, result.note)
             )

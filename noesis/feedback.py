@@ -14,7 +14,7 @@ proxy is promoted to a measurement without ground truth (see
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from math import sqrt
+from math import isfinite, sqrt
 from typing import Any
 
 from noesis.ratios import rate
@@ -34,6 +34,17 @@ class LabeledPair:
     proxy_score: float  # what the system's proxy claimed, in [0, 1]
     hrv: float | None = None
     provenance: str = "unknown"
+
+    def __post_init__(self) -> None:
+        # Self-validating: closes the bypass where direct construction (vs the
+        # dict path through _validate_pair) fed NaN/inf into calibrate() and
+        # produced a CALIBRATED verdict over poison (знайдено хаос-стрес-тестом).
+        if self.human_verdict not in _VERDICTS:
+            raise ValueError(f"human_verdict must be one of {_VERDICTS}, got {self.human_verdict!r}")
+        if not (isfinite(self.proxy_score) and 0.0 <= self.proxy_score <= 1.0):
+            raise ValueError(f"proxy_score must be a finite value in [0, 1], got {self.proxy_score}")
+        if self.hrv is not None and not isfinite(self.hrv):
+            raise ValueError(f"hrv must be finite or None, got {self.hrv}")
 
     def reward(self) -> float:
         return 1.0 if self.human_verdict == "works" else 0.0
