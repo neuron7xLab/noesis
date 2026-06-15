@@ -1,0 +1,35 @@
+{
+  "kind": "discriminant_validity",
+  "boundary": "об'єктивні деградації, не людська корисність; claim: гейт ранжує цілий артефакт вище деградованого",
+  "n_intents": 12,
+  "overall_auc": 0.9847,
+  "good_pass_rate": 1.0,
+  "good_mean_w": 0.7683,
+  "per_degradation": {
+    "drop_sections": {
+      "auc": 1.0,
+      "pass_rate": 0.0,
+      "mean_w": 0.4112
+    },
+    "off_topic": {
+      "auc": 1.0,
+      "pass_rate": 0.0,
+      "mean_w": 0.2326
+    },
+    "pad": {
+      "auc": 0.9236,
+      "pass_rate": 1.0,
+      "mean_w": 0.7083
+    },
+    "strip_falsifier": {
+      "auc": 1.0,
+      "pass_rate": 0.0,
+      "mean_w": 0.6183
+    },
+    "inject_forbidden": {
+      "auc": 1.0,
+      "pass_rate": 0.0,
+      "mean_w": 0.6783
+    }
+  }
+}
