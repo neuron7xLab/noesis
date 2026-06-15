@@ -11,10 +11,14 @@
 * і дзеркальна хиба — підрядок ``agi`` всередині ``m·agi·c`` БІЛЬШЕ не
   спричиняє false-positive (межі слова для коротких ASCII-стемів).
 
+Той самий нормалізатор застосовано і до маркерів надвпевненості
+(``hallucination_risk``) — інакше ``г а р а н т о в а н о`` просочувався б
+повз детектор (під-детекція = небезпечний напрям).
+
 Залишкові відомі межі (поза можливостями стрічкового гейта, fail-closed —
 радше зайва тривога, ніж пропуск): кирилічні стеми навмисно prefix-матч
 (``діагност`` ловить і безпечну «діагностику трубопроводу»); агресивний
-leetspeak з заміною кількох літер може просочитись.
+leetspeak з заміною кількох літер може просочитись; числа словами не ловляться.
 """
 
 from __future__ import annotations
@@ -88,13 +92,20 @@ _COMPILED: tuple[tuple[re.Pattern[str], str], ...] = tuple(
     (_compile(needle), label) for needle, label in _FORBIDDEN_CLAIMS
 )
 
-# Маркери непідкріпленої впевненості (галюцинаційний ризик).
+# Маркери непідкріпленої впевненості (галюцинаційний ризик) — той самий
+# нормалізатор, що й заборонені claims (стійкі до сепаратор-розриву/гомогліфів).
 _CERTAINTY_MARKERS: tuple[str, ...] = (
     "гарантовано", "стовідсотково", "100% точно", "доведено науково",
     "завжди працює", "ніколи не помиляється", "guaranteed", "always works",
 )
+_CERTAINTY_COMPILED: tuple[tuple[re.Pattern[str], str], ...] = tuple(
+    (_compile(marker), marker) for marker in _CERTAINTY_MARKERS
+)
 
-_NUM = re.compile(r"\b\d{2,}\b")
+# Числа у виході. Захоплюємо згруповані (1 000 000) і десяткові (3.14) як цілий
+# токен, щоб сигнал називав справжнє число, а не фрагмент («000»). Однозначні
+# цілі навмисно НЕ ловимо (≈шум: «5 кроків», «у 3 етапи»).
+_NUM = re.compile(r"\d{1,3}(?:[ ,]\d{3})+|\d+\.\d+|\d{2,}")
 
 
 def check_forbidden_claims(text: str) -> list[str]:
@@ -112,8 +123,8 @@ def hallucination_risk(text: str, source: str = "") -> tuple[str, list[str]]:
 
     Повертає (рівень, список_сигналів). Рівень ∈ {"low","medium","high"}.
     """
-    low = text.lower()
-    signals = [m for m in _CERTAINTY_MARKERS if m in low]
+    folded = _fold(text.lower())
+    signals = [marker for pattern, marker in _CERTAINTY_COMPILED if pattern.search(folded)]
     # Числа у виході, яких немає у вхідному джерелі — потенційна фабрикація.
     src_nums = set(_NUM.findall(source))
     out_nums = [n for n in _NUM.findall(text) if n not in src_nums]
