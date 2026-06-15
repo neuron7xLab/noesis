@@ -34,6 +34,7 @@ _SPECIAL = {
     "discriminate",
     "validity",
     "metrics",
+    "proxy-matrix",
 }
 # команди, що друкують не-JSON (markdown / звіт)
 _NON_JSON = {"human-eval", "eiic", "neuro"}
