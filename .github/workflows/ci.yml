@@ -43,9 +43,5 @@ jobs:
         run: python -m noesis.cli proxy-matrix
       - name: Physics boundary contract
         run: python -m noesis.cli physics-boundary validate
-      - name: Release verdict (informational — honestly FAIL on open claims)
-        continue-on-error: true
-        run: python -m noesis.cli verdict
-      - name: Claim validity (informational)
-        continue-on-error: true
-        run: python -m noesis.cli validate
+      - name: Bibliography claim-validity verdict (no unsourced/miscast claims)
+        run: python -m noesis.cli bibliography verdict
